@@ -1,0 +1,111 @@
+<ion-content [fullscreen]="true">
+  <div class="landing-shell">
+    <header class="public-header" (keydown.escape)="menuOpen = false; menuButton.focus()">
+      <a class="brand" routerLink="/" aria-label="Hipatec — início">
+        <img src="assets/logo_roxo.png" alt="Hipatec" width="142" />
+      </a>
+      <button #menuButton class="menu-toggle" type="button" (click)="menuOpen = !menuOpen"
+        [attr.aria-expanded]="menuOpen" aria-controls="public-nav">
+        {{ menuOpen ? 'Fechar menu' : 'Abrir menu' }}
+      </button>
+      <nav id="public-nav" [class.open]="menuOpen" aria-label="Navegação pública">
+        <a href="#sobre" (click)="scrollToSection(sobre, $event)">Sobre</a>
+        <a href="#mentorias" (click)="scrollToSection(mentorias, $event)">Mentorias</a>
+        <a href="#comunidade" (click)="scrollToSection(comunidade, $event)">Comunidade</a>
+        <a routerLink="/login" (click)="menuOpen = false">Entrar</a>
+        <a class="btn btn-primary" routerLink="/cadastro" (click)="menuOpen = false">Criar conta</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero-section">
+        <span class="eyebrow">Rede de apoio para mulheres do IFSP</span>
+        <h1>Conectando mulheres para permanecerem e crescerem na tecnologia</h1>
+        <div class="hero-bottom">
+          <div class="hero-intro">
+            <p>A Hipatec aproxima estudantes e mentoras para que mais mulheres avancem na tecnologia com acolhimento, troca de experiências e apoio.</p>
+            <div class="actions">
+              <a class="btn btn-primary" routerLink="/cadastro">Criar conta grátis</a>
+              <a class="btn" href="#mentorias" (click)="scrollToSection(mentorias, $event)">Conhecer mentorias</a>
+            </div>
+          </div>
+          <div class="hero-visual" aria-label="Exemplos ilustrativos da comunidade">
+            <p class="example-note">Prévia ilustrativa — pessoas e números fictícios</p>
+            <article class="preview-card profile-preview">
+              <span class="avatar" aria-hidden="true">AC</span>
+              <div><strong>Ana Clara</strong><span>ADS, 3º semestre</span></div>
+              <p>Buscando mentoria em frontend e apoio para construir meu primeiro portfólio.</p>
+            </article>
+            <article class="preview-card feed-preview">
+              <span class="tag">Feed colaborativo</span>
+              <p>“Alguém topa revisar currículo antes da feira de estágios?”</p>
+              <small>24 curtidas · 8 comentários</small>
+            </article>
+            <article class="preview-card mentoring-preview">
+              <span class="tag">Exemplo de mentoria</span>
+              <h2>Preparação para entrevista técnica</h2>
+              <p>Um espaço para praticar e ganhar confiança.</p>
+              <a href="#mentorias" (click)="scrollToSection(mentorias, $event)">Conheça a proposta</a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section #sobre id="sobre" tabindex="-1" class="section two-column">
+        <div>
+          <span class="eyebrow">Por que existe</span>
+          <h2>Representatividade começa no acesso, mas se sustenta com permanência.</h2>
+        </div>
+        <p>A Hipatec nasce para fortalecer mulheres do IFSP em tecnologia com uma rede de acolhimento, trocas e referências. A proposta é criar pontes entre alunas e mentoras, fortalecendo trajetórias reais na tecnologia.</p>
+      </section>
+
+      <section class="section cards-grid" aria-label="Pilares da Hipatec">
+        <article class="feature-card"><span class="tag">01</span><h2>Mentorias</h2><p>Conexão com ex-alunas e profissionais para orientar carreira, estudos, portfólio e processos seletivos.</p></article>
+        <article class="feature-card"><span class="tag">02</span><h2>Rede colaborativa</h2><p>Um lugar para compartilhar dúvidas, conquistas e aprendizados, com apoio entre estudantes.</p></article>
+        <article class="feature-card"><span class="tag">03</span><h2>Aprender com os encontros</h2><p>A proposta inclui gravações das mentorias para rever as conversas e acompanhar o que você já assistiu.</p></article>
+      </section>
+
+      <section #mentorias id="mentorias" tabindex="-1" class="section">
+        <span class="eyebrow">Mentorias</span>
+        <h2>Encontros para avançar com acompanhamento.</h2>
+        <p>Estamos preparando encontros presenciais ou online, com data, vagas e inscrição. No piloto, os encontros online e as gravações usarão ferramentas externas com acesso controlado pela equipe.</p>
+        <p>Os temas abaixo são exemplos da proposta. A agenda real será divulgada pela equipe.</p>
+        <div class="cards-grid">
+          <article class="feature-card"><span class="tag">Frontend</span><h3>Primeiros passos em desenvolvimento web</h3><p>Organizar os estudos, praticar e montar um primeiro portfólio.</p></article>
+          <article class="feature-card"><span class="tag">Dados</span><h3>Carreira em dados para iniciantes</h3><p>Trocar experiências sobre SQL, visualização de dados e caminhos na área.</p></article>
+          <article class="feature-card"><span class="tag">Carreira</span><h3>Preparação para entrevista técnica</h3><p>Praticar a comunicação técnica e conversar sobre inseguranças no processo seletivo.</p></article>
+        </div>
+      </section>
+
+      <section #comunidade id="comunidade" tabindex="-1" class="section two-column">
+        <div>
+          <span class="eyebrow">Comunidade</span>
+          <h2>Um feed para dúvidas, conquistas e pedidos de apoio.</h2>
+          <p>Conheça as conversas da comunidade e encontre colegas para compartilhar o caminho.</p>
+          <a class="btn" routerLink="/home">Conhecer o feed</a>
+        </div>
+        <article class="social-mock">
+          <span class="tag">Publicação ilustrativa</span>
+          <h3>Júlia Mendes</h3>
+          <p>Alguém estudando banco de dados para a prova? Podemos montar uma sessão de exercícios.</p>
+          <small>19 curtidas · 9 comentários fictícios</small>
+        </article>
+      </section>
+
+      <section class="final-cta">
+        <span class="eyebrow">Faça parte</span>
+        <h2>Entre na rede que acolhe, orienta e abre caminhos.</h2>
+        <div class="actions">
+          <a class="btn btn-primary" routerLink="/cadastro">Criar conta</a>
+          <a class="btn" routerLink="/cadastro">Quero ser mentora</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <img src="assets/logo_hipatec_roxo.png" alt="Hipatec" width="112" />
+      <p>Projeto acadêmico para fortalecer a presença e a permanência de mulheres na tecnologia.</p>
+      <a routerLink="/login">Entrar na Hipatec</a>
+    </footer>
+  </div>
+</ion-content>
