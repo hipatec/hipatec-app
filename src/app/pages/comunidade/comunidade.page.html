@@ -1,0 +1,17 @@
+<ion-content class="community-content">
+  <!-- Spinner de carregamento -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+    <p>Conectando à Comunidade...</p>
+  </div>
+
+  <!-- Iframe do Fluent Community -->
+  <iframe
+    [src]="safeCommunityUrl"
+    (load)="onIframeLoad()"
+    frameborder="0"
+    allow="camera; microphone; fullscreen; clipboard-read; clipboard-write"
+    class="community-iframe"
+    [class.loaded]="!isLoading">
+  </iframe>
+</ion-content>
