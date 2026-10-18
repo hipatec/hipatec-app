@@ -15,6 +15,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
   },
   {
+    path: 'redefinir-senha',
+    data: { redefinir: true },
+    loadComponent: () => import('./pages/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
+  },
+  {
     path: 'mentorias',
     loadComponent: () => import('./pages/mentorias/mentorias.page').then( m => m.MentoriasPage)
   },

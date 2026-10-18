@@ -9,6 +9,14 @@ import { environment } from '../../environments/environment';
 export class AuthService {
   constructor(private http: HttpClient) { }
 
+  solicitarRecuperacao(email: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}auth/recuperacao-senha`, { email });
+  }
+
+  redefinirSenha(token: string, senha: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}auth/redefinir-senha`, { token, senha });
+  }
+
   login(
     role: 'estudantes' | 'mentoras',
     email: string,

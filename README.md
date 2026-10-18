@@ -33,6 +33,8 @@ Para executar o backend, consulte o README de `hipatec/hipatec`: a base examinad
 | `/` | Apresentação pública da Hipatec |
 | `/home` | Feed existente, também destino após login |
 | `/login` | Login de estudante ou mentora |
+| `/forgot-password` | Solicitação de recuperação integrada ao backend |
+| `/redefinir-senha` | Definição da nova senha pelo link recebido |
 | `/cadastro` | Cadastro |
 | `/profile` | Perfil |
 | `/mentorias` | Listagem inicial de mentorias |
@@ -66,6 +68,7 @@ A página tem menu adaptado para celular, fechamento por Escape e navegação pe
 | --- | --- |
 | Apresentação | Página pública sem dependência de API |
 | Cadastro/login | Chamadas HTTP; identificação da usuária armazenada no navegador após retorno de ID |
+| Recuperação de senha | Solicitação por e-mail, nova senha e integração com endpoints `/auth` |
 | Perfil | Consulta e edição via serviços HTTP |
 | Feed | Consulta/criação de posts; curtidas locais e comentários ainda sem fluxo completo de persistência na interface |
 | Mentorias | Listagem/cadastro iniciais; inscrições, agenda e gravações ainda não implementadas |
@@ -102,6 +105,20 @@ O build gera `www/`. Karma precisa de Chrome/Chromium; configure `CHROME_BIN` se
 A base possui problemas herdados nos testes e no lint. Os estilos existentes do feed e do perfil também ultrapassam o limite de erro de 4 kB do build de produção; a recuperação da apresentação não altera esses arquivos nem aumenta o orçamento configurado. A configuração de desenvolvimento não aplica esse limite, mas sua compilação não substitui a validação de produção.
 
 Para revisar manualmente, abra `/` em computador e celular, use o menu, Escape e os links das seções; confira os exemplos identificados e os links para login, cadastro e feed. Operações com dados devem ser verificadas com a API configurada e dados de teste.
+
+## Recuperação de senha
+
+A tela `forgot-password` usa como base o visual da main (`6b71d8a`), agora integrada aos endpoints reais de recuperação e redefinição. O login permanece igual ao da main. A implementação antiga do fork não foi restaurada.
+
+A solicitação envia apenas o e-mail. O backend procura nos dois perfis e só gera link se encontrar exatamente uma conta; a tela não exige escolher estudante ou mentora. A confirmação aparece apenas após o backend aceitar a solicitação. Ao entrar na tela, `ionViewWillEnter` limpa os dados e o estado de confirmação; ao sair, a requisição pendente é cancelada para evitar que sua resposta altere uma próxima visita. A confirmação não comprova entrega do e-mail nem existência da conta.
+
+O link do e-mail abre `/redefinir-senha#token=...`, usando a mesma identidade visual para informar e confirmar a nova senha. O fragmento é removido da barra e o token é enviado no corpo do POST. São tratados erros de conexão, limite de tentativas, senha inválida e link expirado ou já utilizado.
+
+```bash
+npm test -- --watch=false --browsers=ChromeHeadless --include='src/app/pages/forgot-password/*.spec.ts'
+```
+
+Seis testes de interação passaram, incluindo reentrada na tela e cancelamento do pedido ao sair. A compilação de desenvolvimento também passou. O ambiente local e os provedores de e-mail são configurados no backend; consulte seu README.
 
 ## Trabalho em equipe
 
