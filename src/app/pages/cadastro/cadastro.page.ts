@@ -60,7 +60,9 @@ export class CadastroPage implements OnInit {
 
     request.subscribe({
       next: response => {
-        alert(response.message || `Cadastro realizado com sucesso para ${this.role}.`);
+        alert(this.role === 'mentoras' ? 'Cadastro recebido. Aguarde a aprovação da equipe para entrar.' : 'Cadastro realizado. Você já pode entrar.');
+        this.senha = '';
+        this.router.navigate(['/login']);
       },
       error: err => {
         console.error('Cadastro error:', err);

@@ -40,19 +40,15 @@ export class LoginPage implements OnInit {
 
     this.auth.login(this.role, this.email, this.password)
       .subscribe({
-        next: (id) => {
-
-          // alert(`Login successful for ${this.role}`);
-
-          console.log('Login successful, received ID:', id);
-          localStorage.setItem('userRole', this.role);
-          localStorage.setItem('userId', id.toString());
-
-          this.router.navigate(['/home']);
+        next: () => {
+          this.password = '';
+          window.location.assign('/home');
         },
         error: (err) => {
-          alert('Email ou senha inválidos');
-          console.error(err);
+          this.password = '';
+          alert(err.status === 403 ? 'Cadastro de mentora aguardando aprovação da equipe.'
+            : err.status === 429 ? 'Muitas tentativas. Aguarde 15 minutos.'
+            : err.status === 0 ? 'Não foi possível conectar. Tente novamente.' : 'Email ou senha inválidos');
         }
       });
   }

@@ -23,7 +23,7 @@ export class PerfilService {
     constructor(private http: HttpClient) { }
 
     getPerfil(role: string, id: number) {
-        return this.http.get(
+        return this.http.get<Perfil>(
             `${environment.apiUrl}perfil/${role}/${id}`
         );
     }
@@ -33,7 +33,7 @@ export class PerfilService {
     }
 
     updatePerfil(role: string, id: number, formData: FormData) {
-        return this.http.put(
+        return this.http.put<Perfil>(
             `${environment.apiUrl}perfil/${role}/${id}`,
             formData
         );

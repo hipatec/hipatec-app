@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { authGuard } from './services/auth.guard';
 
 export const routes: Routes = [
   {
@@ -21,6 +22,7 @@ export const routes: Routes = [
   },
   {
     path: 'mentorias',
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/mentorias/mentorias.page').then( m => m.MentoriasPage)
   },
 
@@ -30,11 +32,14 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/profile/profile.page').then( m => m.ProfilePage)
   },
 
   {
     path: 'mentorias/cadastro',
+    canActivate: [authGuard],
+    data: { mentora: true },
     loadComponent: () => import('./pages/mentorias/cadastro/cadastro.page').then( m => m.CadastroPage)
   },
   {
