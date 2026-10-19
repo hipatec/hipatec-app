@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { PerfilService } from '../../services/perfil.service';
 import { addIcons } from 'ionicons';
 import { personOutline, settingsOutline, logOutOutline } from 'ionicons/icons';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -18,7 +19,11 @@ export class NavbarComponent  implements OnInit {
   public userROLE: string = '';
   public profileImage: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
   
-  constructor(public router: Router, private perfilService: PerfilService) { 
+  constructor(
+    public router: Router,
+    private perfilService: PerfilService,
+    private authService: AuthService
+  ) {
     addIcons({ personOutline, settingsOutline, logOutOutline });
   }
 
@@ -67,8 +72,9 @@ export class NavbarComponent  implements OnInit {
   }
   logout(popover: any) {
     popover.dismiss().then(() => {
-      // Lógica futura de limpeza de token/sessão e redirecionamento para o login
       console.log('Saindo da conta...');
+      this.authService.logout();
+      this.router.navigate(['/login']); // Ajuste a rota se necessário
     });
   }
 

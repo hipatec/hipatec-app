@@ -44,6 +44,10 @@ export class AuthService {
   }
 
   logout() {
-    try { localStorage.removeItem('auth_token'); } catch { /* ignore */ }
+    try {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userRole');
+    } catch { /* ignore */ }
   }
 }
