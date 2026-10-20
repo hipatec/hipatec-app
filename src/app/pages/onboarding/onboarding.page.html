@@ -1,0 +1,196 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Conhecendo você</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="onboarding-content">
+  <main class="container">
+    <div class="topo">
+      <p class="etapa">ETAPA {{ etapa + 1 }} DE 4</p>
+
+      <div class="barra-progresso">
+        <div class="progresso" [style.width.%]="progresso"></div>
+      </div>
+    </div>
+
+    <ng-container [ngSwitch]="etapa">
+      <section *ngSwitchCase="0">
+        <h1>Vamos nos conhecer melhor?</h1>
+
+        <p class="descricao">
+          Queremos entender seu momento para sugerir oportunidades
+          que combinem com você.
+        </p>
+
+        <h2>Qual é o seu nível de experiência em tecnologia?</h2>
+
+        <button
+          type="button"
+          class="opcao"
+          [class.selecionada]="respostas.nivelExperiencia === 'iniciante'"
+          (click)="respostas.nivelExperiencia = 'iniciante'">
+          <strong>Estou começando agora</strong>
+          <span>Quero aprender os fundamentos.</span>
+        </button>
+
+        <button
+          type="button"
+          class="opcao"
+          [class.selecionada]="respostas.nivelExperiencia === 'intermediario'"
+          (click)="respostas.nivelExperiencia = 'intermediario'">
+          <strong>Já tenho alguma experiência</strong>
+          <span>Quero desenvolver minhas habilidades.</span>
+        </button>
+
+        <button
+          type="button"
+          class="opcao"
+          [class.selecionada]="respostas.nivelExperiencia === 'avancado'"
+          (click)="respostas.nivelExperiencia = 'avancado'">
+          <strong>Quero me aprofundar</strong>
+          <span>Busco novos desafios e especialização.</span>
+        </button>
+      </section>
+
+      <section *ngSwitchCase="1">
+        <h1>O que desperta sua curiosidade?</h1>
+
+        <p class="descricao">
+          Escolha uma ou mais áreas que você gostaria de explorar.
+        </p>
+
+        <button
+          type="button"
+          class="opcao"
+          *ngFor="let area of [
+            'Programação',
+            'Cibersegurança e redes',
+            'Dados e inteligência artificial',
+            'Design e UX',
+            'Desenvolvimento de jogos',
+            'Ainda estou descobrindo'
+          ]"
+          [class.selecionada]="estaSelecionada(respostas.areasInteresse, area)"
+          (click)="selecionarArea(area)">
+          <span class="marcador">
+            {{ estaSelecionada(respostas.areasInteresse, area) ? '✓' : '+' }}
+          </span>
+          <strong>{{ area }}</strong>
+        </button>
+      </section>
+
+      <section *ngSwitchCase="2">
+        <h1>Quais são seus objetivos?</h1>
+
+        <p class="descricao">
+          Queremos entender o que você espera encontrar no Hipatec.
+        </p>
+
+        <button
+          type="button"
+          class="opcao"
+          *ngFor="let objetivo of [
+            'Encontrar uma mentora',
+            'Aprender por meio de cursos',
+            'Encontrar vagas de estágio ou emprego',
+            'Conhecer outras mulheres na tecnologia',
+            'Desenvolver projetos e meu portfólio'
+          ]"
+          [class.selecionada]="estaSelecionada(respostas.objetivos, objetivo)"
+          (click)="selecionarObjetivo(objetivo)">
+          <span class="marcador">
+            {{ estaSelecionada(respostas.objetivos, objetivo) ? '✓' : '+' }}
+          </span>
+          <strong>{{ objetivo }}</strong>
+        </button>
+      </section>
+
+      <section *ngSwitchCase="3">
+        <h1>Como podemos te apoiar?</h1>
+
+        <p class="descricao">
+          Não existe resposta certa. Queremos entender o que seria
+          mais útil para você neste momento.
+        </p>
+
+        <h2>Qual é sua maior dificuldade hoje?</h2>
+
+        <ion-radio-group [(ngModel)]="respostas.principalDificuldade">
+          <ion-item lines="none">
+            <ion-radio slot="start" value="Aprender conteúdos técnicos"></ion-radio>
+            <ion-label>Aprender conteúdos técnicos</ion-label>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-radio slot="start" value="Não saber por onde começar"></ion-radio>
+            <ion-label>Não saber por onde começar</ion-label>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-radio slot="start" value="Falta de confiança ou apoio"></ion-radio>
+            <ion-label>Falta de confiança ou apoio</ion-label>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-radio slot="start" value="Encontrar oportunidades"></ion-radio>
+            <ion-label>Encontrar oportunidades</ion-label>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-radio slot="start" value="Ainda não tenho uma dificuldade definida"></ion-radio>
+            <ion-label>Ainda estou descobrindo</ion-label>
+          </ion-item>
+        </ion-radio-group>
+
+        <h2>Como você prefere aprender?</h2>
+
+        <ion-radio-group [(ngModel)]="respostas.formatoAprendizado">
+          <ion-item lines="none">
+            <ion-radio slot="start" value="Com acompanhamento de uma mentora"></ion-radio>
+            <ion-label>Com acompanhamento de uma mentora</ion-label>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-radio slot="start" value="Por cursos e materiais"></ion-radio>
+            <ion-label>Por cursos e materiais</ion-label>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-radio slot="start" value="Praticando em projetos"></ion-radio>
+            <ion-label>Praticando em projetos</ion-label>
+          </ion-item>
+
+          <ion-item lines="none">
+            <ion-radio slot="start" value="Conversando com outras estudantes"></ion-radio>
+            <ion-label>Conversando com outras estudantes</ion-label>
+          </ion-item>
+        </ion-radio-group>
+      </section>
+    </ng-container>
+
+    <p class="erro" *ngIf="erro">{{ erro }}</p>
+
+    <div class="botoes">
+      <ion-button
+        *ngIf="etapa > 0"
+        fill="outline"
+        (click)="voltar()"
+        [disabled]="enviando">
+        Voltar
+      </ion-button>
+
+      <ion-button
+        class="botao-principal"
+        (click)="avancar()"
+        [disabled]="enviando">
+        {{ enviando ? 'Salvando...' :
+           etapa === 3 ? 'Concluir' : 'Continuar' }}
+      </ion-button>
+    </div>
+
+    <p class="privacidade">
+      Suas respostas serão usadas para personalizar sua experiência.
+    </p>
+  </main>
+</ion-content>
