@@ -6,7 +6,8 @@ import { PerfilService } from '../../services/perfil.service';
 import { AuthService } from '../../services/auth.service';
 import { switchMap } from 'rxjs';
 import { addIcons } from 'ionicons';
-import { personOutline, settingsOutline, logOutOutline, starOutline } from 'ionicons/icons';
+import { personOutline, settingsOutline, logOutOutline } from 'ionicons/icons';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -20,8 +21,12 @@ export class NavbarComponent  implements OnInit {
   public userROLE: string = '';
   public profileImage: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
   
-  constructor(public router: Router, private perfilService: PerfilService, private auth: AuthService) {
-    addIcons({ personOutline, settingsOutline, logOutOutline, starOutline });
+  constructor(
+    public router: Router,
+    private perfilService: PerfilService,
+    private authService: AuthService
+  ) {
+    addIcons({ personOutline, settingsOutline, logOutOutline });
   }
 
   ngOnInit() {
@@ -66,6 +71,9 @@ export class NavbarComponent  implements OnInit {
         next: () => { window.location.assign('/login'); },
         error: () => { alert('Não foi possível encerrar a sessão. Tente novamente.'); }
       });
+      console.log('Saindo da conta...');
+      this.authService.logout();
+      this.router.navigate(['/login']); // Ajuste a rota se necessário
     });
   }
 }

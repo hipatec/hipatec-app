@@ -38,12 +38,11 @@ export class AuthService {
     }
   }
 
-  private identificar(sessao: Sessao) {
-    if (localStorage.getItem('userId') !== String(sessao.id) || localStorage.getItem('userRole') !== sessao.role) {
-      this.limparEstado();
-    }
-    // Cache de apresentação; somente a sessão no servidor autoriza operações.
-    localStorage.setItem('userId', String(sessao.id));
-    localStorage.setItem('userRole', sessao.role);
+  logout() {
+    try {
+      localStorage.removeItem('auth_token');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userRole');
+    } catch { /* ignore */ }
   }
 }
