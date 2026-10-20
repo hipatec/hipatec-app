@@ -1,24 +1,29 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-
 import { CreatePostModalComponent } from './create-post-modal.component';
 
 describe('CreatePostModalComponent', () => {
-  let component: CreatePostModalComponent;
-  let fixture: ComponentFixture<CreatePostModalComponent>;
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ CreatePostModalComponent ],
-      imports: [IonicModule.forRoot()]
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [CreatePostModalComponent, IonicModule.forRoot()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])]
     }).compileComponents();
+    localStorage.clear();
+  });
 
-    fixture = TestBed.createComponent(CreatePostModalComponent);
-    component = fixture.componentInstance;
+  it('renderiza com os provedores da aplicação', () => {
+    const fixture = TestBed.createComponent(CreatePostModalComponent);
     fixture.detectChanges();
-  }));
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    const http = TestBed.inject(HttpTestingController);
+    for (const request of http.match(() => true)) {
+      if (request.request.url.endsWith('/auth/session')) request.flush(null, { status: 401, statusText: 'Unauthorized' });
+      else request.flush([]);
+    }
+    fixture.detectChanges();
+    expect(fixture.componentInstance).toBeTruthy();
+    http.verify();
   });
 });

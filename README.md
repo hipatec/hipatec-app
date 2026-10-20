@@ -1,5 +1,7 @@
 # Hipatec — frontend
 
+**Sprint 2:** login usa sessão HttpOnly do backend, CSRF e guards; atualizar junto com a API. Estudantes entram após cadastro; mentoras aguardam aprovação manual. O layout existente foi preservado.
+
 Aplicativo web da Hipatec em **Angular 20, Ionic 8 e Capacitor 8**. Repositório da organização: [hipatec/hipatec-app](https://github.com/hipatec/hipatec-app). A API Java/Spring fica em [hipatec/hipatec](https://github.com/hipatec/hipatec); frontend e backend são executados separadamente.
 
 ## Executar localmente
@@ -67,13 +69,13 @@ A página tem menu adaptado para celular, fechamento por Escape e navegação pe
 | Área | Estado observado no código |
 | --- | --- |
 | Apresentação | Página pública sem dependência de API |
-| Cadastro/login | Chamadas HTTP; identificação da usuária armazenada no navegador após retorno de ID |
+| Cadastro/login | JSON em `/auth/login`, sessão no servidor e cache de apresentação no navegador |
 | Recuperação de senha | Solicitação por e-mail, nova senha e integração com endpoints `/auth` |
 | Perfil | Consulta e edição via serviços HTTP |
 | Feed | Consulta/criação de posts; curtidas locais e comentários ainda sem fluxo completo de persistência na interface |
 | Mentorias | Listagem/cadastro iniciais; inscrições, agenda e gravações ainda não implementadas |
 | Comunidade externa | Página experimental que abre serviço WordPress/Fluent Community em iframe |
-| Aprovação e permissões | Sem guards de rota; identificação local não equivale a sessão autenticada e autorizada |
+| Aprovação e permissões | Guards consultam `/auth/session`; API valida aprovação e titularidade; logout invalida sessão |
 
 A comunidade externa monta a URL do iframe com `userEmail` do localStorage e uma chave fixa no próprio frontend. O fluxo de login atual não grava `userEmail`. Esse mecanismo demonstrativo precisa ser revisado antes de servir como autenticação real: valores públicos do navegador não comprovam identidade ou aprovação de acesso. O funcionamento e as permissões do serviço externo não foram validados nesta revisão.
 
@@ -125,3 +127,11 @@ Seis testes de interação passaram, incluindo reentrada na tela e cancelamento 
 Nathalia é a representante do grupo e trabalha no backend. Thiago trabalha no frontend. Lucca auxilia na organização, documentação, testes e apoio técnico; não decide sozinho o escopo ou as prioridades. As decisões finais devem ser validadas pelo grupo.
 
 Crie uma branch, mantenha mudanças pequenas e descreva no PR o comportamento alterado, como testar e as limitações. Não versione `node_modules/`, `www/`, credenciais ou dados de participantes. Atualize o README quando mudar rotas, comandos ou integração.
+
+## Verificação da Sprint 2
+
+`npm test -- --watch=false --browsers=ChromeHeadless` inclui sessão, CSRF, logout, guards e perfil sem foto. O backend oferece `bash gradlew sprint2Local` para validar login e edição textual no navegador com H2 descartável; consultar `docs/SPRINT2.md` no repositório backend para contas e limitações.
+
+O interceptor envia cookies somente à API configurada e obtém CSRF antes de escritas. Login/logout recarregam a aplicação para descartar páginas privadas mantidas em cache pelo Ionic. O ID do perfil vem da API, independentemente da presença de foto.
+
+O build de desenvolvimento passa. O build de produção continua bloqueado pelos budgets preexistentes de CSS de home (4,11 kB) e perfil (4,23 kB), limite de 4 kB; os limites não foram aumentados. O lint também possui pendências anteriores (injeção por construtor, configuração de TypeScript e nomes de eventos), fora desta alteração funcional.

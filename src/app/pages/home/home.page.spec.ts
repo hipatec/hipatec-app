@@ -1,18 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 import { HomePage } from './home.page';
 
 describe('HomePage', () => {
-  let component: HomePage;
-  let fixture: ComponentFixture<HomePage>;
-
   beforeEach(async () => {
-    fixture = TestBed.createComponent(HomePage);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    await TestBed.configureTestingModule({
+      imports: [HomePage, IonicModule.forRoot()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])]
+    }).compileComponents();
+    localStorage.clear();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('renderiza com os provedores da aplicação', () => {
+    const fixture = TestBed.createComponent(HomePage);
+    fixture.detectChanges();
+    const http = TestBed.inject(HttpTestingController);
+    for (const request of http.match(() => true)) {
+      if (request.request.url.endsWith('/auth/session')) request.flush(null, { status: 401, statusText: 'Unauthorized' });
+      else request.flush([]);
+    }
+    fixture.detectChanges();
+    expect(fixture.componentInstance).toBeTruthy();
+    http.verify();
   });
 });

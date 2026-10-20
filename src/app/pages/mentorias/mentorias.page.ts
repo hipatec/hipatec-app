@@ -34,7 +34,7 @@ export class MentoriasPage implements OnInit {
 
   isMentora(): boolean {
     console.log('Verificando se é mentora, userRole:', this.userRole);
-    return this.userRole === 'mentora';
+    return this.userRole === 'mentoras';
   }
   ngOnInit() {
     this.loadMentorias();
