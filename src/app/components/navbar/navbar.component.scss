@@ -81,3 +81,57 @@ ion-popover {
         --color: #472b7a;
     }
 }
+
+/* --- Lógica Base de Alternância --- */
+.desktop-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.mobile-item {
+  display: none; /* Escondido por padrão nas telas grandes */
+}
+
+.divider {
+  height: 1px;
+  background: #ebeef0;
+  margin: 4px 16px;
+}
+
+/* --- View Mobile (Celulares) --- */
+@media (max-width: 768px) {
+  
+  /* Oculta tudo que é de computador forçadamente */
+  .desktop-only {
+    display: none !important;
+  }
+  
+  /* Revela os itens dentro do popover */
+  ion-item.mobile-item {
+    display: block !important;
+    --display: flex; /* Mantém o alinhamento interno do ícone com o texto */
+  }
+  div.mobile-item {
+    display: block !important;
+  }
+
+  /* Recupera o espaço perdido nas bordas nativas do Ionic */
+  ion-toolbar.navbar-container {
+    --padding-start: 8px;
+    --padding-end: 8px;
+  }
+
+  /* Reduz a logo e impõe um limite máximo para não esmagar o avatar */
+  .logo-img {
+    height: 28px !important;
+    max-width: 130px; 
+    object-fit: contain;
+  }
+  
+  /* Ajusta o avatar */
+  .user-avatar {
+    width: 32px !important;
+    height: 32px !important;
+    margin-left: 10px;
+  }
+}

@@ -62,9 +62,14 @@ export class NavbarComponent  implements OnInit {
       this.router.navigate(['/mentorias']);
     });
   }
-  goToHome() {
-    this.router.navigate(['/home']); // Ajuste a rota se necessário
+  goToHome(popover?: any) {
+    if (popover) {
+      popover.dismiss().then(() => this.router.navigate(['/home']));
+    } else {
+      this.router.navigate(['/home']);
+    }
   }
+
   goToSettings(popover: any) {
     popover.dismiss().then(() => { 
       // Lógica futura para configurações

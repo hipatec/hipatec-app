@@ -3,34 +3,50 @@
     
     <ion-buttons slot="start">
       <div class="logo-container">
-      <img src="assets/logo_roxo.png" alt="Hipatec Logo" class="logo-img">
+        <img src="assets/logo_roxo.png" alt="Hipatec Logo" class="logo-img">
       </div>
     </ion-buttons>
 
-    <div class="search-box">
+    <!-- Barra de pesquisa protegida para sumir no mobile -->
+    <div class="search-box desktop-only">
       <ion-searchbar placeholder="digite aqui para buscar..." class="custom-search"></ion-searchbar>
       <ion-icon name="star-outline" class="star-icon"></ion-icon>
     </div>
 
     <ion-buttons slot="end">
-      <ion-button (click)="goToHome()" fill="clear">home</ion-button>
-      
-      <!-- Substituição do ID por evento passando $event -->
-      <ion-button (click)="aprendizadoPopover.present($event)" fill="clear">aprendizado</ion-button>
+      <!-- Botões agrupados para ocultação fácil -->
+      <div class="desktop-buttons desktop-only">
+        <ion-button (click)="goToHome()" fill="clear">home</ion-button>
+        <ion-button (click)="aprendizadoPopover.present($event)" fill="clear">aprendizado</ion-button>
+      </div>
 
-      <!-- Substituição do ID por evento passando $event -->
+      <!-- Avatar sempre visível -->
       <ion-avatar class="user-avatar" (click)="menuPopover.present($event)" style="cursor: pointer;">
         <img [src]="profileImage" />
       </ion-avatar>
     </ion-buttons>
       
-    <!-- Popover do Perfil com referência local #menuPopover -->
+    <!-- Popover Principal (Perfil + Mobile Menu) -->
     <ion-popover #menuPopover class="perfil-popover" side="bottom" alignment="end">
       <ng-template>
         <ion-content>
           <ion-list lines="none">
             
-            <!-- *ngIf verifica a rota para esconder o botão. Passe o menuPopover para a função -->
+            <!-- Itens de navegação que só aparecem no celular -->
+            <ion-item button (click)="goToHome(menuPopover)" class="mobile-item">
+              <ion-icon name="home-outline" slot="start"></ion-icon>
+              <ion-label>Home</ion-label>
+            </ion-item>
+
+            <ion-item button (click)="goToMentoria(menuPopover)" class="mobile-item">
+              <ion-icon name="book-outline" slot="start"></ion-icon>
+              <ion-label>Aprendizado</ion-label>
+            </ion-item>
+
+            <!-- Linha divisória invisível no computador -->
+            <div class="mobile-item divider"></div>
+            
+            <!-- Itens padrão do perfil -->
             <ion-item button (click)="goToProfile(menuPopover)" *ngIf="router.url !== '/profile'">
               <ion-icon name="person-outline" slot="start"></ion-icon>
               <ion-label>Meu perfil</ion-label>
@@ -51,7 +67,7 @@
       </ng-template>
     </ion-popover>
 
-    <!-- Popover de Aprendizado com referência local #aprendizadoPopover -->
+    <!-- Popover de Aprendizado mantido para o Desktop -->
     <ion-popover #aprendizadoPopover>
       <ng-template>
         <ion-content>

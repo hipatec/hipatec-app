@@ -253,3 +253,62 @@ ion-fab-button {
     right: calc((100vw - 1200px) / 2 + 20px);
   }
 }
+
+/* --- Responsividade para Celulares (Mobile View) --- */
+@media (max-width: 768px) {
+  
+  /* 1. Tira o respiro lateral do gradiente para usar 100% da tela */
+  .gradient-bg {
+    padding: 0; 
+  }
+
+  /* 2. Remove as bordas redondas e o padding pesado do container branco */
+  .feed-container {
+    padding: 0;
+    background: transparent;
+    border-radius: 0;
+    margin-top: 0;
+  }
+
+  /* 3. Transforma os posts em um feed contínuo (encostando nas laterais) */
+  .post-card {
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    margin-bottom: 6px; /* Espaçamento menor entre posts no celular */
+    box-shadow: none;
+    border-top: 1px solid #ebeef0;
+    border-bottom: 1px solid #ebeef0;
+    padding: 12px 16px; /* Reduz levemente o respiro interno */
+  }
+
+  /* 4. Ajustes de tipografia e espaçamento interno do post para telas menores */
+  .post-header {
+    margin-bottom: 8px;
+    
+    .post-avatar-placeholder {
+      width: 32px;
+      height: 32px;
+      margin-right: 10px;
+    }
+    
+    .post-meta .post-author {
+      font-size: 13px;
+    }
+  }
+
+  .post-body .post-text {
+    font-size: 13px;
+  }
+
+  .post-actions {
+    gap: 12px; /* Aproxima os botões de curtir e comentar */
+    margin-top: 10px;
+  }
+
+  /* 5. Garante que o botão flutuante de postar fique bem posicionado no celular */
+  .fab-post {
+    right: 16px;
+    bottom: 16px;
+  }
+}
