@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './services/auth.guard';
+import { guestGuard } from './guards/guest.guard';
 
 export const routes: Routes = [
   {
@@ -24,6 +25,10 @@ export const routes: Routes = [
     path: 'mentorias',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/mentorias/mentorias.page').then( m => m.MentoriasPage)
+  },
+  {
+    path: 'onboarding',
+    loadComponent: () => import('./pages/onboarding/onboarding.page').then(m => m.OnboardingPage)
   },
 
   {

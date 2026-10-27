@@ -29,7 +29,7 @@ export class CadastroPage implements OnInit {
     private auth: AuthService, private router: Router,
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   switchRole(ev: any) {
     this.role = ev.detail?.value || 'estudantes';
@@ -40,8 +40,15 @@ export class CadastroPage implements OnInit {
     this.usuario = '';
   }
 
+
   cadastrar() {
-    if (!this.nome || !this.email || !this.senha || !this.dataNascimento || !this.usuario) {
+    if (
+      !this.nome ||
+      !this.email ||
+      !this.senha ||
+      !this.dataNascimento ||
+      !this.usuario
+    ) {
       alert('Preencha todos os campos para continuar.');
       return;
     }
