@@ -3,6 +3,8 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { PerfilService } from '../../services/perfil.service';
+import { AuthService } from '../../services/auth.service';
+import { switchMap } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { personOutline, settingsOutline, logOutOutline } from 'ionicons/icons';
 import { AuthService } from '../../services/auth.service';
@@ -32,24 +34,17 @@ export class NavbarComponent  implements OnInit {
   }
 
   private loadUserProfile() {
-    const userRole = localStorage.getItem('userRole');
-    const userId = localStorage.getItem('userId');
-
-    if (userRole && userId) {
-      this.userROLE = userRole;
-      this.perfilService.getPerfil(userRole, parseInt(userId)).subscribe({
-        next: (profile: any) => {
-          if (profile.pfp) {
-            this.profileImage = profile.pfp;
-            localStorage.setItem('pfpPerfil', profile.pfp);
-            localStorage.setItem('perfil', profile.id || '');
-          }
-        },
-        error: (err) => {
-          console.error('Error loading profile:', err);
-        }
-      });
-    }
+    this.auth.sessao().pipe(switchMap(sessao => {
+      this.userROLE = sessao.role;
+      return this.perfilService.getPerfil(sessao.role, sessao.id);
+    })).subscribe({
+      next: profile => {
+        this.profileImage = profile.pfp || 'https://ionicframework.com/docs/img/demos/avatar.svg';
+        localStorage.setItem('perfil', String(profile.id));
+        localStorage.setItem('pfpPerfil', this.profileImage);
+      },
+      error: () => { this.userROLE = ''; }
+    });
   }
 
   goToProfile(popover: any) {
@@ -72,10 +67,13 @@ export class NavbarComponent  implements OnInit {
   }
   logout(popover: any) {
     popover.dismiss().then(() => {
+      this.auth.logout().subscribe({
+        next: () => { window.location.assign('/login'); },
+        error: () => { alert('Não foi possível encerrar a sessão. Tente novamente.'); }
+      });
       console.log('Saindo da conta...');
       this.authService.logout();
       this.router.navigate(['/login']); // Ajuste a rota se necessário
     });
   }
-
 }

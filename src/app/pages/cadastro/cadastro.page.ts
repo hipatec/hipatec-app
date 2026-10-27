@@ -67,15 +67,9 @@ export class CadastroPage implements OnInit {
 
     request.subscribe({
       next: response => {
-        alert(response.message || `Cadastro realizado com sucesso para ${this.role}.`);
-
-        if (this.role === 'estudantes') {
-          // Somente estudantes respondem ao onboarding.
-          this.router.navigate(['/onboarding']);
-        } else {
-          // Mentoras seguem o fluxo normal.
-          this.router.navigate(['/login']);
-        }
+        alert(this.role === 'mentoras' ? 'Cadastro recebido. Aguarde a aprovação da equipe para entrar.' : 'Cadastro realizado. Você já pode entrar.');
+        this.senha = '';
+        this.router.navigate(['/login']);
       },
       error: err => {
         console.error('Cadastro error:', err);

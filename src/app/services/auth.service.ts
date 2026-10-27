@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+export interface Sessao { id: number; role: 'estudantes' | 'mentoras'; }
+
+@Injectable({ providedIn: 'root' })
 export class AuthService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   solicitarRecuperacao(email: string): Observable<void> {
     return this.http.post<void>(`${environment.apiUrl}auth/recuperacao-senha`, { email });
@@ -17,30 +17,25 @@ export class AuthService {
     return this.http.post<void>(`${environment.apiUrl}auth/redefinir-senha`, { token, senha });
   }
 
-  login(
-    role: 'estudantes' | 'mentoras',
-    email: string,
-    senha: string
-  ): Observable<number> {
-
-    const endpoint =
-      role === 'estudantes'
-        ? 'estudantes/login'
-        : 'mentoras/login';
-
-    const url = `${environment.apiUrl}${endpoint}`;
-    const params = new HttpParams()
-      .set('email', email)
-      .set('senha', senha);
-
-    return this.http.post<number>(url, {}, { params });
-  }
-  saveToken(token: string) {
-    try { localStorage.setItem('auth_token', token); } catch { /* ignore on private mode */ }
+  login(role: Sessao['role'], email: string, senha: string): Observable<Sessao> {
+    return this.http.post<Sessao>(`${environment.apiUrl}auth/login`, { role, email, senha })
+      .pipe(tap(sessao => { this.limparEstado(); this.identificar(sessao); }));
   }
 
-  getToken(): string | null {
-    try { return localStorage.getItem('auth_token'); } catch { return null; }
+  sessao(): Observable<Sessao> {
+    return this.http.get<Sessao>(`${environment.apiUrl}auth/session`)
+      .pipe(tap(sessao => this.identificar(sessao)));
+  }
+
+  logout(): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}auth/logout`, {})
+      .pipe(tap(() => this.limparEstado()));
+  }
+
+  limparEstado() {
+    for (const chave of ['userId', 'userRole', 'perfil', 'pfpPerfil', 'auth_token', 'userEmail']) {
+      localStorage.removeItem(chave);
+    }
   }
 
   logout() {

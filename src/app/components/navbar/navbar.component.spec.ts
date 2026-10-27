@@ -1,24 +1,29 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-
 import { NavbarComponent } from './navbar.component';
 
 describe('NavbarComponent', () => {
-  let component: NavbarComponent;
-  let fixture: ComponentFixture<NavbarComponent>;
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [ NavbarComponent ],
-      imports: [IonicModule.forRoot()]
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [NavbarComponent, IonicModule.forRoot()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])]
     }).compileComponents();
+    localStorage.clear();
+  });
 
-    fixture = TestBed.createComponent(NavbarComponent);
-    component = fixture.componentInstance;
+  it('renderiza com os provedores da aplicação', () => {
+    const fixture = TestBed.createComponent(NavbarComponent);
     fixture.detectChanges();
-  }));
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
+    const http = TestBed.inject(HttpTestingController);
+    for (const request of http.match(() => true)) {
+      if (request.request.url.endsWith('/auth/session')) request.flush(null, { status: 401, statusText: 'Unauthorized' });
+      else request.flush([]);
+    }
+    fixture.detectChanges();
+    expect(fixture.componentInstance).toBeTruthy();
+    http.verify();
   });
 });

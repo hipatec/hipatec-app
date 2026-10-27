@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
@@ -25,7 +25,7 @@ import { PostsService } from '../../services/posts.service';
     EditProfileModalComponent
   ]
 })
-export class ProfilePage implements OnInit {
+export class ProfilePage {
   showEditModal = false;
   selectedPfpFile?: File;
   selectedBackgroundFile?: File;
@@ -43,17 +43,21 @@ export class ProfilePage implements OnInit {
   perfil: any;
   posts: any[] = [];
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.perfil = undefined;
+    this.posts = [];
+    this.showEditModal = false;
     this.userRole = localStorage.getItem('userRole');
     this.userId = Number(localStorage.getItem('userId'));
-    const perfilId = Number(localStorage.getItem('perfil') || this.userId);
+
 
     this.perfilService
       .getPerfil(this.userRole!, this.userId)
       .subscribe(perfil => {
         this.perfil = perfil;
-        console.log('Perfil carregado:', perfil);
-        this.loadPosts(perfilId);
+
+        localStorage.setItem('perfil', String(perfil.id));
+        this.loadPosts(perfil.id);
       });
   }
 
