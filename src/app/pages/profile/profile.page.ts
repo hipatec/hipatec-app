@@ -8,6 +8,7 @@ import { MentoraService } from '../../services/mentora.service';
 import { PerfilService } from '../../services/perfil.service';
 import { EditProfileModalComponent } from '../../components/edit-profile-modal/edit-profile-modal.component';
 import { PostsService } from '../../services/posts.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -35,11 +36,12 @@ export class ProfilePage {
     private estudanteService: EstudanteService, 
     private mentoraService: MentoraService, 
     private perfilService: PerfilService,
-    private postsService: PostsService
+    private postsService: PostsService,
+    private authService: AuthService
   ) {}
 
-  userRole = localStorage.getItem('userRole');
-  userId = Number(localStorage.getItem('userId'));
+  userRole: string | null = null;
+  userId = 0;
   perfil: any;
   posts: any[] = [];
 
@@ -47,18 +49,21 @@ export class ProfilePage {
     this.perfil = undefined;
     this.posts = [];
     this.showEditModal = false;
-    this.userRole = localStorage.getItem('userRole');
-    this.userId = Number(localStorage.getItem('userId'));
-
-
-    this.perfilService
-      .getPerfil(this.userRole!, this.userId)
-      .subscribe(perfil => {
-        this.perfil = perfil;
-
-        localStorage.setItem('perfil', String(perfil.id));
-        this.loadPosts(perfil.id);
-      });
+    this.authService.sessao().subscribe({
+      next: sessao => {
+        this.userRole = sessao.role;
+        this.userId = sessao.id;
+        this.perfilService.getPerfil(sessao.role, sessao.id).subscribe(perfil => {
+          this.perfil = perfil;
+          localStorage.setItem('perfil', String(perfil.id));
+          this.loadPosts(perfil.id);
+        });
+      },
+      error: () => {
+        this.userRole = null;
+        this.userId = 0;
+      }
+    });
   }
 
   private loadPosts(perfilId: number) {

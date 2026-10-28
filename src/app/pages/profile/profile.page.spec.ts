@@ -27,12 +27,11 @@ describe('ProfilePage', () => {
     http.verify();
   });
   it('usa o ID retornado do perfil sem foto, nunca o ID da conta ou cache anterior', () => {
-    localStorage.setItem('userRole', 'estudantes');
-    localStorage.setItem('userId', '1');
     localStorage.setItem('perfil', '999');
     const fixture = TestBed.createComponent(ProfilePage);
     fixture.componentInstance.ionViewWillEnter();
     const http = TestBed.inject(HttpTestingController);
+    http.expectOne('http://localhost:8080/auth/session').flush({ id: 1, role: 'estudantes' });
     http.expectOne('http://localhost:8080/perfil/estudantes/1').flush({ id: 42, nome: 'Aluna', usuario: 'aluna', pfp: null });
     http.expectOne('http://localhost:8080/posts/autor/42').flush([]);
     expect(localStorage.getItem('perfil')).toBe('42');

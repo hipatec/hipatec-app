@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface Sessao { id: number; role: 'estudantes' | 'mentoras'; }
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private readonly sessaoSubject = new BehaviorSubject<Sessao | null>(null);
+  readonly sessaoAtual$ = this.sessaoSubject.asObservable();
+
   constructor(private http: HttpClient) {}
 
   solicitarRecuperacao(email: string): Observable<void> {
@@ -32,17 +35,14 @@ export class AuthService {
       .pipe(tap(() => this.limparEstado()));
   }
 
-  limparEstado() {
+  limparEstado(): void {
     for (const chave of ['userId', 'userRole', 'perfil', 'pfpPerfil', 'auth_token', 'userEmail']) {
       localStorage.removeItem(chave);
     }
+    this.sessaoSubject.next(null);
   }
 
-  logout() {
-    try {
-      localStorage.removeItem('auth_token');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('userRole');
-    } catch { /* ignore */ }
+  private identificar(sessao: Sessao): void {
+    this.sessaoSubject.next(sessao);
   }
 }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { MentoriasService, Mentoria } from '../../services/mentorias.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-mentorias',
@@ -15,7 +16,7 @@ import { MentoriasService, Mentoria } from '../../services/mentorias.service';
 
 export class MentoriasPage implements OnInit {
 
-  public userRole: string = localStorage.getItem('userRole') || 'estudante'; // papel de usuária teste
+  public userRole = '';
 
   // dados simulados (quando o banco chegar, você só substituirá estes dois array)
   public minhasMentorias: Mentoria[] = [
@@ -30,15 +31,24 @@ export class MentoriasPage implements OnInit {
     { id: 11, titulo: 'Mentoria Tech', mentora: 'Bia Costa', descricao: 'Dicas de arquitetura Angular.' },
   ];
 
-  constructor(private modalCtrl: ModalController, private mentoriasService: MentoriasService) { }
+  constructor(
+    private modalCtrl: ModalController,
+    private mentoriasService: MentoriasService,
+    private authService: AuthService
+  ) { }
 
   isMentora(): boolean {
     console.log('Verificando se é mentora, userRole:', this.userRole);
     return this.userRole === 'mentoras';
   }
   ngOnInit() {
-    this.loadMentorias();
-    this.isMentora(); // para debug, pode remover depois
+    this.authService.sessao().subscribe({
+      next: sessao => {
+        this.userRole = sessao.role;
+        this.loadMentorias();
+      },
+      error: () => { this.userRole = ''; }
+    });
   }
 
   loadMentorias() {

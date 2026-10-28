@@ -24,8 +24,10 @@ describe('Sessão de navegador', () => {
     expect(request.request.body).toBeNull();
     request.flush({ token: 'csrf-teste', headerName: 'X-CSRF-TOKEN' });
   }
-  it('envia senha somente no corpo e substitui o cache da conta anterior', () => {
+  it('envia senha somente no corpo e atualiza a identidade da sessão', () => {
     localStorage.setItem('perfil', '999');
+    let sessao: any = null;
+    auth.sessaoAtual$.subscribe(valor => sessao = valor);
     auth.login('estudantes', 'aluna@example.test', 'TesteLocal123!').subscribe();
     csrf();
     const login = http.expectOne(`${base}auth/login`);
@@ -34,7 +36,7 @@ describe('Sessão de navegador', () => {
     expect(login.request.body.senha).toBe('TesteLocal123!');
     login.flush({ id: 1, role: 'estudantes' });
     expect(localStorage.getItem('perfil')).toBeNull();
-    expect(localStorage.getItem('userId')).toBe('1');
+    expect(sessao).toEqual({ id: 1, role: 'estudantes' });
   });
   it('limpa identidade e perfil após logout confirmado pelo servidor', () => {
     localStorage.setItem('userId', '1'); localStorage.setItem('perfil', '42');
