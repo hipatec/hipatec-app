@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonItem, IonLabel, IonSegment, IonSegmentButton, IonList, IonDatetime } from '@ionic/angular/standalone';
+import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
 import { EstudanteService } from '../../services/estudante.service';
 import { MentoraService } from '../../services/mentora.service';
 import { Router, RouterLink } from '@angular/router';
@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './cadastro.page.html',
   styleUrls: ['./cadastro.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonItem, IonLabel, IonSegment, IonSegmentButton, IonList, IonDatetime, CommonModule, FormsModule, RouterLink]
+  imports: [IonLabel, IonSegment, IonSegmentButton, CommonModule, FormsModule, RouterLink]
 })
 export class CadastroPage implements OnInit {
 

@@ -1,0 +1,13 @@
+/* Estilo do Botão Flutuante */
+ion-fab-button {
+  --background: #472b7a;
+  --background-hover: #382260;
+  --box-shadow: 0 4px 12px rgba(71, 43, 122, 0.4);
+}
+
+/* Alinhamento para telas grandes (respeitando seu max-width de 1200px) */
+@media (min-width: 1250px) {
+  .fab-post {
+    right: calc((100vw - 1200px) / 2 + 20px);
+  }
+}

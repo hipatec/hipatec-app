@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar } from '@ionic/angular/standalone';
+import { IonContent } from '@ionic/angular/standalone';
 import { NavbarComponent } from '../../components/navbar/navbar.component';
 import { EstudanteService } from '../../services/estudante.service';
 import { MentoraService } from '../../services/mentora.service';
@@ -16,10 +16,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./profile.page.scss'],
   standalone: true,
   imports: [
-    IonContent, 
-    IonHeader, 
-    IonTitle, 
-    IonToolbar, 
+    IonContent,
     CommonModule, 
     FormsModule, 
     NavbarComponent, 

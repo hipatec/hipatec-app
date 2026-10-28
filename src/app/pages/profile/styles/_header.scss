@@ -1,0 +1,94 @@
+.profile-header {
+  position: relative;
+  width: 100%;
+}
+
+.cover-banner {
+  width: 100%;
+  height: 150px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 1px;
+}
+
+.profile-info-container {
+  display: flex;
+  align-items: flex-end;
+  padding: 0 20px;
+  position: relative;
+  z-index: 5;
+  gap: 20px;
+}
+
+.avatar-box {
+  position: relative;
+  background: #ffffff;
+  padding: 4px;
+  border-radius: 50%;
+  display: inline-block;
+
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 1px solid #999999;
+    background: #e0e0e0;
+    object-fit: cover;
+  }
+}
+
+.profile-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  flex: 1;
+
+  .user-meta {
+    .user-name { font-family: 'Roboto', sans-serif; color: #472b7a; font-size: 22px; font-weight: 700; margin: 0; }
+    .user-username { font-family: 'Roboto', sans-serif; color: #666666; font-size: 16px; margin: 0; }
+    .user-role { font-family: 'Roboto', sans-serif; color: #7b59b8; font-size: 16px; font-weight: 500; margin: 4px 0 0 0; }
+  }
+
+  .profile-stats {
+    display: flex;
+    gap: 15px;
+
+    .stats-item {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      color: #472b7a;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+
+      strong { color: #472b7a; font-weight: 700; }
+      span { color: #472b7a; }
+    }
+  }
+}
+
+.profile-bio-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 12px 0px 0 20px;
+  gap: 20px;
+
+  .user-bio { font-family: 'Roboto', sans-serif; color: #444444; font-size: 16px; line-height: 1.5; margin: 0; flex: 1; }
+  .btn-edit-profile {
+    height: 36px;
+    width: 100px;
+    background: #472b7a;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(71, 43, 122, 0.2);
+    transition: background-color 0.2s, transform 0.1s;
+  }
+}

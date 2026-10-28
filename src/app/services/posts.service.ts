@@ -4,9 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 export interface PostPayload {
-  autorId: number;
   conteudo: string;
-  autorFoto: string;
 }
 
 export interface Post {
