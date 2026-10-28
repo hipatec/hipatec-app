@@ -7,7 +7,6 @@ import { AuthService } from '../../services/auth.service';
 import { switchMap } from 'rxjs';
 import { addIcons } from 'ionicons';
 import { personOutline, settingsOutline, logOutOutline } from 'ionicons/icons';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -34,7 +33,7 @@ export class NavbarComponent  implements OnInit {
   }
 
   private loadUserProfile() {
-    this.auth.sessao().pipe(switchMap(sessao => {
+    this.authService.sessao().pipe(switchMap(sessao => {
       this.userROLE = sessao.role;
       return this.perfilService.getPerfil(sessao.role, sessao.id);
     })).subscribe({
@@ -67,13 +66,10 @@ export class NavbarComponent  implements OnInit {
   }
   logout(popover: any) {
     popover.dismiss().then(() => {
-      this.auth.logout().subscribe({
+      this.authService.logout().subscribe({
         next: () => { window.location.assign('/login'); },
         error: () => { alert('Não foi possível encerrar a sessão. Tente novamente.'); }
       });
-      console.log('Saindo da conta...');
-      this.authService.logout();
-      this.router.navigate(['/login']); // Ajuste a rota se necessário
     });
   }
 }

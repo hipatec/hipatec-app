@@ -14,6 +14,7 @@ export const routes: Routes = [
   },
   {
     path: 'login',
+    canActivate: [guestGuard],
     loadComponent: () => import('./pages/login/login.page').then( m => m.LoginPage)
   },
   {
@@ -28,11 +29,13 @@ export const routes: Routes = [
   },
   {
     path: 'onboarding',
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/onboarding/onboarding.page').then(m => m.OnboardingPage)
   },
 
   {
     path: 'cadastro',
+    canActivate: [guestGuard],
     loadComponent: () => import('./pages/cadastro/cadastro.page').then( m => m.CadastroPage)
   },
   {
