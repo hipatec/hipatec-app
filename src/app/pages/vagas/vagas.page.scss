@@ -1,0 +1,310 @@
+ion-content {
+  --background: linear-gradient(135deg, #fff8df 0%, #ffffff 58%, #e4d8f4 100%);
+}
+
+.vagas-shell {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 42px 0 72px;
+}
+
+.vagas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 34px;
+  border: 1px solid rgba(71, 43, 122, 0.13);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 10px 28px rgba(71, 43, 122, 0.08);
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: #7b59b8;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+h1, h2, h3, p { margin-top: 0; }
+
+h1 {
+  margin-bottom: 8px;
+  color: #472b7a;
+  font-size: clamp(30px, 4vw, 44px);
+}
+
+.subtitle {
+  margin-bottom: 0;
+  color: #615775;
+  font-size: 15px;
+}
+
+.header-icon {
+  display: grid;
+  width: 68px;
+  height: 68px;
+  flex: 0 0 68px;
+  place-items: center;
+  border-radius: 50%;
+  background: #efe8fa;
+  color: #472b7a;
+
+  ion-icon { font-size: 32px; }
+}
+
+.vagas-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(260px, 3fr);
+  gap: 28px;
+  margin-top: 30px;
+  align-items: start;
+}
+
+.results-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 4px 16px;
+
+  h2 {
+    margin-bottom: 5px;
+    color: #472b7a;
+    font-size: 22px;
+  }
+
+  span {
+    color: #786e88;
+    font-size: 13px;
+  }
+}
+
+.mobile-filter-button { display: none; }
+
+.vagas-list { display: grid; gap: 16px; }
+
+.vaga-card {
+  position: relative;
+  padding: 22px 24px 20px;
+  border: 1px solid rgba(71, 43, 122, 0.16);
+  border-radius: 12px;
+  background: #ffffff;
+  box-shadow: 0 5px 14px rgba(71, 43, 122, 0.06);
+  cursor: pointer;
+  transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+
+  &:hover {
+    border-color: rgba(71, 43, 122, 0.4);
+    box-shadow: 0 10px 22px rgba(71, 43, 122, 0.12);
+    transform: translateY(-2px);
+  }
+
+  h3 {
+    margin: 18px 0 8px;
+    color: #2e2344;
+    font-size: 19px;
+  }
+}
+
+.company-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #472b7a;
+  font-size: 14px;
+
+  time {
+    margin-left: auto;
+    color: #827990;
+    font-size: 12px;
+  }
+}
+
+.company-avatar {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid #7b59b8;
+  border-radius: 50%;
+  background: #f1ebfa;
+  color: #472b7a;
+  font-weight: 700;
+}
+
+.vaga-description {
+  max-width: 720px;
+  margin-bottom: 14px;
+  color: #615775;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.vaga-meta, .tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+
+.vaga-meta {
+  color: #6d637c;
+  font-size: 13px;
+
+  span { display: inline-flex; align-items: center; gap: 5px; }
+  ion-icon { color: #7b59b8; }
+}
+
+.tag-list { margin-top: 16px; gap: 8px; }
+.tag {
+  padding: 5px 10px;
+  border-radius: 4px;
+  background: #eee9f5;
+  color: #472b7a;
+  font-size: 12px;
+}
+
+.vaga-actions { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; }
+.details-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #5d389b;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.apply-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-left: auto;
+  padding: 9px 13px;
+  border: 1px solid #472b7a;
+  border-radius: 6px;
+  background: #472b7a;
+  color: #ffffff;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+
+  ion-icon { font-size: 16px; }
+  &:hover { background: #5d389b; }
+}
+
+.filters-panel {
+  position: sticky;
+  top: 24px;
+  padding: 22px;
+  border: 1px solid rgba(71, 43, 122, 0.15);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 20px rgba(71, 43, 122, 0.06);
+
+  label {
+    display: block;
+    margin: 20px 0 7px;
+    color: #472b7a;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  fieldset {
+    margin: 20px 0 0;
+    padding: 0;
+    border: 0;
+    border-top: 1px solid #eee8f7;
+  }
+
+  legend {
+    padding: 16px 0 0;
+    color: #472b7a;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-weight: 500;
+    line-height: 1.35;
+  }
+
+  input[type='checkbox'] { accent-color: #472b7a; margin-top: 2px; }
+
+  ion-searchbar {
+    --background: #faf8fd;
+    --box-shadow: none;
+    --border-radius: 6px;
+    border: 1px solid #ded6eb;
+    padding: 0;
+  }
+
+  select {
+    width: 100%;
+    min-height: 42px;
+    padding: 0 10px;
+    border: 1px solid #ded6eb;
+    border-radius: 6px;
+    background: #faf8fd;
+    color: #472b7a;
+    font: inherit;
+  }
+}
+
+.filters-heading {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  color: #472b7a;
+
+  h2 { margin: 0; font-size: 17px; }
+  ion-icon { font-size: 20px; }
+}
+
+.clear-filters {
+  width: 100%;
+  margin-top: 24px;
+  padding: 10px;
+  border: 1px solid #7b59b8;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #472b7a;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.empty-state {
+  padding: 52px 24px;
+  border: 1px dashed #b9a8d3;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.68);
+  text-align: center;
+  color: #615775;
+
+  ion-icon { font-size: 38px; color: #7b59b8; }
+  h3 { margin: 14px 0 6px; color: #472b7a; }
+  p { margin-bottom: 18px; }
+}
+
+@media (max-width: 800px) {
+  .vagas-shell { width: min(100% - 28px, 620px); padding-top: 24px; }
+  .vagas-header { padding: 22px; }
+  .vagas-layout { grid-template-columns: 1fr; }
+  .filters-panel { position: static; grid-row: 1; }
+  .results-column { grid-row: 2; }
+  .mobile-filter-button { display: inline-flex; }
+}
+
+@media (max-width: 520px) {
+  .vagas-header { align-items: flex-start; }
+  .header-icon { width: 48px; height: 48px; flex-basis: 48px; ion-icon { font-size: 24px; } }
+  .results-heading { align-items: flex-start; flex-direction: column; }
+  .mobile-filter-button { margin: -4px 0 0; }
+}

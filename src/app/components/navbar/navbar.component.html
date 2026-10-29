@@ -2,9 +2,9 @@
   <ion-toolbar class="navbar-container">
     
     <ion-buttons slot="start">
-      <div class="logo-container">
-      <img src="assets/logo_roxo.png" alt="Hipatec Logo" class="logo-img">
-      </div>
+      <ion-button class="logo-button" fill="clear" aria-label="Ir para a home" (click)="goToHome()">
+        <img src="assets/logo_hipatec_roxo.png" alt="Hipatec" class="logo-img">
+      </ion-button>
     </ion-buttons>
 
     <div class="search-box">
@@ -13,25 +13,51 @@
     </div>
 
     <ion-buttons slot="end">
-      <ion-button (click)="goToHome()" fill="clear">home</ion-button>
-      
-      <!-- Substituição do ID por evento passando $event -->
-      <ion-button (click)="aprendizadoPopover.present($event)" fill="clear">aprendizado</ion-button>
+      <ion-button (click)="goToHome()" fill="clear">Home</ion-button>
+      <ion-button (click)="aprendizadoPopover.present($event)" fill="clear">Aprendizado</ion-button>
+      <ion-button (click)="goToVagas()" fill="clear">Vagas</ion-button>
 
-      <!-- Substituição do ID por evento passando $event -->
-      <ion-avatar class="user-avatar" (click)="menuPopover.present($event)" style="cursor: pointer;">
-        <img [src]="profileImage" />
+      <ion-button id="notification-trigger" class="notification-button" fill="clear" aria-label="Notificações" (click)="marcarNotificacoesComoLidas()">
+        <ion-icon name="notifications-outline" aria-hidden="true"></ion-icon>
+        <ion-badge *ngIf="notificacoesNaoLidas > 0" class="notification-badge">{{ notificacoesNaoLidas }}</ion-badge>
+      </ion-button>
+
+      <ion-avatar class="user-avatar" (click)="menuPopover.present($event)" (keydown.enter)="menuPopover.present()" (keydown.space)="menuPopover.present()" role="button" tabindex="0" aria-label="Abrir menu do perfil">
+        <img [src]="profileImage" alt="Foto do perfil" />
       </ion-avatar>
     </ion-buttons>
       
+    <ion-popover class="notificacoes-popover" trigger="notification-trigger" side="bottom" alignment="end" arrow="true">
+      <ng-template>
+        <ion-content>
+          <ion-list lines="none">
+            <ion-list-header>Notificações</ion-list-header>
+            <ion-item *ngFor="let notificacao of notificacoes; let i = index">
+              <ion-icon name="notifications-outline" slot="start" aria-hidden="true"></ion-icon>
+              <ion-label>{{ notificacao.texto }}</ion-label>
+              <button type="button" class="remove-notification" [attr.aria-label]="'Remover notificação ' + (i + 1)" (click)="$event.stopPropagation(); removerNotificacao(i)">
+                <ion-icon name="close" aria-hidden="true"></ion-icon>
+              </button>
+            </ion-item>
+            <ion-item *ngIf="notificacoes.length === 0" class="empty-notifications">
+              <ion-label>Nenhuma notificação.</ion-label>
+            </ion-item>
+            <ion-item button class="clear-notifications" (click)="limparNotificacoes()" *ngIf="notificacoes.length > 0">
+              <ion-label>Limpar todas as notificações</ion-label>
+            </ion-item>
+          </ion-list>
+        </ion-content>
+      </ng-template>
+    </ion-popover>
+
     <!-- Popover do Perfil com referência local #menuPopover -->
-    <ion-popover #menuPopover class="perfil-popover" side="bottom" alignment="end">
+    <ion-popover #menuPopover class="perfil-popover" side="bottom" alignment="end" arrow="true">
       <ng-template>
         <ion-content>
           <ion-list lines="none">
             
             <!-- *ngIf verifica a rota para esconder o botão. Passe o menuPopover para a função -->
-            <ion-item button (click)="goToProfile(menuPopover)" *ngIf="router.url !== '/profile'">
+            <ion-item button (click)="goToProfile(menuPopover)">
               <ion-icon name="person-outline" slot="start"></ion-icon>
               <ion-label>Meu perfil</ion-label>
             </ion-item>
@@ -39,6 +65,10 @@
             <ion-item button (click)="goToSettings(menuPopover)">
               <ion-icon name="settings-outline" slot="start"></ion-icon>
               <ion-label>Configurações</ion-label>
+            </ion-item>
+            <ion-item button (click)="goToAdmin(menuPopover)" *ngIf="userROLE === 'administradores' || userROLE === 'administrador'">
+              <ion-icon name="settings-outline" slot="start"></ion-icon>
+              <ion-label>Administração</ion-label>
             </ion-item>
 
             <ion-item button (click)="logout(menuPopover)" class="item-sair">
@@ -52,11 +82,13 @@
     </ion-popover>
 
     <!-- Popover de Aprendizado com referência local #aprendizadoPopover -->
-    <ion-popover #aprendizadoPopover>
+    <ion-popover #aprendizadoPopover class="aprendizado-popover" side="bottom" alignment="start" arrow="true">
       <ng-template>
         <ion-content>
           <ion-list lines="none">
-            <ion-item [button]="true" (click)="goToMentoria(aprendizadoPopover)">painel</ion-item>
+            <ion-item [button]="true" (click)="goToMentoria(aprendizadoPopover)">Painel</ion-item>
+            <ion-item [button]="true" (click)="goToMeuAprendizado(aprendizadoPopover)">Meu aprendizado</ion-item>
+            <ion-item [button]="true" (click)="goToGestao(aprendizadoPopover)" *ngIf="userROLE === 'mentoras'">Gestão de mentorias</ion-item>
           </ion-list>
         </ion-content>
       </ng-template>

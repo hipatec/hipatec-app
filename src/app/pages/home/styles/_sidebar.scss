@@ -76,14 +76,20 @@
 .sidebar-more {
   padding: 16px 20px 0 20px;
 
-  a {
-    font-family: 'Roboto', sans-serif;
+  .sidebar-more-button {
+    background: transparent;
+    border: 0;
     color: #7b59b8;
-    text-decoration: none;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
     font-size: 14px;
+    padding: 0;
 
-    &:hover {
+    &:hover,
+    &:focus-visible {
+      color: #472b7a;
       text-decoration: underline;
+      outline: none;
     }
   }
 }

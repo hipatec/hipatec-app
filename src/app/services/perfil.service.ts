@@ -13,6 +13,8 @@ export interface Perfil {
     num_seguindo?: number;
     pfp?: string;
     background?: string;
+    id_estudante?: number;
+    id_mentora?: number;
 }
 
 @Injectable({
