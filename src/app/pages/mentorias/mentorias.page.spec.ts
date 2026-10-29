@@ -26,4 +26,15 @@ describe('MentoriasPage', () => {
     expect(fixture.componentInstance).toBeTruthy();
     http.verify();
   });
+
+  it('troca o mês e gera os dias correspondentes', () => {
+    const fixture = TestBed.createComponent(MentoriasPage);
+    const page = fixture.componentInstance;
+    expect(page.tituloDoMes).toBe('Novembro de 2026');
+    page.mudarMes(1);
+    expect(page.tituloDoMes).toBe('Dezembro de 2026');
+    expect(page.diasComEvento).toEqual([]);
+    page.mudarMes(-1);
+    expect(page.diasComEvento).toEqual([12, 15, 20]);
+  });
 });
