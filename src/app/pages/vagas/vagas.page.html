@@ -1,0 +1,110 @@
+<ion-content class="vagas-content">
+  <main class="vagas-shell">
+    <header class="vagas-header">
+      <div>
+        <p class="eyebrow">OPORTUNIDADES</p>
+        <h1>Vagas</h1>
+        <p class="subtitle">Encontre oportunidades para continuar sua jornada na tecnologia.</p>
+      </div>
+      <div class="header-icon" aria-hidden="true">
+        <ion-icon name="briefcase-outline"></ion-icon>
+      </div>
+    </header>
+
+    <div class="vagas-layout">
+      <section class="results-column" aria-labelledby="resultados-title">
+        <div class="results-heading">
+          <div>
+            <h2 id="resultados-title">Oportunidades abertas</h2>
+            <span>{{ vagasFiltradas.length }} vagas encontradas</span>
+          </div>
+          <ion-button fill="clear" class="mobile-filter-button" (click)="limparFiltros()">
+            <ion-icon slot="start" name="funnel-outline"></ion-icon>
+            Limpar filtros
+          </ion-button>
+        </div>
+
+        <div *ngIf="vagasFiltradas.length; else emptyState" class="vagas-list">
+          <article class="vaga-card" *ngFor="let vaga of vagasFiltradas" (click)="abrirVaga(vaga)">
+            <div class="company-row">
+              <div class="company-avatar" aria-hidden="true">{{ vaga.empresa.charAt(0) }}</div>
+              <div class="company-name">{{ vaga.empresa }}</div>
+              <time>{{ vaga.publicada }}</time>
+            </div>
+            <h3>{{ vaga.titulo }}</h3>
+            <p class="vaga-description">{{ vaga.descricao }}</p>
+            <div class="vaga-meta">
+              <span><ion-icon name="location-outline" aria-hidden="true"></ion-icon>{{ vaga.local }}</span>
+              <span><ion-icon name="time-outline" aria-hidden="true"></ion-icon>{{ vaga.modalidade }}</span>
+            </div>
+            <div class="tag-list" aria-label="Competências da vaga">
+              <span class="tag" *ngFor="let tag of vaga.tags">{{ tag }}</span>
+            </div>
+            <div class="vaga-actions">
+              <button type="button" class="details-link" (click)="$event.stopPropagation(); abrirVaga(vaga)">Ver detalhes</button>
+              <button type="button" class="apply-button" (click)="$event.stopPropagation(); inscrever(vaga)" [attr.aria-label]="'Inscrever-se em ' + vaga.titulo">
+                Inscrever-se <ion-icon name="open-outline" aria-hidden="true"></ion-icon>
+              </button>
+            </div>
+          </article>
+        </div>
+
+        <ng-template #emptyState>
+          <div class="empty-state" role="status">
+            <ion-icon name="briefcase-outline" aria-hidden="true"></ion-icon>
+            <h3>Nenhuma vaga encontrada</h3>
+            <p>Tente remover algum filtro ou fazer uma nova busca.</p>
+            <ion-button fill="outline" (click)="limparFiltros()">Limpar filtros</ion-button>
+          </div>
+        </ng-template>
+      </section>
+
+      <aside class="filters-panel" aria-labelledby="filters-title">
+        <div class="filters-heading">
+          <ion-icon name="funnel-outline" aria-hidden="true"></ion-icon>
+          <h2 id="filters-title">Filtros de pesquisa</h2>
+        </div>
+
+        <fieldset>
+          <legend>Identificação geral</legend>
+          <label for="vaga-busca">Buscar</label>
+          <ion-searchbar id="vaga-busca" [(ngModel)]="busca" placeholder="Palavras-chave" [debounce]="150"></ion-searchbar>
+          <label for="cargo">Cargo</label>
+          <select id="cargo" [(ngModel)]="cargo"><option>Todos</option><option>Desenvolvedora Front-end Júnior</option><option>Analista de Dados</option><option>Pessoa Engenheira de Software</option><option>Product Designer</option></select>
+          <label for="area">Área</label>
+          <select id="area" [(ngModel)]="area"><option>Todas</option><option>Tecnologia</option><option>Design</option></select>
+        </fieldset>
+
+        <fieldset>
+          <legend>Localização</legend>
+          <label for="pais">País</label>
+          <select id="pais" [(ngModel)]="pais"><option>Todos</option><option>Brasil</option></select>
+          <label for="estado">Estado</label>
+          <select id="estado" [(ngModel)]="estado"><option>Todos</option><option>São Paulo</option><option>Rio de Janeiro</option></select>
+          <label for="cidade">Cidade</label>
+          <select id="cidade" [(ngModel)]="cidade"><option>Todas</option><option>São Paulo</option><option>Rio de Janeiro</option></select>
+        </fieldset>
+
+        <fieldset>
+          <legend>Perfil e requisitos</legend>
+          <label for="formacao">Nível de formação</label>
+          <select id="formacao" [(ngModel)]="formacao"><option>Todas</option><option>Ensino Médio</option><option>Ensino Superior</option><option>Pós-Graduação</option></select>
+          <label for="senioridade">Experiência / Senioridade</label>
+          <select id="senioridade" [(ngModel)]="senioridade"><option>Todas</option><option>Estágio</option><option>Júnior</option><option>Pleno</option><option>Sênior</option><option>Especialista</option><option>Diretor</option></select>
+          <label for="idioma">Idiomas</label>
+          <select id="idioma" [(ngModel)]="idioma"><option>Todos</option><option>Inglês Intermediário</option><option>Inglês Fluente</option><option>Espanhol Intermediário</option></select>
+        </fieldset>
+
+        <fieldset>
+          <legend>Condições de trabalho</legend>
+          <label for="modalidade">Modalidade</label>
+          <select id="modalidade" [(ngModel)]="modalidade"><option>Todas</option><option>Presencial</option><option>Híbrido</option><option>Remoto</option></select>
+          <label for="contrato">Tipo de contrato</label>
+          <select id="contrato" [(ngModel)]="contrato"><option>Todos</option><option>CLT</option><option>PJ</option><option>Temporário</option><option>Estágio</option><option>Trainee</option></select>
+        </fieldset>
+
+        <button type="button" class="clear-filters" (click)="limparFiltros()">Limpar filtros</button>
+      </aside>
+    </div>
+  </main>
+</ion-content>

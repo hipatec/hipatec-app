@@ -23,6 +23,16 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/forgot-password/forgot-password.page').then(m => m.ForgotPasswordPage)
   },
   {
+    path: 'vagas',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/vagas/vagas.page').then(m => m.VagasPage)
+  },
+  {
+    path: 'aprendizado',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/aprendizado/aprendizado.page').then(m => m.AprendizadoPage)
+  },
+  {
     path: 'mentorias',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/mentorias/mentorias.page').then( m => m.MentoriasPage)
@@ -32,7 +42,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./pages/onboarding/onboarding.page').then(m => m.OnboardingPage)
   },
-
   {
     path: 'cadastro',
     canActivate: [guestGuard],
@@ -43,7 +52,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('./pages/profile/profile.page').then( m => m.ProfilePage)
   },
-
   {
     path: 'mentorias/cadastro',
     canActivate: [authGuard],
@@ -53,10 +61,5 @@ export const routes: Routes = [
   {
     path: 'forgot-password',
     loadComponent: () => import('./pages/forgot-password/forgot-password.page').then( m => m.ForgotPasswordPage)
-  },
-
-
-
-
-
+  }
 ];

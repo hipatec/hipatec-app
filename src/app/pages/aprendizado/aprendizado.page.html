@@ -1,0 +1,97 @@
+<ion-content>
+  <main class="aprendizado-shell">
+    <header class="page-header">
+      <div>
+        <p class="eyebrow">APRENDIZADO</p>
+        <h1>Meu aprendizado</h1>
+        <p>Veja tudo o que você está fazendo agora e continue de onde parou.</p>
+      </div>
+      <div class="overall-progress" aria-label="Progresso médio">
+        <strong>{{ percentualConcluido }}%</strong>
+        <span>progresso médio</span>
+      </div>
+    </header>
+
+    <section class="activity-toolbar" aria-label="Resumo das atividades">
+      <span><ion-icon name="book-outline" aria-hidden="true"></ion-icon>{{ itens.length }} atividades</span>
+      <span><ion-icon name="time-outline" aria-hidden="true"></ion-icon>2 em andamento</span>
+      <span><ion-icon name="checkmark-circle-outline" aria-hidden="true"></ion-icon>1 concluída</span>
+      <div class="pagination-settings">
+        <label for="itens-por-pagina">Mostrar por página</label>
+        <select id="itens-por-pagina" [ngModel]="itensPorPagina" (ngModelChange)="alterarItensPorPagina($event)">
+          <option [value]="6">6</option>
+          <option [value]="12">12</option>
+          <option [value]="24">24</option>
+        </select>
+      </div>
+    </section>
+
+    <section aria-labelledby="atividades-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="atividades-title">Suas atividades</h2>
+          <p>Cursos e mentorias em que você está matriculada.</p>
+        </div>
+        <select aria-label="Filtrar atividades" [ngModel]="filtroAtividade" (ngModelChange)="alterarFiltroAtividade($event)">
+          <option>Todas as atividades</option>
+          <option>Em andamento</option>
+          <option>Concluídas</option>
+        </select>
+        </div>
+
+      <div class="activity-list">
+        <article class="activity-card" *ngFor="let item of atividadesPaginadas">
+          <div class="activity-cover" aria-hidden="true"><ion-icon name="book-outline"></ion-icon></div>
+          <div class="activity-content">
+            <span class="activity-type">{{ item.tipo }}</span>
+            <h3>{{ item.titulo }}</h3>
+            <p>{{ item.descricao }}</p>
+            <span class="mentor-name">Mentora: {{ item.mentora }}</span>
+            <div class="progress-label"><span>Progresso</span><strong>{{ item.progresso * 100 }}%</strong></div>
+            <ion-progress-bar [value]="item.progresso"></ion-progress-bar>
+            <div class="next-activity"><ion-icon name="time-outline" aria-hidden="true"></ion-icon>{{ item.proximaAtividade }}</div>
+          </div>
+          <ion-button fill="outline" class="continue-button" (click)="continuar(item)">
+            {{ item.progresso === 1 ? 'Revisar' : 'Continuar' }}
+          </ion-button>
+        </article>
+      </div>
+      <div class="pagination-controls" *ngIf="totalPaginasAtividades > 1">
+        <button type="button" (click)="mudarPagina('atividades', -1)" [disabled]="paginaAtividades === 1">Anterior</button>
+        <span>Página {{ paginaAtividades }} de {{ totalPaginasAtividades }}</span>
+        <button type="button" (click)="mudarPagina('atividades', 1)" [disabled]="paginaAtividades === totalPaginasAtividades">Próxima</button>
+      </div>
+    </section>
+
+    <section class="suggestions-section" aria-labelledby="sugestoes-title">
+      <div class="suggestions-heading">
+        <div>
+          <h2 id="sugestoes-title">Continuar aprendendo</h2>
+          <p>Confira outras oportunidades de estudo com inscrições abertas.</p>
+        </div>
+        <select aria-label="Filtrar sugestões" [ngModel]="filtroSugestao" (ngModelChange)="alterarFiltroSugestao($event)">
+          <option>Todos</option>
+          <option>Mentoria</option>
+          <option>Curso</option>
+        </select>
+      </div>
+      <div class="suggestions-grid">
+        <article class="suggestion-card" *ngFor="let sugestao of sugestoesPaginadas">
+          <div class="suggestion-image" aria-hidden="true"></div>
+          <div class="suggestion-copy">
+            <span>{{ sugestao.tipo }}</span>
+            <h3>{{ sugestao.titulo }}</h3>
+            <p>{{ sugestao.descricao }}</p>
+            <small>Mentora: {{ sugestao.mentora }}</small>
+          </div>
+          <ion-button fill="outline" (click)="inscrever(sugestao)">Inscrever-se agora</ion-button>
+        </article>
+      </div>
+      <div class="pagination-controls" *ngIf="totalPaginasSugestoes > 1">
+        <button type="button" (click)="mudarPagina('sugestoes', -1)" [disabled]="paginaSugestoes === 1">Anterior</button>
+        <span>Página {{ paginaSugestoes }} de {{ totalPaginasSugestoes }}</span>
+        <button type="button" (click)="mudarPagina('sugestoes', 1)" [disabled]="paginaSugestoes === totalPaginasSugestoes">Próxima</button>
+      </div>
+    </section>
+  </main>
+</ion-content>
