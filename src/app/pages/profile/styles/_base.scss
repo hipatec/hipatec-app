@@ -1,9 +1,9 @@
 .gradient-bg {
   width: 100vw;
-  min-height: 100vh;
+  min-height: calc(100vh - 56px);
   height: auto;
   background: linear-gradient(135deg, #fff3cd 0%, #ffffff 50%, #9b82c9 100%);
-  padding: 20px 0;
+  padding: 76px 0 20px;
   box-sizing: border-box;
 }
 

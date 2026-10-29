@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent } from '@ionic/angular/standalone';
-import { NavbarComponent } from '../../components/navbar/navbar.component';
+import { IonContent, IonicModule } from '@ionic/angular';
 import { EstudanteService } from '../../services/estudante.service';
 import { MentoraService } from '../../services/mentora.service';
 import { PerfilService } from '../../services/perfil.service';
 import { EditProfileModalComponent } from '../../components/edit-profile-modal/edit-profile-modal.component';
 import { PostsService } from '../../services/posts.service';
 import { AuthService } from '../../services/auth.service';
+import { close, ellipsisHorizontal, heart, heartOutline, chatbubbleOutline, pencil, trash, repeatOutline } from 'ionicons/icons';
+import { addIcons } from 'ionicons';
 
 @Component({
   selector: 'app-profile',
@@ -16,10 +17,9 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./profile.page.scss'],
   standalone: true,
   imports: [
-    IonContent,
+    IonicModule,
     CommonModule, 
-    FormsModule, 
-    NavbarComponent, 
+    FormsModule,
     EditProfileModalComponent
   ]
 })
@@ -35,12 +35,19 @@ export class ProfilePage {
     private perfilService: PerfilService,
     private postsService: PostsService,
     private authService: AuthService
-  ) {}
-
+  ) {
+    addIcons({ close, ellipsisHorizontal, heart, heartOutline, chatbubbleOutline, pencil, trash, repeatOutline });
+  }
   userRole: string | null = null;
   userId = 0;
   perfil: any;
   posts: any[] = [];
+  reposts: any[] = [];
+  profileTab: 'posts' | 'reposts' = 'posts';
+  postMenuId: string | number | null = null;
+  iconeCurtir = heartOutline;
+  iconeCurtido = heart;
+  iconeComentar = chatbubbleOutline;
 
   ionViewWillEnter() {
     this.perfil = undefined;
@@ -66,17 +73,41 @@ export class ProfilePage {
   private loadPosts(perfilId: number) {
     this.postsService.getPostsPerfil(perfilId).subscribe(posts => {
       this.posts = posts.map(post => this.mapPost(post));
-      console.log('Posts carregados:', this.posts);
+      const reposts = this.getLocalReposts(perfilId);
+      this.posts = [...this.posts, ...reposts.filter((post: any) => post.repostComComentario)];
+      this.reposts = reposts.filter((post: any) => post.repostPuro);
     });
   }
 
+  private getLocalReposts(perfilId: number) {
+    const raw = JSON.parse(localStorage.getItem('hipatec-reposts') || '[]');
+    const vistos = new Set<string>();
+    return raw.filter((repost: any) => {
+      const originalId = String(repost?.repostOriginalId ?? '');
+      const valido = Boolean(repost?.id?.toString().startsWith('repost-'))
+        && Boolean(originalId)
+        && Boolean(repost?.repostOriginal)
+        && (repost.repostPuro === true || repost.repostComComentario === true)
+        && String(repost.repostOwnerId) === String(perfilId)
+        && !vistos.has(`${originalId}:${repost.repostComComentario ? 'comment' : 'pure'}`);
+      if (valido) vistos.add(`${originalId}:${repost.repostComComentario ? 'comment' : 'pure'}`);
+      return valido;
+    });
+  }
   private mapPost(post: any) {
+    const localReposts = JSON.parse(localStorage.getItem('hipatec-reposts') || '[]');
+    const perfilId = localStorage.getItem('perfil');
+    const repostado = localReposts.some((repost: any) => String(repost.repostOriginalId) === String(post.id)
+      && String(repost.repostOwnerId) === String(perfilId)
+      && (repost.repostPuro === true || repost.repostComComentario === true));
     return {
       ...post,
       conteudo: post.conteudo || post.texto || '',
       tempo: this.formatPostTime(post.dataCriacao),
       curtidas: post.likesCount ?? 0,
-      comentarios: post.commentsCount ?? 0
+      comentarios: post.commentsCount ?? 0,
+      reposts: (post.repostsCount ?? 0) + (repostado ? 1 : 0),
+      repostadoUsuario: repostado
     };
   }
 
@@ -104,6 +135,80 @@ export class ProfilePage {
     return `há ${days} dia${days > 1 ? 's' : ''}`;
   }
 
+
+  toggleCurtida(post: any) {
+    post.curtidoUsuario = !post.curtidoUsuario;
+    post.curtidas = Math.max(0, (post.curtidas ?? 0) + (post.curtidoUsuario ? 1 : -1));
+  }
+
+  abrirComentario(post: any) {
+    const comentario = window.prompt('Escreva um comentário:', '');
+    if (comentario?.trim()) post.comentarios = (post.comentarios ?? 0) + 1;
+  }
+
+  repostar(post: any, comComentario = false) {
+    const originalId = post.repostOriginal?.id || post.id;
+    const reposts = JSON.parse(localStorage.getItem('hipatec-reposts') || '[]');
+    const existente = reposts.find((item: any) => String(item.repostOriginalId) === String(originalId));
+
+    if (existente) {
+      localStorage.setItem('hipatec-reposts', JSON.stringify(reposts.filter((item: any) => item !== existente)));
+      post.repostadoUsuario = false;
+      post.reposts = Math.max(0, (post.reposts ?? 0) - 1);
+      this.posts = this.posts.filter(item => item.id !== existente.id);
+      this.reposts = this.reposts.filter(item => item.id !== existente.id);
+      return;
+    }
+
+    const comentario = comComentario ? window.prompt('Adicione um comentário ao repost:', '') : '';
+    if (comComentario && comentario === null) return;
+
+    const novoRepost = {
+      ...post,
+      id: `repost-${Date.now()}`,
+      repostOriginalId: originalId,
+      repostOwnerId: localStorage.getItem('perfil'),
+      conteudo: comentario || post.conteudo,
+      repostOriginal: post,
+      repostComComentario: Boolean(comentario),
+      repostPuro: !comentario,
+      tempo: 'agora',
+      repostadoUsuario: true,
+      reposts: 1
+    };
+    localStorage.setItem('hipatec-reposts', JSON.stringify([novoRepost, ...reposts]));
+    post.repostadoUsuario = true;
+    post.reposts = (post.reposts ?? 0) + 1;
+    if (comentario) this.posts = [novoRepost, ...this.posts];
+    else this.reposts = [novoRepost, ...this.reposts];
+  }
+  togglePostMenu(post: any) {
+    this.postMenuId = this.postMenuId === post.id ? null : post.id;
+  }
+
+  isPostOwner(post: any): boolean {
+    return Number(post.autorId) === Number(this.perfil?.id);
+  }
+
+  canEditPost(post: any): boolean {
+    return this.isPostOwner(post);
+  }
+
+  canDeletePost(post: any): boolean {
+    if (this.isPostOwner(post)) return true;
+    if (this.userRole === 'administradores' || this.userRole === 'administrador') return true;
+    return this.userRole === 'mentoras' && post.autorRole === 'estudantes';
+  }
+
+  editarPost(post: any) {
+    this.postMenuId = null;
+    alert('A edição do post será conectada à API de publicações.');
+  }
+
+  excluirPost(post: any) {
+    this.postMenuId = null;
+    alert('A exclusão do post será conectada à API de moderação.');
+  }
 
   editProfile() {
     this.showEditModal = true;

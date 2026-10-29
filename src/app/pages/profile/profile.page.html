@@ -1,6 +1,5 @@
-<app-navbar></app-navbar>
 
-<ion-content fullscreen class="gradient-bg">
+<ion-content class="gradient-bg">
   <div class="main-layout-wrapper">
 
     <div class="header-container">
@@ -28,15 +27,15 @@
             <div class="profile-stats">
               <div class="stats-item">
                 <strong class="num-posts">{{ perfil?.num_publicacoes || 0 }}</strong> 
-                <span>posts</span>
+                <span>Posts</span>
               </div>
               <div class="stats-item">
                 <strong class="num-seguidores">{{ perfil?.num_seguidores || 0 }}</strong>
-                <span>seguidores</span>
+                <span>Seguidores</span>
               </div>
               <div class="stats-item">
                 <strong class="num-seguindo">{{ perfil?.num_seguindo || 0 }}</strong> 
-                <span>seguindo</span>
+                <span>Seguindo</span>
               </div>
             </div>
           </div>
@@ -46,7 +45,7 @@
           <p class="user-bio">
             {{ perfil?.biografia || 'Nenhuma biografia informada.' }}
           </p>
-          <button class="btn-edit-profile" (click)="editProfile()">editar perfil</button>
+          <button class="btn-edit-profile" (click)="editProfile()">Editar perfil</button>
         </div>
 
         <app-edit-profile-modal
@@ -56,37 +55,89 @@
           (requestSave)="salvarFromModal($event)">
         </app-edit-profile-modal>
 
+        <div class="profile-tabs" role="tablist" aria-label="Conteúdo do perfil">
+          <button type="button" [class.active]="profileTab === 'posts'" (click)="profileTab = 'posts'">Posts</button>
+          <button type="button" [class.active]="profileTab === 'reposts'" (click)="profileTab = 'reposts'">Republicados</button>
+        </div>
+
       </header>
     </div>
 
-    <div class="feed-container" >
-      
+    <div class="feed-container" *ngIf="profileTab === 'posts'">
       <div class="post-card" *ngFor="let post of posts">
         <div class="post-header">
           <div class="post-avatar-placeholder">
-            <img [src]="perfil?.pfp || post.autorFoto" [alt]="perfil?.nome || post.autor" />
+            <img [src]="perfil?.pfp || post.autorFoto" [alt]="perfil?.nome || post.autor || 'Usuário'" />
           </div>
           <div class="post-meta">
             <span class="post-author">{{ perfil?.nome || post.autor }}</span>
             <span class="post-role">{{ userRole }}</span>
           </div>
           <span class="post-time">{{ post.tempo }}</span>
-          <button class="btn-options">&#8226;&#8226;&#8226;</button>
+          <button type="button" class="btn-options" aria-label="Opções da publicação" (click)="togglePostMenu(post)">
+            <ion-icon name="ellipsis-horizontal" aria-hidden="true"></ion-icon>
+          </button>
+          <div class="post-menu" *ngIf="postMenuId === post.id" role="menu">
+            <button type="button" role="menuitem" *ngIf="canEditPost(post)" (click)="editarPost(post)">
+              <ion-icon name="pencil" aria-hidden="true"></ion-icon>
+              <span>Editar publicação</span>
+            </button>
+            <button type="button" role="menuitem" class="post-menu-danger" *ngIf="canDeletePost(post)" (click)="excluirPost(post)">
+              <ion-icon name="trash" aria-hidden="true"></ion-icon>
+              <span>Excluir publicação</span>
+            </button>
+          </div>
         </div>
 
         <div class="post-body">
-          <p class="post-text">
-            {{ post.conteudo }}
-          </p>
+          <p class="post-text">{{ post.conteudo }}</p>
+          <div class="repost-comment-context" *ngIf="post.repostComComentario">
+            <div class="repost-label"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon> Repost com comentário</div>
+            <div class="reposted-original" *ngIf="post.repostOriginal">
+              <strong>{{ post.repostOriginal.autor }}</strong>
+              <p>{{ post.repostOriginal.conteudo }}</p>
+            </div>
+          </div>
         </div>
 
         <div class="post-actions">
-          <span class="action-dot"></span>
-          <span class="action-dot"></span>
-          <span class="action-dot"></span>
+          <button type="button" class="action-btn btn-like" [class.active-like]="post.curtidoUsuario" [attr.aria-label]="'Curtir publicação de ' + (perfil?.nome || post.autor)" (click)="toggleCurtida(post)">
+            <ion-icon [icon]="post.curtidoUsuario ? iconeCurtido : iconeCurtir"></ion-icon>
+            <span class="action-count">{{ post.curtidas }}</span>
+          </button>
+          <button type="button" class="action-btn btn-comment" [attr.aria-label]="'Comentar publicação de ' + (perfil?.nome || post.autor)" (click)="abrirComentario(post)">
+            <ion-icon [icon]="iconeComentar"></ion-icon>
+            <span class="action-count">{{ post.comentarios }}</span>
+          </button>
+          <button type="button" class="action-btn btn-repost" [class.active-repost]="post.repostadoUsuario" aria-label="Repostar publicação" (click)="repostar(post)">
+            <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
+            <span class="action-count">{{ post.reposts }}</span>
+          </button>
+          <button type="button" class="action-btn btn-repost-comment" [class.active-repost]="post.repostadoUsuario" aria-label="Repostar com comentário" (click)="repostar(post, true)">
+            <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
+            <span>Comentar</span>
+          </button>
         </div>
       </div>
+    </div>
 
+    <div class="feed-container reposts-feed" *ngIf="profileTab === 'reposts'">
+      <div class="post-card" *ngFor="let repost of reposts">
+        <div class="repost-status" aria-label="Você republicou esta publicação"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon></div>
+        <div class="post-header">
+          <div class="post-avatar-placeholder"><img [src]="repost.avatar" [alt]="repost.autor || 'Usuário'" /></div>
+          <div class="post-meta"><span class="post-author">{{ repost.autor }}</span></div>
+          <span class="post-time">{{ repost.tempo }}</span>
+        </div>
+        <div class="post-body"><p class="post-text">{{ repost.conteudo }}</p></div>
+        <div class="post-actions">
+          <button type="button" class="action-btn btn-like" [class.active-like]="repost.curtidoUsuario" aria-label="Curtir publicação" (click)="toggleCurtida(repost)"><ion-icon [icon]="repost.curtidoUsuario ? iconeCurtido : iconeCurtir"></ion-icon><span class="action-count">{{ repost.curtidas || 0 }}</span></button>
+          <button type="button" class="action-btn btn-comment" aria-label="Comentar publicação" (click)="abrirComentario(repost)"><ion-icon [icon]="iconeComentar"></ion-icon><span class="action-count">{{ repost.comentarios || 0 }}</span></button>
+          <button type="button" class="action-btn btn-repost" [class.active-repost]="repost.repostadoUsuario" aria-label="Repostar publicação" (click)="repostar(repost)"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon><span class="action-count">{{ repost.reposts || 1 }}</span></button>
+          <button type="button" class="action-btn btn-repost-comment" aria-label="Repostar com comentário" (click)="repostar(repost, true)"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon><span>Comentar</span></button>
+        </div>
+      </div>
+      <div class="feed-state" *ngIf="reposts.length === 0">Nenhuma publicação republicada.</div>
     </div>
 
   </div>
