@@ -33,6 +33,16 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/aprendizado/aprendizado.page').then(m => m.AprendizadoPage)
   },
   {
+    path: 'gestao-mentorias',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/gestao-mentorias/gestao-mentorias.page').then(m => m.GestaoMentoriasPage)
+  },
+  {
+    path: 'admin/perfis',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/admin-perfis/admin-perfis.page').then(m => m.AdminPerfisPage)
+  },
+  {
     path: 'mentorias',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/mentorias/mentorias.page').then( m => m.MentoriasPage)
@@ -46,6 +56,11 @@ export const routes: Routes = [
     path: 'cadastro',
     canActivate: [guestGuard],
     loadComponent: () => import('./pages/cadastro/cadastro.page').then( m => m.CadastroPage)
+  },
+  {
+    path: 'profile/:role/:id',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/profile/profile.page').then(m => m.ProfilePage)
   },
   {
     path: 'profile',

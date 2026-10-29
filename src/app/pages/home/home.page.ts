@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { IonicModule, ModalController } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -53,7 +54,8 @@ export class HomePage implements OnInit {
     private modalController: ModalController,
     private postsService: PostsService,
     private perfilService: PerfilService,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) {
     addIcons({ heartOutline, heart, chatbubbleOutline, add, ellipsisHorizontal, flagOutline, close, pencil, trash, repeatOutline });
   }
@@ -130,6 +132,10 @@ export class HomePage implements OnInit {
 
   mostrarMaisSugestoes() {
     this.quantidadeSugestoes = this.sugestoes.length;
+  }
+  abrirPerfil(post: any) {
+    const role = post.autorRole || 'estudantes';
+    this.router.navigate(['/profile', role, post.autorId]);
   }
   togglePostMenu(post: any) {
     this.postMenuId = this.postMenuId === post.id ? null : post.id;

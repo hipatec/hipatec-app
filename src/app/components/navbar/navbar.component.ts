@@ -73,6 +73,13 @@ export class NavbarComponent  implements OnInit {
   goToMeuAprendizado(popover: any) {
     popover.dismiss().then(() => this.router.navigate(['/aprendizado']));
   }
+  goToGestao(popover: any) {
+    popover.dismiss().then(() => this.router.navigate(['/gestao-mentorias']));
+  }
+
+  goToAdmin(popover: any) {
+    popover.dismiss().then(() => this.router.navigate(['/admin/perfis']));
+  }
   goToProfile(popover: any) {
     popover.dismiss().then(() => {
       this.router.navigate(['/profile']); // Coloque a rota correta do seu perfil

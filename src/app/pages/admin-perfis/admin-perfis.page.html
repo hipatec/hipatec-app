@@ -1,0 +1,7 @@
+<ion-content>
+  <main class="admin-shell">
+    <p class="eyebrow">ADMINISTRAÇÃO</p><h1>Perfis de mentoras</h1><p class="subtitle">Analise solicitações e gerencie os perfis autorizados.</p>
+    <section class="admin-summary"><strong>{{ solicitacoes.length }}</strong><span>solicitações pendentes</span></section>
+    <div class="request-list"><article class="request-card" *ngFor="let pessoa of solicitacoes"><div class="avatar"></div><div><h2>{{ pessoa.nome }}</h2><p>{{ pessoa.email }} · {{ pessoa.area }}</p><small>Solicitado em {{ pessoa.data }}</small></div><div class="request-actions"><button class="approve" (click)="autorizar(pessoa)">Autorizar</button><button class="reject" (click)="recusar(pessoa)">Recusar</button></div></article></div>
+  </main>
+</ion-content>

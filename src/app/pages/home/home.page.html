@@ -26,7 +26,7 @@
                   <img [src]="post.avatar" [alt]="post.autor" />
                 </div>
                 <div class="post-meta">
-                  <span class="post-author">{{ post.autor }}</span>
+                  <button type="button" class="post-author-link" (click)="abrirPerfil(post)">{{ post.autor }}</button>
                   <!-- <span class="post-role">{{ post.role }}</span> -->
                 </div>
                 <span class="post-time">{{ post.tempo }}</span>

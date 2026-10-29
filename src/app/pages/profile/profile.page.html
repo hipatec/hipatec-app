@@ -45,7 +45,7 @@
           <p class="user-bio">
             {{ perfil?.biografia || 'Nenhuma biografia informada.' }}
           </p>
-          <button class="btn-edit-profile" (click)="editProfile()">Editar perfil</button>
+          <button class="btn-edit-profile" (click)="editProfile()" *ngIf="!isPublicProfile">Editar perfil</button>
         </div>
 
         <app-edit-profile-modal

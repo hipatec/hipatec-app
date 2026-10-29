@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonicModule } from '@ionic/angular';
@@ -34,10 +36,12 @@ export class ProfilePage {
     private mentoraService: MentoraService, 
     private perfilService: PerfilService,
     private postsService: PostsService,
-    private authService: AuthService
+    private authService: AuthService,
+    private route: ActivatedRoute
   ) {
     addIcons({ close, ellipsisHorizontal, heart, heartOutline, chatbubbleOutline, pencil, trash, repeatOutline });
   }
+  isPublicProfile = false;
   userRole: string | null = null;
   userId = 0;
   perfil: any;
@@ -52,7 +56,22 @@ export class ProfilePage {
   ionViewWillEnter() {
     this.perfil = undefined;
     this.posts = [];
+    this.reposts = [];
     this.showEditModal = false;
+    const role = this.route.snapshot.paramMap.get('role');
+    const publicId = Number(this.route.snapshot.paramMap.get('id'));
+    this.isPublicProfile = Boolean(role && publicId);
+
+    if (this.isPublicProfile && role && publicId) {
+      this.userRole = role;
+      this.userId = publicId;
+      this.perfilService.getPerfil(role, publicId).subscribe(perfil => {
+        this.perfil = perfil;
+        this.loadPosts(publicId, false);
+      });
+      return;
+    }
+
     this.authService.sessao().subscribe({
       next: sessao => {
         this.userRole = sessao.role;
@@ -63,19 +82,18 @@ export class ProfilePage {
           this.loadPosts(perfil.id);
         });
       },
-      error: () => {
-        this.userRole = null;
-        this.userId = 0;
-      }
+      error: () => { this.userRole = null; this.userId = 0; }
     });
   }
 
-  private loadPosts(perfilId: number) {
+  private loadPosts(perfilId: number, includeLocalReposts = true) {
     this.postsService.getPostsPerfil(perfilId).subscribe(posts => {
       this.posts = posts.map(post => this.mapPost(post));
-      const reposts = this.getLocalReposts(perfilId);
-      this.posts = [...this.posts, ...reposts.filter((post: any) => post.repostComComentario)];
-      this.reposts = reposts.filter((post: any) => post.repostPuro);
+      if (includeLocalReposts) {
+        const reposts = this.getLocalReposts(perfilId);
+        this.posts = [...this.posts, ...reposts.filter((post: any) => post.repostComComentario)];
+        this.reposts = reposts.filter((post: any) => post.repostPuro);
+      }
     });
   }
 

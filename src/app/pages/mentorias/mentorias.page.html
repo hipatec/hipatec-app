@@ -1,85 +1,18 @@
 <ion-content class="ion-padding">
   <main class="painel-shell">
     <header class="painel-header">
-      <p class="eyebrow">PAINEL</p>
-      <h1>Meu painel</h1>
-      <p class="section-subtitle">Um resumo rápido do seu progresso na Hipatec.</p>
+      <p class="eyebrow">PAINEL</p><h1>Meu painel</h1><p class="section-subtitle">Um resumo rápido do seu progresso na Hipatec.</p>
     </header>
-
     <section class="summary-grid" aria-label="Resumo do aprendizado">
       <article class="summary-card"><span class="summary-label">Matrículas</span><strong>3</strong><small>cursos e mentorias</small></article>
       <article class="summary-card"><span class="summary-label">Aproveitamento</span><strong>78%</strong><small>média de conclusão</small></article>
       <article class="summary-card"><span class="summary-label">Em andamento</span><strong>2</strong><small>aprendizados ativos</small></article>
     </section>
-
     <section class="calendar-section" aria-labelledby="agenda-title">
-      <div class="section-heading">
-        <div>
-          <h2 id="agenda-title" class="section-title">Minha agenda</h2>
-          <p class="section-subtitle">Prazos e encontros importantes do seu aprendizado.</p>
-        </div>
-        <ion-icon name="calendar-outline" aria-hidden="true"></ion-icon>
-      </div>
-      <div class="agenda-list">
-        <article class="agenda-item" *ngFor="let evento of agenda">
-          <time>{{ evento.data }}</time>
-          <div><strong>{{ evento.titulo }}</strong><span>{{ evento.tipo }}</span></div>
-        </article>
-      </div>
-      <div class="calendar-widget" aria-label="Calendário de novembro de 2026">
-        <div class="calendar-header">
-          <button type="button" aria-label="Mês anterior" (click)="mudarMes(-1)"><ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon></button>
-          <strong>{{ tituloDoMes }}</strong>
-          <button type="button" aria-label="Próximo mês" (click)="mudarMes(1)"><ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon></button>
-        </div>
-        <div class="calendar-weekdays" aria-hidden="true">
-          <span *ngFor="let dia of ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']">{{ dia }}</span>
-        </div>
-        <div class="calendar-grid">
-          <span *ngFor="let dia of diasDoMes" class="calendar-day" [class.has-event]="dia !== null && diasComEvento.includes(dia)">
-            {{ dia || '' }}
-            <i *ngIf="dia !== null && diasComEvento.includes(dia)" aria-label="Há evento neste dia"></i>
-          </span>
-        </div>
-      </div>
+      <div class="section-heading"><div><h2 id="agenda-title" class="section-title">Minha agenda</h2><p class="section-subtitle">Prazos e encontros importantes do seu aprendizado.</p></div><ion-icon name="calendar-outline" aria-hidden="true"></ion-icon></div>
+      <div class="agenda-list"><article class="agenda-item" *ngFor="let evento of agenda"><time>{{ evento.data }}</time><div><strong>{{ evento.titulo }}</strong><span>{{ evento.tipo }}</span></div></article></div>
+      <div class="calendar-widget" aria-label="Calendário de novembro de 2026"><div class="calendar-header"><button type="button" aria-label="Mês anterior" (click)="mudarMes(-1)"><ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon></button><strong>{{ tituloDoMes }}</strong><button type="button" aria-label="Próximo mês" (click)="mudarMes(1)"><ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon></button></div><div class="calendar-weekdays" aria-hidden="true"><span *ngFor="let dia of ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']">{{ dia }}</span></div><div class="calendar-grid"><span *ngFor="let dia of diasDoMes" class="calendar-day" [class.has-event]="dia !== null && diasComEvento.includes(dia)">{{ dia || '' }}<i *ngIf="dia !== null && diasComEvento.includes(dia)" aria-label="Há evento neste dia"></i></span></div></div>
     </section>
-
-    <section class="panel-links" aria-label="Acesso ao aprendizado">
-      <div>
-        <h2>Quer continuar estudando?</h2>
-        <p>Acesse Meu aprendizado para ver todas as atividades, progresso e próximas etapas.</p>
-      </div>
-      <ion-button (click)="goToAprendizado()" fill="solid">Ver meu aprendizado</ion-button>
-    </section>
-
-    <section *ngIf="isMentora()" class="management-section" aria-labelledby="gestao-title">
-      <div class="section-heading">
-        <div>
-          <p class="eyebrow">ÁREA DA MENTORA</p>
-          <h2 id="gestao-title" class="section-title">Gestão</h2>
-          <p class="section-subtitle">Resumo dos cursos e mentorias que você ministra.</p>
-        </div>
-        <ion-button fill="outline" class="management-action">Criar conteúdo</ion-button>
-      </div>
-      <div class="management-summary">
-        <article class="management-stat"><strong>{{ minhasMentorias.length }}</strong><span>conteúdos ativos</span></article>
-        <article class="management-stat"><strong>24</strong><span>matrículas recebidas</span></article>
-        <article class="management-stat"><strong>86%</strong><span>conclusão média</span></article>
-      </div>
-      <ion-grid>
-        <ion-row>
-          <ion-col size="12" size-md="4" *ngFor="let item of minhasMentorias">
-            <ion-card class="mentoria-card management-card">
-              <div class="card-image-placeholder"></div>
-              <ion-card-header>
-                <ion-card-title>{{ item.titulo }}</ion-card-title>
-                <ion-card-subtitle>12 matrículas · 86% concluído</ion-card-subtitle>
-              </ion-card-header>
-              <ion-button fill="outline" class="btn-config" (click)="abrirDetalhes(item)">Configurar</ion-button>
-            </ion-card>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </section>
+    <section class="panel-links" aria-label="Acesso ao aprendizado"><div><h2>Quer continuar estudando?</h2><p>Acesse Meu aprendizado para ver todas as atividades, progresso e próximas etapas.</p></div><ion-button (click)="goToAprendizado()" fill="solid">Ver meu aprendizado</ion-button></section>
   </main>
 </ion-content>

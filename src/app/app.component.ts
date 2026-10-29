@@ -14,7 +14,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 export class AppComponent implements OnInit {
   showNavbar = false;
 
-  private readonly appRoutes = ['/home', '/mentorias', '/aprendizado', '/vagas', '/profile'];
+  private readonly appRoutes = ['/home', '/mentorias', '/aprendizado', '/gestao-mentorias', '/vagas', '/profile', '/admin/perfis'];
 
   constructor(private router: Router) {}
 

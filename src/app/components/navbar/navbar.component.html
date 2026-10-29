@@ -66,6 +66,10 @@
               <ion-icon name="settings-outline" slot="start"></ion-icon>
               <ion-label>Configurações</ion-label>
             </ion-item>
+            <ion-item button (click)="goToAdmin(menuPopover)" *ngIf="userROLE === 'administradores' || userROLE === 'administrador'">
+              <ion-icon name="settings-outline" slot="start"></ion-icon>
+              <ion-label>Administração</ion-label>
+            </ion-item>
 
             <ion-item button (click)="logout(menuPopover)" class="item-sair">
               <ion-icon name="log-out-outline" slot="start"></ion-icon>
@@ -84,6 +88,7 @@
           <ion-list lines="none">
             <ion-item [button]="true" (click)="goToMentoria(aprendizadoPopover)">Painel</ion-item>
             <ion-item [button]="true" (click)="goToMeuAprendizado(aprendizadoPopover)">Meu aprendizado</ion-item>
+            <ion-item [button]="true" (click)="goToGestao(aprendizadoPopover)" *ngIf="userROLE === 'mentoras'">Gestão de mentorias</ion-item>
           </ion-list>
         </ion-content>
       </ng-template>

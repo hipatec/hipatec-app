@@ -66,7 +66,9 @@
     }
     .post-meta {
       display: flex; flex-direction: column;
-      .post-author { font-family: 'Roboto', sans-serif; color: #472b7a; font-weight: 700; font-size: 14px; }
+      .post-author, .post-author-link { font-family: 'Roboto', sans-serif; color: #472b7a; font-weight: 700; font-size: 14px; }
+      .post-author-link { border: 0; padding: 0; background: transparent; text-align: left; cursor: pointer; }
+      .post-author-link:hover { color: #7b59b8; }
       .post-role { font-family: 'Roboto', sans-serif; color: #7b59b8; font-size: 12px; }
     }
     .post-time { font-family: 'Roboto', sans-serif; font-size: 11px; color: #666666; margin-left: auto; margin-right: 35px; }
