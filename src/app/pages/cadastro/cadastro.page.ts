@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonItem, IonLabel, IonSegment, IonSegmentButton, IonList, IonDatetime } from '@ionic/angular/standalone';
+import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
 import { EstudanteService } from '../../services/estudante.service';
 import { MentoraService } from '../../services/mentora.service';
 import { Router, RouterLink } from '@angular/router';
@@ -13,7 +13,7 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './cadastro.page.html',
   styleUrls: ['./cadastro.page.scss'],
   standalone: true,
-  imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonInput, IonButton, IonItem, IonLabel, IonSegment, IonSegmentButton, IonList, IonDatetime, CommonModule, FormsModule, RouterLink]
+  imports: [IonLabel, IonSegment, IonSegmentButton, CommonModule, FormsModule, RouterLink]
 })
 export class CadastroPage implements OnInit {
 
@@ -67,15 +67,9 @@ export class CadastroPage implements OnInit {
 
     request.subscribe({
       next: response => {
-        alert(response.message || `Cadastro realizado com sucesso para ${this.role}.`);
-
-        if (this.role === 'estudantes') {
-          // Somente estudantes respondem ao onboarding.
-          this.router.navigate(['/onboarding']);
-        } else {
-          // Mentoras seguem o fluxo normal.
-          this.router.navigate(['/login']);
-        }
+        alert(this.role === 'mentoras' ? 'Cadastro recebido. Aguarde a aprovação da equipe para entrar.' : 'Cadastro realizado. Você já pode entrar.');
+        this.senha = '';
+        this.router.navigate(['/login']);
       },
       error: err => {
         console.error('Cadastro error:', err);

@@ -13,6 +13,8 @@ export interface Perfil {
     num_seguindo?: number;
     pfp?: string;
     background?: string;
+    id_estudante?: number;
+    id_mentora?: number;
 }
 
 @Injectable({
@@ -23,7 +25,7 @@ export class PerfilService {
     constructor(private http: HttpClient) { }
 
     getPerfil(role: string, id: number) {
-        return this.http.get(
+        return this.http.get<Perfil>(
             `${environment.apiUrl}perfil/${role}/${id}`
         );
     }
@@ -33,7 +35,7 @@ export class PerfilService {
     }
 
     updatePerfil(role: string, id: number, formData: FormData) {
-        return this.http.put(
+        return this.http.put<Perfil>(
             `${environment.apiUrl}perfil/${role}/${id}`,
             formData
         );

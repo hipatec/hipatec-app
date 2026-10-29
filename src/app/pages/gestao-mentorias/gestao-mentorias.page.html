@@ -1,0 +1,18 @@
+<ion-content>
+  <main class="management-shell">
+    <p class="eyebrow">ÁREA DA MENTORA</p>
+    <h1>Gestão de mentorias</h1>
+    <p class="subtitle">Crie, acompanhe e configure os conteúdos que você ministra.</p>
+    <section class="management-summary">
+      <article><strong>4</strong><span>conteúdos ativos</span></article>
+      <article><strong>24</strong><span>matrículas recebidas</span></article>
+      <article><strong>86%</strong><span>conclusão média</span></article>
+    </section>
+    <div class="toolbar"><h2>Meus conteúdos</h2><ion-button fill="solid">Criar conteúdo</ion-button></div>
+    <div class="content-list">
+      <article class="content-card" *ngFor="let item of conteudos">
+        <div class="cover"></div><div><span class="status">Publicado</span><h3>{{ item.titulo }}</h3><p>{{ item.descricao }}</p><small>{{ item.matriculas }} matrículas · {{ item.conclusao }}% concluído</small></div><ion-button fill="outline">Configurar</ion-button>
+      </article>
+    </div>
+  </main>
+</ion-content>

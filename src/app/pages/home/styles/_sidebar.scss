@@ -1,0 +1,95 @@
+/* --- Estilização da Sidebar (Quem Seguir) --- */
+.sidebar-card {
+  background: #ffffff;
+  border-radius: 24px;
+  padding: 24px 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.13);
+
+  h3 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 16px 20px;
+    color: #472b7a; /* Cor roxa do seu layout */
+  }
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  gap: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #f9f9f9;
+  }
+}
+
+.item-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #999999;
+  background: #e0e0e0;
+}
+
+.item-info {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.item-name {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #472b7a;
+}
+
+.item-handle {
+  font-family: 'Roboto', sans-serif;
+  font-size: 13px;
+  color: #666666;
+}
+
+.btn-follow {
+  background-color: #472b7a;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px; /* Combinando com o seu .btn-edit-profile */
+  padding: 0 16px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  height: 32px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(71, 43, 122, 0.2);
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: #382260;
+  }
+}
+
+.sidebar-more {
+  padding: 16px 20px 0 20px;
+
+  .sidebar-more-button {
+    background: transparent;
+    border: 0;
+    color: #7b59b8;
+    cursor: pointer;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    padding: 0;
+
+    &:hover,
+    &:focus-visible {
+      color: #472b7a;
+      text-decoration: underline;
+      outline: none;
+    }
+  }
+}

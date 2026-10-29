@@ -17,7 +17,7 @@
         <label class="upload-overlay" for="bg-upload">
           <span class="upload-icon">📷 Alterar Capa</span>
         </label>
-        <input id="bg-upload" type="file" accept="image/*" (change)="onBackgroundSelected($event)" class="hidden-file-input" />
+        <input id="bg-upload" type="file" accept="image/png,image/jpeg" (change)="onBackgroundSelected($event)" class="hidden-file-input" />
       </div>
 
       <div class="preview-avatar-section">
@@ -27,19 +27,19 @@
           <label class="upload-overlay-circle" for="pfp-upload">
             <span class="upload-icon-circle">📷</span>
           </label>
-          <input id="pfp-upload" type="file" accept="image/*" (change)="onPfpSelected($event)" class="hidden-file-input" />
+          <input id="pfp-upload" type="file" accept="image/png,image/jpeg" (change)="onPfpSelected($event)" class="hidden-file-input" />
         </div>
       </div>
 
       <div class="preview-info-section">
-        <input type="text" class="input-name" placeholder="Nome de exibição" [(ngModel)]="editModel.nome" />
+        <input type="text" class="input-name" placeholder="Nome de exibição" maxlength="100" [(ngModel)]="editModel.nome" />
         
         <div class="input-username-row">
           <span class="arroba">@</span>
-          <input type="text" class="input-username" placeholder="usuario" [(ngModel)]="editModel.usuario" />
+          <input type="text" class="input-username" placeholder="usuario" maxlength="100" [(ngModel)]="editModel.usuario" />
         </div>
         
-        <textarea class="input-bio" rows="3" placeholder="Adicione uma biografia..." [(ngModel)]="editModel.biografia"></textarea>
+        <textarea class="input-bio" rows="3" placeholder="Adicione uma biografia..." maxlength="255" [(ngModel)]="editModel.biografia"></textarea>
       </div>
 
     </div>

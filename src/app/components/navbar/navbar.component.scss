@@ -15,16 +15,22 @@ ion-header {
     border-bottom: 1px solid #e0e0e0;
 }
 
-.logo-container {
-    display: flex;
-    align-items: center;
-    padding: 5px 10px;
+.logo-button {
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --padding-top: 5px;
+  --padding-bottom: 5px;
+  --color: #472b7a;
+  margin: 0;
 
   .logo-img {
-    height: 50px;
-    width: auto;
+    height: 42px;
+    width: 145px;
     object-fit: contain;
+    object-position: left center;
   }
+
+  &:focus-visible { outline: 2px solid #7b59b8; outline-offset: 2px; }
 }
 
 .search-box {
@@ -47,17 +53,78 @@ ion-header {
   }
 }
 
+.notification-button {
+  position: relative;
+  min-width: 42px;
+
+  ion-icon {
+    font-size: 22px;
+  }
+}
+
+.notification-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #c34a75;
+  color: #ffffff;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.notificacoes-popover {
+  --width: 320px;
+  --offset-y: 10px;
+  --max-height: min(520px, calc(100vh - 90px));
+
+  ion-list-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: #472b7a;
+    font-weight: 700;
+  }
+
+.remove-notification {
+  display: inline-flex;
+  padding: 6px;
+  border: 0;
+    background: transparent;
+    color: #7b59b8;
+    cursor: pointer;
+  }
+  .remove-notification:hover { color: #c34a75; }
+  .remove-notification ion-icon { font-size: 17px; }
+  .empty-notifications { color: #827990; font-size: 13px; }
+  .clear-notifications { margin-top: 6px; border-top: 1px solid #eee8f7; --color: #c34a75; font-size: 13px; font-weight: 700; }
+  ion-item {
+    --min-height: 48px;
+    font-size: 13px;
+  }
+}
 .user-avatar {
   width: 35px;
   height: 35px;
   margin-left: 15px;
   border: 1px solid #472b7a;
+  cursor: pointer;
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid #7b59b8;
+    outline-offset: 3px;
+  }
 }
 
 ion-button {
     font-family: 'Roboto', sans-serif;
     --color: #472b7a !important; // tive que fazer isso pra forçar a cor, porque o ion-button tem uma cor padrão que não muda com a variável --color
-    text-transform: lowercase;
+    text-transform: none;
     font-size: 16px;
     --ripple-color: #7b59b8 !important;
     --background-hover: transparent !important;
@@ -68,6 +135,14 @@ ion-button {
 
 ion-popover {
     --background: #ffffff !important;
+    --offset-y: 10px;
+    --box-shadow: 0 12px 28px rgba(54, 34, 86, 0.18);
+
+    &.perfil-popover,
+    &.aprendizado-popover {
+      --offset-y: 10px;
+      --backdrop-opacity: 0;
+    }
 
     ion-list {
         background: transparent !important;

@@ -1,104 +1,18 @@
-
-<app-navbar></app-navbar>
-
-<ion-content [fullscreen]="true" class="ion-padding">
-  
-  <div *ngIf="userRole === 'estudantes'">
-  <h2 class="section-title">Meu aprendizado</h2>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="12" size-md="4" *ngFor="let item of minhasMentorias">
-        <ion-card (click)="abrirDetalhes(item)" class="mentoria-card">
-          <ion-card-content>
-            <ion-grid class="ion-no-padding">
-              <ion-row class="ion-align-items-center">
-                
-                <ion-col size="7">
-                  <div class="card-main-title">{{ item.titulo }}</div>
-                  <p class="card-desc-text">{{ item.descricao }}</p>
-                </ion-col>
-                <ion-col size="5">
-                  <div class="card-image-wireframe"> <!-- Placeholder para imagem -->
-                    <div class="cross-line-1"></div> <!-- Linhas cruzadas para indicar que é um placeholder -->
-                    <div class="cross-line-2"></div> <!-- ISSO VAI SAIR QUANDO TIVER IMAGEM, É SÓ PARA DEIXAR CLARO QUE AQUI VAI TER UMA FOTO DEPOIS -->
-                  </div>
-                </ion-col>
-              </ion-row>
-              <ion-row>
-                <ion-col size="12">
-                  <div class="progress-container">
-                    <span class="progress-text">{{ (item.progresso ?? 0) * 100 }}% concluído</span>
-                    <ion-progress-bar [value]="item.progresso"></ion-progress-bar>
-                  </div>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-card-content>
-        </ion-card>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-  <h2 class="section-title">Continuar aprendendo</h2>
-  <p class="section-subtitle">Confira outras oportunidades de estudo com inscrições abertas</p>
-
-  <div class="horizontal-scroll">
-    <ion-card *ngFor="let m of mentoriasDisponiveis" class="mentoria-card wide-card">
-      <ion-card-content>
-        <ion-grid class="ion-no-padding">
-          <ion-row class="ion-align-items-center">
-            
-            <ion-col size="7">
-              <div class="card-status-text">Inscrições Abertas</div>
-              <div class="card-main-title">{{ m.titulo }}</div>
-              <p class="card-mentor-text">Mentora: {{ m.mentora }}</p>
-              <p class="card-desc-text">{{ m.descricao }}</p>
-              
-              <ion-button class="btn-card-action" fill="solid" (click)="abrirDetalhes(m)">
-                Inscrever-se agora
-              </ion-button>
-            </ion-col>
-            
-            <ion-col size="5">
-              <div class="card-image-wireframe">
-                <div class="cross-line-1"></div>
-                <div class="cross-line-2"></div>
-              </div>
-            </ion-col>
-
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-  </div>
-
-  </div>
-
-  
-
-  <div *ngIf="userRole === 'mentoras'">
-    <h2 class="section-title">Minhas mentorias</h2>
-    <p class="section-subtitle">Gerenciar mentorias e criar novas</p>
-
-    <ion-grid>
-      <ion-row>
-        <ion-col size="12" size-md="4" *ngFor="let item of minhasMentorias">
-          <ion-card class="mentoria-card">
-            <div class="card-image-placeholder"></div>
-            <ion-card-header>
-              <ion-card-title>{{ item.titulo }}</ion-card-title>
-            </ion-card-header>
-            <ion-button fill="outline" class="btn-config" (click)="abrirDetalhes(item)">Configurar</ion-button>
-          </ion-card>
-        </ion-col>
-
-        <ion-col size="12" size-md="4">
-          <ion-card class="add-card">
-            <ion-icon name="add-outline"></ion-icon>
-          </ion-card>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </div>
-
+<ion-content class="ion-padding">
+  <main class="painel-shell">
+    <header class="painel-header">
+      <p class="eyebrow">PAINEL</p><h1>Meu painel</h1><p class="section-subtitle">Um resumo rápido do seu progresso na Hipatec.</p>
+    </header>
+    <section class="summary-grid" aria-label="Resumo do aprendizado">
+      <article class="summary-card"><span class="summary-label">Matrículas</span><strong>3</strong><small>cursos e mentorias</small></article>
+      <article class="summary-card"><span class="summary-label">Aproveitamento</span><strong>78%</strong><small>média de conclusão</small></article>
+      <article class="summary-card"><span class="summary-label">Em andamento</span><strong>2</strong><small>aprendizados ativos</small></article>
+    </section>
+    <section class="calendar-section" aria-labelledby="agenda-title">
+      <div class="section-heading"><div><h2 id="agenda-title" class="section-title">Minha agenda</h2><p class="section-subtitle">Prazos e encontros importantes do seu aprendizado.</p></div><ion-icon name="calendar-outline" aria-hidden="true"></ion-icon></div>
+      <div class="agenda-list"><article class="agenda-item" *ngFor="let evento of agenda"><time>{{ evento.data }}</time><div><strong>{{ evento.titulo }}</strong><span>{{ evento.tipo }}</span></div></article></div>
+      <div class="calendar-widget" aria-label="Calendário de novembro de 2026"><div class="calendar-header"><button type="button" aria-label="Mês anterior" (click)="mudarMes(-1)"><ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon></button><strong>{{ tituloDoMes }}</strong><button type="button" aria-label="Próximo mês" (click)="mudarMes(1)"><ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon></button></div><div class="calendar-weekdays" aria-hidden="true"><span *ngFor="let dia of ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']">{{ dia }}</span></div><div class="calendar-grid"><span *ngFor="let dia of diasDoMes" class="calendar-day" [class.has-event]="dia !== null && diasComEvento.includes(dia)">{{ dia || '' }}<i *ngIf="dia !== null && diasComEvento.includes(dia)" aria-label="Há evento neste dia"></i></span></div></div>
+    </section>
+    <section class="panel-links" aria-label="Acesso ao aprendizado"><div><h2>Quer continuar estudando?</h2><p>Acesse Meu aprendizado para ver todas as atividades, progresso e próximas etapas.</p></div><ion-button (click)="goToAprendizado()" fill="solid">Ver meu aprendizado</ion-button></section>
+  </main>
 </ion-content>

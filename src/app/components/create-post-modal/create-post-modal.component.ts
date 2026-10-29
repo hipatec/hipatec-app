@@ -32,18 +32,10 @@ export class CreatePostModalComponent {
       return;
     }
 
-    const perfilId = localStorage.getItem('perfil');
-    if (!perfilId) {
-      alert('Erro: usuário não autenticado');
-      return;
-    }
-
     this.isSubmitting = true;
 
     const payload = {
-      autorId: parseInt(perfilId),
-      conteudo: this.conteudo.trim(),
-      autorFoto: this.pfp
+      conteudo: this.conteudo.trim()
     };
 
     this.postsService.createPost(payload).subscribe({
