@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { NavbarComponent } from './navbar.component';
 
@@ -25,5 +25,17 @@ describe('NavbarComponent', () => {
     fixture.detectChanges();
     expect(fixture.componentInstance).toBeTruthy();
     http.verify();
+  });
+
+  it('usa o logo como atalho para a home', () => {
+    const fixture = TestBed.createComponent(NavbarComponent);
+    const router = TestBed.inject(Router);
+    spyOn(router, 'navigate');
+    fixture.detectChanges();
+
+    const logo = fixture.nativeElement.querySelector('.logo-button') as HTMLButtonElement;
+    logo.click();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/home']);
   });
 });

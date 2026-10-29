@@ -1,3 +1,6 @@
 <ion-app>
-  <ion-router-outlet></ion-router-outlet>
+  <app-navbar *ngIf="showNavbar"></app-navbar>
+  <div class="app-shell" [class.has-navbar]="showNavbar">
+    <ion-router-outlet></ion-router-outlet>
+  </div>
 </ion-app>

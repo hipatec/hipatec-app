@@ -1,0 +1,23 @@
+:host {
+  --hipatec-navbar-height: 56px;
+  display: block;
+  height: 100%;
+}
+
+.app-shell {
+  height: 100%;
+}
+
+.app-shell.has-navbar {
+  padding-top: var(--hipatec-navbar-height);
+  box-sizing: border-box;
+}
+
+.app-shell.has-navbar ion-router-outlet {
+  top: var(--hipatec-navbar-height);
+  height: calc(100% - var(--hipatec-navbar-height));
+}
+
+@media (max-width: 600px) {
+  :host { --hipatec-navbar-height: 56px; }
+}
