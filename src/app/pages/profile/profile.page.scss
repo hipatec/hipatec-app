@@ -2,6 +2,10 @@
 @use './styles/header';
 @use '../home/styles/feed';
 
+.feed-container .post-card {
+  box-shadow: 0 3px 10px rgba(71, 43, 122, 0.07);
+}
+
 .profile-tabs { display: flex; gap: 4px; margin-top: 22px; border-top: 1px solid #eee8f7; }
 .profile-tabs button { padding: 12px 18px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #827990; font: inherit; cursor: pointer; }
 .profile-tabs button.active { border-bottom-color: #472b7a; color: #472b7a; font-weight: 700; }
