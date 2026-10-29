@@ -57,7 +57,7 @@
           <ion-list lines="none">
             
             <!-- *ngIf verifica a rota para esconder o botão. Passe o menuPopover para a função -->
-            <ion-item button (click)="goToProfile(menuPopover)" *ngIf="router.url !== '/profile'">
+            <ion-item button (click)="goToProfile(menuPopover)">
               <ion-icon name="person-outline" slot="start"></ion-icon>
               <ion-label>Meu perfil</ion-label>
             </ion-item>
