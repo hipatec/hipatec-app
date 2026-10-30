@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonTextarea, IonButton } from '@ionic/angular/standalone';
@@ -11,15 +11,13 @@ import { MentoriasService } from '../../../services/mentorias.service';
   standalone: true,
   imports: [IonContent, IonHeader, IonTitle, IonToolbar, IonItem, IonLabel, IonInput, IonTextarea, IonButton, CommonModule, FormsModule]
 })
-export class CadastroPage implements OnInit {
+export class CadastroPage {
   titulo = '';
   descricao = '';
   progresso = 0;
 
   constructor(private mentoriasService: MentoriasService) { }
 
-  ngOnInit() {
-  }
 
   submit() {
     const payload = {

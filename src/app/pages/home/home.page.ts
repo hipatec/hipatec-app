@@ -93,7 +93,7 @@ export class HomePage implements OnInit {
     const autor = perfil?.usuario || `Usuário ${post.autorId}`;
     const avatar = perfil?.pfp || post.autorFoto || 'https://ionicframework.com/docs/img/demos/avatar.svg';
 
-    const localReposts = JSON.parse(localStorage.getItem('hipatec-reposts') || '[]');
+    const localReposts = this.getLocalReposts();
     const repostado = localReposts.some((repost: any) => String(repost.repostOriginalId) === String(post.id));
 
     return {
@@ -128,6 +128,16 @@ export class HomePage implements OnInit {
       return `há ${diffHours} h`;
     }
     return `há ${diffDays} dia${diffDays > 1 ? 's' : ''}`;
+  }
+
+  private getLocalReposts(): any[] {
+    try {
+      const value = JSON.parse(localStorage.getItem('hipatec-reposts') || '[]');
+      return Array.isArray(value) ? value : [];
+    } catch {
+      localStorage.removeItem('hipatec-reposts');
+      return [];
+    }
   }
 
   mostrarMaisSugestoes() {
@@ -192,7 +202,7 @@ export class HomePage implements OnInit {
 
   repostar(post: any, comComentario = false) {
     const originalId = post.repostOriginal?.id || post.id;
-    const reposts = JSON.parse(localStorage.getItem('hipatec-reposts') || '[]');
+    const reposts = this.getLocalReposts();
     const existente = reposts.find((repost: any) => String(repost.repostOriginalId) === String(originalId));
 
     if (existente) {

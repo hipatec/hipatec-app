@@ -1,19 +1,60 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import {
+  IonAvatar,
+  IonBadge,
+  IonButton,
+  IonButtons,
+  IonContent,
+  IonHeader,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonListHeader,
+  IonPopover,
+  IonSearchbar,
+  IonToolbar
+} from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
 import { PerfilService } from '../../services/perfil.service';
 import { AuthService } from '../../services/auth.service';
 import { switchMap } from 'rxjs';
 import { addIcons } from 'ionicons';
-import { personOutline, settingsOutline, logOutOutline, notificationsOutline, close } from 'ionicons/icons';
+import {
+  bookOutline,
+  briefcaseOutline,
+  close,
+  homeOutline,
+  logOutOutline,
+  notificationsOutline,
+  personOutline,
+  settingsOutline,
+  starOutline
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [
+    CommonModule,
+    IonAvatar,
+    IonBadge,
+    IonButton,
+    IonButtons,
+    IonContent,
+    IonHeader,
+    IonIcon,
+    IonItem,
+    IonLabel,
+    IonList,
+    IonListHeader,
+    IonPopover,
+    IonSearchbar,
+    IonToolbar
+  ]
 })
 export class NavbarComponent  implements OnInit {
 
@@ -33,7 +74,17 @@ export class NavbarComponent  implements OnInit {
     private perfilService: PerfilService,
     private authService: AuthService
   ) {
-    addIcons({ personOutline, settingsOutline, logOutOutline, notificationsOutline, close });
+    addIcons({
+      bookOutline,
+      briefcaseOutline,
+      close,
+      homeOutline,
+      logOutOutline,
+      notificationsOutline,
+      personOutline,
+      settingsOutline,
+      starOutline
+    });
   }
 
   ngOnInit() {
@@ -96,6 +147,8 @@ export class NavbarComponent  implements OnInit {
     } else {
       this.router.navigate(['/home']);
     }
+  }
+
   goToVagas(popover?: any) {
     const navigate = () => this.router.navigate(['/vagas']);
     if (popover) popover.dismiss().then(navigate);

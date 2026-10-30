@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -9,10 +9,10 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule]
 })
-export class EditProfileModalComponent {
+export class EditProfileModalComponent implements OnChanges {
   @Input() show = false;
   @Input() perfil: any;
-  @Output() close = new EventEmitter<void>();
+  @Output() closed = new EventEmitter<void>();
   // Emit a request for the parent page to perform the actual save (payload: { perfil, pfpFile, backgroundFile })
   @Output() requestSave = new EventEmitter<{ 
     perfil: any; 
@@ -28,8 +28,6 @@ export class EditProfileModalComponent {
 
   saving = false;
 
-  constructor() {}
-
   ngOnChanges(changes: SimpleChanges) {
     if (changes['perfil']) {
       this.editModel = { ...(this.perfil || {}) };
@@ -41,7 +39,7 @@ export class EditProfileModalComponent {
   }
 
   closeModal() {
-    this.close.emit();
+    this.closed.emit();
   }
 
   onPfpSelected(event: any) {

@@ -1,7 +1,7 @@
 /* --- Base do Layout (Baseado no seu código) --- */
 .gradient-bg {
   width: 100vw;
-  min-height: 100vh;
+  min-height: 100%;
   height: auto;
   background: linear-gradient(135deg, #fff3cd 0%, #ffffff 50%, #9b82c9 100%);
   padding: 20px 0;
@@ -28,5 +28,11 @@
   @media (max-width: 992px) {
     grid-template-columns: 1fr; /* Em telas menores, a sidebar some e o feed ocupa 100% */
     .sidebar-column { display: none; }
+  }
+}
+
+@media (max-width: 768px) {
+  .gradient-bg {
+    padding: 0;
   }
 }

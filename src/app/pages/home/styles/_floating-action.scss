@@ -11,3 +11,10 @@ ion-fab-button {
     right: calc((100vw - 1200px) / 2 + 20px);
   }
 }
+
+@media (max-width: 768px) {
+  .fab-post {
+    bottom: 16px;
+    right: 16px;
+  }
+}

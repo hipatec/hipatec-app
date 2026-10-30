@@ -6,10 +6,10 @@
 
 .app-shell {
   height: 100%;
+  width: 100%;
 }
 
 .app-shell.has-navbar {
-  padding-top: var(--hipatec-navbar-height);
   box-sizing: border-box;
 }
 

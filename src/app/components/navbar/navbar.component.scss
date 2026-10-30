@@ -1,61 +1,86 @@
+:host {
+  display: block;
+  height: 56px;
+  position: relative;
+  width: 100%;
+  z-index: 1000;
+}
+
+ion-header,
 ion-toolbar {
-  --background: #ffffff;
-  --color: #000000; 
-  
-  box-shadow: 0 10px 8px rgba(0, 0, 0, 0.15) !important;
+  height: 56px;
 }
 
 ion-header {
   overflow: visible !important;
 }
 
-.navbar-container{
-    --padding-start: 20px;
-    --padding-end: 20px;
-    border-bottom: 1px solid #e0e0e0;
+ion-toolbar {
+  --background: #ffffff;
+  --color: #000000;
+  box-shadow: 0 4px 12px rgba(54, 34, 86, 0.14);
+}
+
+.navbar-container {
+  --min-height: 56px;
+  --padding-start: 20px;
+  --padding-end: 20px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
 .logo-button {
-  --padding-start: 10px;
-  --padding-end: 10px;
-  --padding-top: 5px;
-  --padding-bottom: 5px;
   --color: #472b7a;
+  --padding-bottom: 5px;
+  --padding-end: 10px;
+  --padding-start: 10px;
+  --padding-top: 5px;
   margin: 0;
 
   .logo-img {
+    display: block;
     height: 42px;
-    width: 145px;
     object-fit: contain;
     object-position: left center;
+    width: 145px;
   }
 
-  &:focus-visible { outline: 2px solid #7b59b8; outline-offset: 2px; }
+  &:focus-visible {
+    outline: 2px solid #7b59b8;
+    outline-offset: 2px;
+  }
 }
 
 .search-box {
-  display: flex;
   align-items: center;
   border: 1px solid #472b7a;
   border-radius: 10px;
-  padding: 0 10px;
-  width: 400px;
+  display: flex;
   margin: 0 auto;
+  max-width: 400px;
+  min-width: 220px;
+  padding: 0 10px;
+  width: min(400px, 32vw);
 
   .custom-search {
-    color: #472b7a;
     --background: transparent;
     --box-shadow: none;
+    color: #472b7a;
     padding: 0;
   }
+
   .star-icon {
     color: #472b7a;
   }
 }
 
+.nav-actions {
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
 .notification-button {
-  position: relative;
   min-width: 42px;
+  position: relative;
 
   ion-icon {
     font-size: 22px;
@@ -63,57 +88,37 @@ ion-header {
 }
 
 .notification-badge {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
-  border-radius: 999px;
   background: #c34a75;
+  border-radius: 999px;
   color: #ffffff;
   font-size: 10px;
+  height: 16px;
   line-height: 16px;
+  min-width: 16px;
+  padding: 0 4px;
+  position: absolute;
+  right: 2px;
+  top: 2px;
 }
 
-.notificacoes-popover {
-  --width: 320px;
-  --offset-y: 10px;
-  --max-height: min(520px, calc(100vh - 90px));
-
-  ion-list-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    color: #472b7a;
-    font-weight: 700;
-  }
-
-.remove-notification {
-  display: inline-flex;
-  padding: 6px;
-  border: 0;
-    background: transparent;
-    color: #7b59b8;
-    cursor: pointer;
-  }
-  .remove-notification:hover { color: #c34a75; }
-  .remove-notification ion-icon { font-size: 17px; }
-  .empty-notifications { color: #827990; font-size: 13px; }
-  .clear-notifications { margin-top: 6px; border-top: 1px solid #eee8f7; --color: #c34a75; font-size: 13px; font-weight: 700; }
-  ion-item {
-    --min-height: 48px;
-    font-size: 13px;
-  }
-}
 .user-avatar {
-  width: 35px;
-  height: 35px;
-  margin-left: 15px;
   border: 1px solid #472b7a;
+  border-radius: 50%;
   cursor: pointer;
+  display: block;
+  flex: 0 0 36px;
+  height: 36px;
+  margin-left: 10px;
   outline: none;
+  overflow: hidden;
+  width: 36px;
+
+  img {
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+  }
 
   &:focus-visible {
     outline: 2px solid #7b59b8;
@@ -122,91 +127,158 @@ ion-header {
 }
 
 ion-button {
-    font-family: 'Roboto', sans-serif;
-    --color: #472b7a !important; // tive que fazer isso pra forçar a cor, porque o ion-button tem uma cor padrão que não muda com a variável --color
-    text-transform: none;
-    font-size: 16px;
-    --ripple-color: #7b59b8 !important;
-    --background-hover: transparent !important;
-    --background-hover-opacity: 0 !important;
-    --background-activated: transparent !important;
-    --background-focused: transparent !important;
+  --background-activated: transparent !important;
+  --background-focused: transparent !important;
+  --background-hover: transparent !important;
+  --background-hover-opacity: 0 !important;
+  --color: #472b7a !important;
+  --ripple-color: #7b59b8 !important;
+  font-family: 'Roboto', sans-serif;
+  font-size: 16px;
+  text-transform: none;
+}
+
+.notificacoes-popover {
+  --max-height: min(520px, calc(100vh - 90px));
+  --offset-y: 10px;
+  --width: min(320px, calc(100vw - 24px));
+
+  ion-list-header {
+    align-items: center;
+    color: #472b7a;
+    display: flex;
+    font-weight: 700;
+    gap: 10px;
+    justify-content: space-between;
+  }
+
+  ion-item {
+    --min-height: 48px;
+    font-size: 13px;
+  }
+}
+
+.remove-notification {
+  background: transparent;
+  border: 0;
+  color: #7b59b8;
+  cursor: pointer;
+  display: inline-flex;
+  padding: 6px;
+
+  &:hover {
+    color: #c34a75;
+  }
+
+  ion-icon {
+    font-size: 17px;
+  }
+}
+
+.empty-notifications {
+  color: #827990;
+  font-size: 13px;
+}
+
+.clear-notifications {
+  --color: #c34a75;
+  border-top: 1px solid #eee8f7;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 6px;
 }
 
 ion-popover {
-    --background: #ffffff !important;
+  --background: #ffffff !important;
+  --box-shadow: 0 12px 28px rgba(54, 34, 86, 0.18);
+  --offset-y: 10px;
+
+  &.perfil-popover,
+  &.aprendizado-popover {
+    --backdrop-opacity: 0;
     --offset-y: 10px;
-    --box-shadow: 0 12px 28px rgba(54, 34, 86, 0.18);
+  }
 
-    &.perfil-popover,
-    &.aprendizado-popover {
-      --offset-y: 10px;
-      --backdrop-opacity: 0;
-    }
+  ion-content,
+  ion-list {
+    --background: transparent;
+    background: transparent !important;
+  }
 
-    ion-list {
-        background: transparent !important;
-    }
-
-    ion-content{
-        --background: transparent;
-    }
-    ion-item {
-        --background: transparent;
-        --color: #472b7a;
-    }
-}
-
-/* --- Lógica Base de Alternância --- */
-.desktop-buttons {
-  display: flex;
-  align-items: center;
+  ion-item {
+    --background: transparent;
+    --color: #472b7a;
+  }
 }
 
 .mobile-item {
-  display: none; /* Escondido por padrão nas telas grandes */
+  display: none;
 }
 
 .divider {
-  height: 1px;
   background: #ebeef0;
+  height: 1px;
   margin: 4px 16px;
 }
 
-/* --- View Mobile (Celulares) --- */
+@media (max-width: 980px) {
+  .search-box {
+    width: min(280px, 25vw);
+  }
+
+  ion-button {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 768px) {
-  
-  /* Oculta tudo que é de computador forçadamente */
   .desktop-only {
     display: none !important;
   }
-  
-  /* Revela os itens dentro do popover */
-  ion-item.mobile-item {
-    display: block !important;
-    --display: flex; /* Mantém o alinhamento interno do ícone com o texto */
+
+  .navbar-container {
+    --padding-end: 10px;
+    --padding-start: 10px;
   }
+
+  .logo-button {
+    --padding-end: 4px;
+    --padding-start: 4px;
+
+    .logo-img {
+      height: 32px;
+      width: 118px;
+    }
+  }
+
+  .nav-actions {
+    gap: 2px;
+  }
+
+  .notification-button {
+    min-width: 40px;
+  }
+
+  .user-avatar {
+    flex-basis: 34px;
+    height: 34px;
+    margin-left: 4px;
+    width: 34px;
+  }
+
+  ion-item.mobile-item,
   div.mobile-item {
     display: block !important;
   }
+}
 
-  /* Recupera o espaço perdido nas bordas nativas do Ionic */
-  ion-toolbar.navbar-container {
-    --padding-start: 8px;
-    --padding-end: 8px;
+@media (max-width: 360px) {
+  .navbar-container {
+    --padding-end: 6px;
+    --padding-start: 6px;
   }
 
-  /* Reduz a logo e impõe um limite máximo para não esmagar o avatar */
-  .logo-img {
-    height: 28px !important;
-    max-width: 130px; 
-    object-fit: contain;
-  }
-  
-  /* Ajusta o avatar */
-  .user-avatar {
-    width: 32px !important;
-    height: 32px !important;
-    margin-left: 10px;
+  .logo-button .logo-img {
+    width: 100px;
   }
 }

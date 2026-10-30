@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonLabel, IonSegment, IonSegmentButton } from '@ionic/angular/standalone';
@@ -15,7 +15,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [IonLabel, IonSegment, IonSegmentButton, CommonModule, FormsModule, RouterLink]
 })
-export class CadastroPage implements OnInit {
+export class CadastroPage {
 
   role: 'estudantes' | 'mentoras' = 'estudantes';
   nome = '';
@@ -29,7 +29,6 @@ export class CadastroPage implements OnInit {
     private auth: AuthService, private router: Router,
   ) { }
 
-  ngOnInit() { }
 
   switchRole(ev: any) {
     this.role = ev.detail?.value || 'estudantes';

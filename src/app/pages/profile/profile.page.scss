@@ -1,6 +1,6 @@
 @use './styles/base';
 @use './styles/header';
-@use '../home/styles/feed';
+@use './styles/feed';
 
 .feed-container .post-card {
   box-shadow: 0 3px 10px rgba(71, 43, 122, 0.07);

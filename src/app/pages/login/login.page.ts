@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 // import { HttpClientModule } from '@angular/common/http';
@@ -15,7 +15,7 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [IonLabel, IonSegment, IonSegmentButton, CommonModule, FormsModule, RouterLink] // adicionei o RouterLink aqui
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
 
   role: 'estudantes' | 'mentoras' = 'estudantes';
   email = '';
@@ -23,8 +23,6 @@ export class LoginPage implements OnInit {
 
   constructor(private auth: AuthService, private router: Router) { } // isso aqui precisa estar em todas? acredito que sim
 
-  ngOnInit() {
-  }
 
   switchRole(ev: any) {
     this.role = ev.detail?.value || 'estudantes';

@@ -127,4 +127,27 @@ describe('HomePage', () => {
     expect(fixture.componentInstance.erroFeed).toBe('Não foi possível carregar o feed.');
     http.verify();
   });
+
+  it('ignora reposts locais inválidos sem interromper o carregamento do feed', () => {
+    localStorage.setItem('hipatec-reposts', '{invalido');
+    const fixture = TestBed.createComponent(HomePage);
+    fixture.detectChanges();
+    const http = TestBed.inject(HttpTestingController);
+
+    for (const request of http.match(() => true)) {
+      if (request.request.url.endsWith('/auth/session')) {
+        request.flush(null, { status: 401, statusText: 'Unauthorized' });
+      } else if (request.request.url.endsWith('/posts')) {
+        request.flush([{ id: 1, autorId: 1, conteudo: 'Teste', dataCriacao: Date.now() }]);
+      } else {
+        request.flush([]);
+      }
+    }
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.posts.length).toBe(1);
+    expect(fixture.componentInstance.carregando).toBeFalse();
+    expect(localStorage.getItem('hipatec-reposts')).toBeNull();
+    http.verify();
+  });
 });
