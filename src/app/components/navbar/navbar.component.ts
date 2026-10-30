@@ -60,14 +60,7 @@ export class NavbarComponent  implements OnInit {
 
   public userROLE: string = '';
   public profileImage: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
-  public notificacoes = [
-    { tipo: 'curtida', texto: 'Alguém curtiu sua publicação.', lida: false },
-    { tipo: 'comentario', texto: 'Alguém comentou em sua publicação.', lida: false },
-    { tipo: 'curso', texto: 'Você concluiu um curso.', lida: true },
-    { tipo: 'matricula', texto: 'Sua matrícula foi realizada com sucesso.', lida: true },
-    { tipo: 'conta', texto: 'Seus dados foram atualizados.', lida: true },
-    { tipo: 'moderacao', texto: 'Um comentário seu foi removido por moderação.', lida: true }
-  ];
+  public notificacoes: Array<{ tipo: string; texto: string; lida: boolean }> = [];
   
   constructor(
     public router: Router,

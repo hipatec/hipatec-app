@@ -26,6 +26,13 @@ describe('NavbarComponent', () => {
     fixtures.splice(0).forEach(fixture => fixture.destroy());
   });
 
+  it('não publica notificações fictícias antes da integração com a API', () => {
+    const fixture = createNavbarFixture();
+
+    expect(fixture.componentInstance.notificacoes).toEqual([]);
+    expect(fixture.componentInstance.notificacoesNaoLidas).toBe(0);
+  });
+
   it('renderiza com os provedores da aplicação', () => {
     const fixture = createNavbarFixture();
     fixture.detectChanges();
