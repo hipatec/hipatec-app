@@ -87,14 +87,19 @@ ion-grid {
   .section-heading > ion-icon { color: #7b59b8; font-size: 28px; }
 }
 
-.agenda-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.agenda-layout { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(280px, .85fr); gap: 18px; align-items: stretch; }
+.calendar-column { min-width: 0; }
+.agenda-details { padding: 18px; border: 1px solid #e0d7ec; border-radius: 10px; background: #fff; }
+.agenda-details h3 { margin: 0 0 5px; color: #472b7a; font-size: 18px; }
+.details-subtitle { margin: 0 0 16px; color: #827990; font-size: 12px; line-height: 1.45; }
+.agenda-list { display: grid; gap: 12px; }
 .agenda-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 8px; background: #f7f3fc; }
-.agenda-item time { color: #472b7a; font-size: 12px; font-weight: 700; }
+.agenda-item time { color: #472b7a; font-size: 12px; font-weight: 700; white-space: nowrap; }
 .agenda-item div { display: grid; gap: 3px; }
 .agenda-item strong { color: #3c3150; font-size: 13px; }
 .agenda-item span { color: #827990; font-size: 11px; }
 
-.calendar-widget { margin-top: 22px; padding: 16px; border: 1px solid #e0d7ec; border-radius: 10px; background: #fff; }
+.calendar-widget { height: 100%; margin-top: 0; padding: 16px; border: 1px solid #e0d7ec; border-radius: 10px; background: #fff; }
 .calendar-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; color: #472b7a; }
 .calendar-header button { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; padding: 0; border: 1px solid #d8cde8; border-radius: 50%; background: #fff; color: #472b7a; cursor: pointer; }
 .calendar-header button ion-icon { font-size: 18px; }
@@ -138,7 +143,8 @@ ion-grid {
 
 @media (max-width: 700px) {
   .summary-grid, .management-summary { grid-template-columns: 1fr; }
-  .agenda-list { grid-template-columns: 1fr; }
+  .agenda-layout { grid-template-columns: 1fr; }
+  .agenda-details { order: -1; }
   .panel-links { align-items: flex-start; flex-direction: column; }
   .section-heading { align-items: flex-start; flex-direction: column; }
   .management-action { margin-top: -8px; }
