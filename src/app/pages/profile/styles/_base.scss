@@ -24,3 +24,14 @@
   width: 100%;
   box-sizing: border-box;
 }
+
+@media (max-width: 720px) {
+  .gradient-bg {
+    width: 100%;
+    min-height: calc(100dvh - 56px);
+    padding: 20px 0;
+  }
+
+  .main-layout-wrapper { width: 100%; }
+  .header-container { border-radius: 16px; padding: 12px; }
+}
