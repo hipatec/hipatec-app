@@ -37,4 +37,15 @@ describe('ProfilePage', () => {
     expect(localStorage.getItem('perfil')).toBe('42');
     http.verify();
   });
+
+  it('usa a foto disponível no feed quando o perfil ainda não tem pfp persistida', () => {
+    const fixture = TestBed.createComponent(ProfilePage);
+    fixture.componentInstance.ionViewWillEnter();
+    const http = TestBed.inject(HttpTestingController);
+    http.expectOne('http://localhost:8080/auth/session').flush({ id: 1, role: 'estudantes' });
+    http.expectOne('http://localhost:8080/perfil/estudantes/1').flush({ id: 42, nome: 'Aluna', usuario: 'aluna', pfp: null });
+    http.expectOne('http://localhost:8080/posts/autor/42').flush([{ id: 'post-1', autorFoto: 'https://cdn.example/avatar.png', dataCriacao: Date.now() }]);
+    expect(fixture.componentInstance.perfil.pfp).toBe('https://cdn.example/avatar.png');
+    http.verify();
+  });
 });

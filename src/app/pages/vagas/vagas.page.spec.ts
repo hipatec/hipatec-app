@@ -13,19 +13,20 @@ describe('VagasPage', () => {
     }).compileComponents();
   });
 
-  it('renderiza a lista de vagas e os filtros', () => {
+  it('renderiza o estado vazio e os filtros sem inventar oportunidades', () => {
     const fixture = TestBed.createComponent(VagasPage);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Vagas');
     expect(fixture.nativeElement.textContent).toContain('Filtros de pesquisa');
-    expect(fixture.componentInstance.vagasFiltradas.length).toBe(4);
+    expect(fixture.nativeElement.textContent).toContain('Nenhuma vaga encontrada');
+    expect(fixture.componentInstance.vagasFiltradas.length).toBe(0);
   });
 
   it('filtra as vagas por modalidade', () => {
     const fixture = TestBed.createComponent(VagasPage);
     fixture.componentInstance.modalidade = 'Remoto';
 
-    expect(fixture.componentInstance.vagasFiltradas.length).toBe(2);
+    expect(fixture.componentInstance.vagasFiltradas.length).toBe(0);
   });
 });

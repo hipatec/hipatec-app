@@ -20,35 +20,14 @@ export class MentoriasPage implements OnInit {
 
   public userRole = '';
 
-  // dados simulados (quando o banco chegar, você só substituirá estes dois array)
-  public minhasMentorias: Mentoria[] = [
-    { id: 1, titulo: 'Lógica de programação', descricao: 'Lógica de programação do ZERO para iniciantes', progresso: 0.6 },
-    { id: 2, titulo: 'Fundamentos do UX Design', descricao: 'Fundamentos do UX Design', progresso: 1.0 },
-    { id: 3, titulo: 'Banco de Dados SQL', descricao: 'Banco de Dados SQL e Lógica de BD', progresso: 0.2 },
-    { id: 4, titulo: 'Introdução à Inteligência Artificial', descricao: 'Conceitos essenciais para começar a explorar IA', progresso: 0.8 },
-  ];
+  public minhasMentorias: Mentoria[] = [];
+  public meuAprendizado: Mentoria[] = [];
+  public mentoriasDisponiveis: Array<{ id: number; titulo: string; mentora: string; descricao: string }> = [];
+  public agenda: Array<{ data: string; titulo: string; tipo: string }> = [];
 
-  public meuAprendizado: Mentoria[] = [
-    { id: 101, titulo: 'Lógica de programação', descricao: 'Lógica de programação do zero para iniciantes', progresso: 0.6 },
-    { id: 102, titulo: 'Fundamentos do UX Design', descricao: 'Fundamentos de experiência e interface', progresso: 1.0 },
-    { id: 103, titulo: 'Banco de Dados SQL', descricao: 'Banco de dados SQL e lógica de BD', progresso: 0.2 }
-  ];
-  public mentoriasDisponiveis = [
-    { id: 10, titulo: 'Mentoria de Carreira', mentora: 'Ana Silva', descricao: 'Como se preparar para entrevistas.' },
-    { id: 11, titulo: 'Mentoria Tech', mentora: 'Bia Costa', descricao: 'Dicas de arquitetura Angular.' },
-  ];
-
-  public agenda = [
-    { data: '12 NOV', titulo: 'Entrega do projeto de SQL', tipo: 'Prazo' },
-    { data: '15 NOV', titulo: 'Mentoria de Carreira', tipo: 'Mentoria' },
-    { data: '20 NOV', titulo: 'Conclusão de UX Design', tipo: 'Curso' }
-  ];
-
-  public mesAtual = 10;
-  public anoAtual = 2026;
-  private readonly eventosPorMes: Record<string, number[]> = {
-    '2026-10': [12, 15, 20]
-  };
+  public mesAtual = new Date().getMonth();
+  public anoAtual = new Date().getFullYear();
+  private readonly eventosPorMes: Record<string, number[]> = {};
 
   get diasDoMes(): Array<number | null> {
     const primeiroDia = new Date(this.anoAtual, this.mesAtual, 1).getDay();
@@ -59,6 +38,10 @@ export class MentoriasPage implements OnInit {
 
   get diasComEvento(): number[] {
     return this.eventosPorMes[`${this.anoAtual}-${this.mesAtual}`] ?? [];
+  }
+
+  get mentoriasEmAndamento(): number {
+    return this.minhasMentorias.filter(item => (item.progresso ?? 0) < 1).length;
   }
 
   get tituloDoMes(): string {

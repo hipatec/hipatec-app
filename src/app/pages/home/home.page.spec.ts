@@ -104,7 +104,7 @@ describe('HomePage', () => {
     const fixture = TestBed.createComponent(HomePage);
     const page = fixture.componentInstance;
 
-    expect(page.sugestoesExibidas.length).toBe(3);
+    expect(page.sugestoesExibidas.length).toBe(0);
     page.mostrarMaisSugestoes();
     expect(page.sugestoesExibidas.length).toBe(page.sugestoes.length);
   });

@@ -22,38 +22,8 @@ interface AprendizadoItem {
   imports: [IonicModule, CommonModule, FormsModule]
 })
 export class AprendizadoPage {
-  itens: AprendizadoItem[] = [
-    {
-      titulo: 'Lógica de programação',
-      descricao: 'Lógica de programação do zero para iniciantes.',
-      progresso: 0.6,
-      tipo: 'Curso',
-      mentora: 'Ana Silva',
-      proximaAtividade: 'Aula 7 · Estruturas de repetição'
-    },
-    {
-      titulo: 'Fundamentos do UX Design',
-      descricao: 'Fundamentos de experiência e interface.',
-      progresso: 1,
-      tipo: 'Curso concluído',
-      mentora: 'Bia Costa',
-      proximaAtividade: 'Revisar certificado'
-    },
-    {
-      titulo: 'Banco de Dados SQL',
-      descricao: 'Banco de dados SQL e lógica de BD.',
-      progresso: 0.2,
-      tipo: 'Curso',
-      mentora: 'Carla Souza',
-      proximaAtividade: 'Aula 2 · Consultas básicas'
-    }
-  ];
-
-  sugestoes = [
-    { titulo: 'Mentoria de Carreira', tipo: 'Mentoria', descricao: 'Prepare-se para entrevistas e novos desafios.', mentora: 'Ana Silva' },
-    { titulo: 'Mentoria Tech', tipo: 'Mentoria', descricao: 'Troque experiências sobre arquitetura Angular.', mentora: 'Bia Costa' },
-    { titulo: 'Introdução à IA', tipo: 'Curso', descricao: 'Conheça os primeiros conceitos de inteligência artificial.', mentora: 'Carla Souza' }
-  ];
+  itens: AprendizadoItem[] = [];
+  sugestoes: Array<{ titulo: string; tipo: string; descricao: string; mentora: string }> = [];
 
   itensPorPagina = 12;
   filtroAtividade = 'Todas as atividades';
@@ -114,6 +84,7 @@ export class AprendizadoPage {
   }
 
   get percentualConcluido() {
+    if (this.itens.length === 0) return 0;
     return Math.round(this.itens.reduce((total, item) => total + item.progresso, 0) / this.itens.length * 100);
   }
 

@@ -14,8 +14,8 @@
 
     <section class="activity-toolbar" aria-label="Resumo das atividades">
       <span><ion-icon name="book-outline" aria-hidden="true"></ion-icon>{{ itens.length }} atividades</span>
-      <span><ion-icon name="time-outline" aria-hidden="true"></ion-icon>2 em andamento</span>
-      <span><ion-icon name="checkmark-circle-outline" aria-hidden="true"></ion-icon>1 concluída</span>
+      <span><ion-icon name="time-outline" aria-hidden="true"></ion-icon>{{ itensFiltrados.length }} atividades carregadas</span>
+      <span><ion-icon name="checkmark-circle-outline" aria-hidden="true"></ion-icon>O progresso será exibido quando houver atividades</span>
       <div class="pagination-settings">
         <label for="itens-por-pagina">Mostrar por página</label>
         <select id="itens-por-pagina" [ngModel]="itensPorPagina" (ngModelChange)="alterarItensPorPagina($event)">
@@ -39,7 +39,7 @@
         </select>
         </div>
 
-      <div class="activity-list">
+      <div class="activity-list" *ngIf="atividadesPaginadas.length > 0">
         <article class="activity-card" *ngFor="let item of atividadesPaginadas">
           <div class="activity-cover" aria-hidden="true"><ion-icon name="book-outline"></ion-icon></div>
           <div class="activity-content">
@@ -55,6 +55,9 @@
             {{ item.progresso === 1 ? 'Revisar' : 'Continuar' }}
           </ion-button>
         </article>
+      </div>
+      <div class="feed-state" *ngIf="atividadesPaginadas.length === 0">
+        Você ainda não possui atividades de aprendizado cadastradas.
       </div>
       <div class="pagination-controls" *ngIf="totalPaginasAtividades > 1">
         <button type="button" (click)="mudarPagina('atividades', -1)" [disabled]="paginaAtividades === 1">Anterior</button>
@@ -75,7 +78,7 @@
           <option>Curso</option>
         </select>
       </div>
-      <div class="suggestions-grid">
+      <div class="suggestions-grid" *ngIf="sugestoesPaginadas.length > 0">
         <article class="suggestion-card" *ngFor="let sugestao of sugestoesPaginadas">
           <div class="suggestion-image" aria-hidden="true"></div>
           <div class="suggestion-copy">
@@ -86,6 +89,9 @@
           </div>
           <ion-button fill="outline" (click)="inscrever(sugestao)">Inscrever-se agora</ion-button>
         </article>
+      </div>
+      <div class="feed-state" *ngIf="sugestoesPaginadas.length === 0">
+        Nenhuma oportunidade de aprendizado disponível no momento.
       </div>
       <div class="pagination-controls" *ngIf="totalPaginasSugestoes > 1">
         <button type="button" (click)="mudarPagina('sugestoes', -1)" [disabled]="paginaSugestoes === 1">Anterior</button>

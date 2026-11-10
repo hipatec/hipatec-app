@@ -111,7 +111,7 @@
         </div>
 
         <div class="sidebar-column">
-          <div class="sidebar-card">
+          <div class="sidebar-card" *ngIf="sugestoesExibidas.length > 0">
             <h3>Quem seguir</h3>
             
             <div class="sidebar-item" *ngFor="let sugestao of sugestoesExibidas">
@@ -126,6 +126,9 @@
             <div class="sidebar-more" *ngIf="quantidadeSugestoes < sugestoes.length">
               <button type="button" class="sidebar-more-button" (click)="mostrarMaisSugestoes()">Mostrar mais</button>
             </div>
+          </div>
+          <div class="sidebar-card feed-state" *ngIf="sugestoesExibidas.length === 0">
+            Sugestões de pessoas aparecerão quando essa função estiver conectada à API.
           </div>
         </div>
 

@@ -43,48 +43,7 @@ export class VagasPage {
   modalidade = 'Todas';
   contrato = 'Todos';
 
-  vagas: Vaga[] = [
-    {
-      empresa: 'Empresa 1',
-      titulo: 'Desenvolvedora Front-end Júnior',
-      descricao: 'Buscamos uma pessoa para atuar no desenvolvimento de interfaces acessíveis e colaborar com um time diverso.',
-      modalidade: 'Híbrido',
-      local: 'São Paulo, SP',
-      pais: 'Brasil', estado: 'São Paulo', cidade: 'São Paulo', area: 'Tecnologia', formacao: 'Ensino Superior', senioridade: 'Júnior', idiomas: 'Inglês Intermediário', contrato: 'CLT',
-      publicada: '12h',
-      tags: ['Angular', 'Júnior']
-    },
-    {
-      empresa: 'Empresa 1',
-      titulo: 'Analista de Dados',
-      descricao: 'Oportunidade para trabalhar com organização de dados, indicadores e melhoria contínua de produtos digitais.',
-      modalidade: 'Remoto',
-      local: 'Brasil',
-      pais: 'Brasil', estado: 'Todos', cidade: 'Todas', area: 'Tecnologia', formacao: 'Ensino Superior', senioridade: 'Pleno', idiomas: 'Inglês Fluente', contrato: 'PJ',
-      publicada: '1d',
-      tags: ['Dados', 'SQL']
-    },
-    {
-      empresa: 'Empresa 2',
-      titulo: 'Pessoa Engenheira de Software',
-      descricao: 'Faça parte de uma equipe que cria soluções digitais com impacto e troca constante de conhecimento.',
-      modalidade: 'Remoto',
-      local: 'Brasil',
-      pais: 'Brasil', estado: 'Todos', cidade: 'Todas', area: 'Tecnologia', formacao: 'Ensino Superior', senioridade: 'Pleno', idiomas: 'Inglês Fluente', contrato: 'CLT',
-      publicada: '2d',
-      tags: ['Java', 'Pleno']
-    },
-    {
-      empresa: 'Empresa 3',
-      titulo: 'Product Designer',
-      descricao: 'Atue na descoberta e no desenho de experiências simples, inclusivas e centradas nas pessoas.',
-      modalidade: 'Híbrido',
-      local: 'Rio de Janeiro, RJ',
-      pais: 'Brasil', estado: 'Rio de Janeiro', cidade: 'Rio de Janeiro', area: 'Design', formacao: 'Ensino Superior', senioridade: 'Sênior', idiomas: 'Inglês Intermediário', contrato: 'CLT',
-      publicada: '3d',
-      tags: ['UX', 'Design']
-    }
-  ];
+  vagas: Vaga[] = [];
 
   constructor() {
     addIcons({ briefcaseOutline, locationOutline, funnelOutline, timeOutline, openOutline });

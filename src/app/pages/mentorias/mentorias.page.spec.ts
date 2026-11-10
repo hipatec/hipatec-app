@@ -30,11 +30,12 @@ describe('MentoriasPage', () => {
   it('troca o mês e gera os dias correspondentes', () => {
     const fixture = TestBed.createComponent(MentoriasPage);
     const page = fixture.componentInstance;
-    expect(page.tituloDoMes).toBe('Novembro de 2026');
+    const tituloInicial = page.tituloDoMes;
     page.mudarMes(1);
-    expect(page.tituloDoMes).toBe('Dezembro de 2026');
+    expect(page.tituloDoMes).not.toBe(tituloInicial);
     expect(page.diasComEvento).toEqual([]);
     page.mudarMes(-1);
-    expect(page.diasComEvento).toEqual([12, 15, 20]);
+    expect(page.tituloDoMes).toBe(tituloInicial);
+    expect(page.diasComEvento).toEqual([]);
   });
 });

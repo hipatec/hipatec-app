@@ -88,6 +88,7 @@ export class ProfilePage {
 
   private loadPosts(perfilId: number, includeLocalReposts = true) {
     this.postsService.getPostsPerfil(perfilId).subscribe(posts => {
+      this.aplicarAvatarDoFeed(posts);
       this.posts = posts.map(post => this.mapPost(post));
       if (includeLocalReposts) {
         const reposts = this.getLocalReposts(perfilId);
@@ -95,6 +96,12 @@ export class ProfilePage {
         this.reposts = reposts.filter((post: any) => post.repostPuro);
       }
     });
+  }
+
+  private aplicarAvatarDoFeed(posts: any[]) {
+    if (this.perfil?.pfp) return;
+    const avatar = posts.find(post => typeof post.autorFoto === 'string' && post.autorFoto.trim())?.autorFoto;
+    if (avatar) this.perfil = { ...this.perfil, pfp: avatar };
   }
 
   private getLocalReposts(perfilId: number) {

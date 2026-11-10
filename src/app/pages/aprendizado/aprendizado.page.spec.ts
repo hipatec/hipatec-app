@@ -11,14 +11,14 @@ describe('AprendizadoPage', () => {
     }).compileComponents();
   });
 
-  it('exibe as atividades completas de aprendizado', () => {
+  it('exibe o estado vazio quando não há atividades reais carregadas', () => {
     const fixture = TestBed.createComponent(AprendizadoPage);
     fixture.detectChanges();
 
     expect(fixture.nativeElement.textContent).toContain('Meu aprendizado');
     expect(fixture.nativeElement.textContent).toContain('Suas atividades');
-    expect(fixture.nativeElement.textContent).toContain('Lógica de programação');
-    expect(fixture.componentInstance.itens.length).toBe(3);
+    expect(fixture.nativeElement.textContent).toContain('Você ainda não possui atividades de aprendizado cadastradas.');
+    expect(fixture.componentInstance.itens.length).toBe(0);
   });
 
   it('filtra atividades em andamento e concluídas', () => {
@@ -26,9 +26,9 @@ describe('AprendizadoPage', () => {
     const page = fixture.componentInstance;
 
     page.alterarFiltroAtividade('Concluídas');
-    expect(page.atividadesPaginadas.length).toBe(1);
+    expect(page.atividadesPaginadas.length).toBe(0);
     page.alterarFiltroAtividade('Em andamento');
-    expect(page.atividadesPaginadas.length).toBe(2);
+    expect(page.atividadesPaginadas.length).toBe(0);
   });
 
   it('filtra sugestões por tipo', () => {
@@ -36,8 +36,8 @@ describe('AprendizadoPage', () => {
     const page = fixture.componentInstance;
 
     page.alterarFiltroSugestao('Curso');
-    expect(page.sugestoesPaginadas.length).toBe(1);
+    expect(page.sugestoesPaginadas.length).toBe(0);
     page.alterarFiltroSugestao('Mentoria');
-    expect(page.sugestoesPaginadas.length).toBe(2);
+    expect(page.sugestoesPaginadas.length).toBe(0);
   });
 });

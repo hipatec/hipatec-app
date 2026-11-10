@@ -26,7 +26,6 @@ export class HomePage implements OnInit {
   public iconeComentar = chatbubbleOutline;
   public iconeCurtido = heart;
 
-  // matriz simulando os dados vindos do banco **** substituir
   posts: any[] = [];
   carregando = false;
   erroFeed: string | null = null;
@@ -35,15 +34,7 @@ export class HomePage implements OnInit {
   postEmDenuncia: any = null;
   motivoDenuncia = '';
 
-  // matriz para os itens da barra lateral ****esse n sei como podemos fazer, ja que seria um certo algoritmo para sugerir as pessoas, mas vou deixar aqui como exemplo
-  sugestoes = [
-    { nome: 'Nathalia Ventura', arroba: '@kawkdev' },
-    { nome: 'Thiago Barbosa', arroba: '@thiwink' },
-    { nome: 'Lucca Rosa', arroba: '@rosalucca' },
-    { nome: 'Ana Clara', arroba: '@anaclara' },
-    { nome: 'Marina Souza', arroba: '@marinasouza' },
-    { nome: 'Paula Mendes', arroba: '@paulamendes' }
-  ];
+  sugestoes: Array<{ nome: string; arroba: string }> = [];
   quantidadeSugestoes = 3;
 
   get sugestoesExibidas() {
