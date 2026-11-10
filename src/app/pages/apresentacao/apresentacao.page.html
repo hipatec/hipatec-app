@@ -1,20 +1,10 @@
 <ion-content [fullscreen]="true">
   <div class="landing-shell">
-    <header class="public-header" (keydown.escape)="menuOpen = false; menuButton.focus()">
+    <header class="public-header">
       <a class="brand" routerLink="/" aria-label="Hipatec — início">
         <img src="assets/logo_roxo.png" alt="Hipatec" width="142" />
       </a>
-      <button #menuButton class="menu-toggle" type="button" (click)="menuOpen = !menuOpen"
-        [attr.aria-expanded]="menuOpen" aria-controls="public-nav">
-        {{ menuOpen ? 'Fechar menu' : 'Abrir menu' }}
-      </button>
-      <nav id="public-nav" [class.open]="menuOpen" aria-label="Navegação pública">
-        <a href="#sobre" (click)="scrollToSection(sobre, $event)">Sobre</a>
-        <a href="#mentorias" (click)="scrollToSection(mentorias, $event)">Mentorias</a>
-        <a href="#comunidade" (click)="scrollToSection(comunidade, $event)">Comunidade</a>
-        <a routerLink="/login" (click)="menuOpen = false">Entrar</a>
-        <a class="btn btn-primary" routerLink="/cadastro" (click)="menuOpen = false">Criar conta</a>
-      </nav>
+      <a class="btn btn-primary header-login" routerLink="/login">Entrar</a>
     </header>
 
     <main>

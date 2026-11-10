@@ -13,6 +13,8 @@
   flex-direction: row-reverse;
 }
 
+.logo-link { display: inline-block; color: inherit; text-decoration: none; }
+
 /* --- Metade Esquerda: Identidade Visual --- */
 .panel-left {
   flex: 1;
@@ -165,7 +167,13 @@ main {
 }
 
 @media (max-width: 768px) {
+  .container { min-height: 100dvh; height: auto; overflow-y: auto; }
   .panel-left {
     display: none;
   }
+
+  main { max-width: 520px; width: 100%; padding: 28px 20px 36px; }
+  .role-toggle { width: 100%; }
+  .role-toggle ion-segment-button { min-width: 0; flex: 1 1 0; }
+  .role-toggle ion-label { white-space: nowrap; }
 }

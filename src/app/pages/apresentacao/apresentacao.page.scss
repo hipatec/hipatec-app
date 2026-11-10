@@ -1,6 +1,7 @@
 :host { color: #271743; font-family: Roboto, Arial, sans-serif; }
 ion-content { --background: #fffaf0; --color: #271743; }
 .landing-shell {
+  overflow-x: hidden;
   min-height: 100%;
   background: radial-gradient(circle at 12% 8%, #ffe28080, transparent 28%),
     radial-gradient(circle at 92% 20%, #9b82c960, transparent 26%),
@@ -12,7 +13,7 @@ ion-content { --background: #fffaf0; --color: #271743; }
 a { color: #472b7a; font-weight: 700; }
 nav a, .btn { text-decoration: none; }
 img { display: block; max-width: 100%; height: auto; }
-.menu-toggle { display: none; }
+.header-login { flex: 0 0 auto; }
 :is(a, button):focus-visible { outline: 3px solid #472b7a; outline-offset: 4px; }
 .btn, .menu-toggle { border: 1px solid #472b7a40; border-radius: 28px; background: #ffffffb8; padding: 12px 20px; color: #472b7a; }
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; }
@@ -46,13 +47,13 @@ p { color: #5d477d; line-height: 1.7; }
 .site-footer { border-top: 1px solid #472b7a20; padding: 34px 0; }
 .site-footer p { flex: 1; }
 @media (max-width: 940px) {
-  .public-header { flex-wrap: wrap; padding: 14px 0; }
-  .menu-toggle { display: block; font: inherit; cursor: pointer; }
-  nav { display: none; width: 100%; flex-wrap: wrap; }
-  nav.open { display: flex; }
+  .public-header { padding: 14px 0; }
   .hero-bottom, .two-column, .cards-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
+  .public-header { min-height: 64px; width: calc(100% - 32px); }
+  .public-header .brand img { width: 112px; }
+  .header-login { min-height: 40px; padding: 9px 18px; }
   .hero-intro p, .two-column > p { font-size: 17px; }
   .hero-bottom, .two-column { gap: 24px; }
   .hero-visual { min-height: auto; display: grid; gap: 16px; }

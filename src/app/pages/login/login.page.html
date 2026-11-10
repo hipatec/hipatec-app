@@ -1,21 +1,21 @@
 <div class="gradient-bg">
   
   <div class="container">
-    <div class="logo-box">
+    <a class="logo-box logo-link" routerLink="/" aria-label="Voltar para a página inicial da Hipatec">
         <img src="assets/logo_hipatec_roxo.png" alt="Hipatec" class="logo-img" />
-      </div>
+    </a>
     <main>
 
       
 
       <h2 class="login-title">{{ role === 'estudantes' ? 'Login Estudante' : 'Login Mentora' }}</h2>
 
-      <ion-segment value="estudantes" (ionChange)="switchRole($event)">
+      <ion-segment class="role-toggle" [value]="role" (ionChange)="switchRole($event)">
         <ion-segment-button value="estudantes">
-          <ion-label>Estudantes</ion-label>
+          <ion-label>Estudante</ion-label>
         </ion-segment-button>
         <ion-segment-button value="mentoras">
-          <ion-label>Mentoras</ion-label>
+          <ion-label>Mentora</ion-label>
         </ion-segment-button>
       </ion-segment>
 

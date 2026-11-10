@@ -26,4 +26,12 @@ describe('LoginPage', () => {
     expect(fixture.componentInstance).toBeTruthy();
     http.verify();
   });
+
+  it('mantém o logo como link para a home pública', () => {
+    const fixture = TestBed.createComponent(LoginPage);
+    fixture.detectChanges();
+    const link = fixture.nativeElement.querySelector('.logo-link');
+    expect(link?.getAttribute('href')).toBe('/');
+    expect(link?.getAttribute('aria-label')).toContain('página inicial');
+  });
 });

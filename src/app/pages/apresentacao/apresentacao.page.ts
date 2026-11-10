@@ -11,11 +11,8 @@ import { IonContent } from '@ionic/angular/standalone';
   imports: [RouterLink, IonContent],
 })
 export class ApresentacaoPage {
-  menuOpen = false;
-
   scrollToSection(section: HTMLElement, event: Event) {
     event.preventDefault();
-    this.menuOpen = false;
     // O Ionic rola dentro de ion-content; aguarde o menu recolher antes de posicionar a seção.
     requestAnimationFrame(() => {
       section.scrollIntoView({ block: 'start' });
