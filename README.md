@@ -19,12 +19,12 @@ A porta **8100** corresponde à origem permitida pelo CORS dos controllers de es
 
 ## Configuração da API
 
-A URL atual é `http://localhost:8080/`, definida em:
+A URL de desenvolvimento é `http://localhost:8080/`; a produção usa `https://hipatec-production.up.railway.app/`, definidas em:
 
 - [environment.ts](src/environments/environment.ts): desenvolvimento.
 - [environment.prod.ts](src/environments/environment.prod.ts): produção.
 
-Mantenha a barra final, pois os serviços concatenam os caminhos diretamente. O ambiente de produção ainda aponta para localhost e precisa ser configurado antes de publicar a aplicação. Credenciais privadas não devem ficar no frontend.
+Mantenha a barra final, pois os serviços concatenam os caminhos diretamente. Credenciais privadas não devem ficar no frontend.
 
 Para executar o backend, consulte o README de `hipatec/hipatec`: a base examinada depende de SQL Server, procedimentos SQL de login e configurações Firebase/Cloudinary. A presença dos endpoints no código não garante que o ambiente de integração esteja pronto.
 
