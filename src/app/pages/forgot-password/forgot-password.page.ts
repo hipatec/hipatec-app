@@ -29,6 +29,7 @@ export class ForgotPasswordPage implements OnDestroy {
   erro = '';
   redefinir = false;
   linkValido = false;
+  validandoLink = false;
   senha = '';
   confirmacao = '';
 
@@ -43,10 +44,24 @@ export class ForgotPasswordPage implements OnDestroy {
     this.erro = '';
     this.redefinir = this.route.snapshot.data['redefinir'] === true;
     this.linkValido = false;
+    this.validandoLink = false;
     if (this.redefinir) {
       this.token = new URLSearchParams(this.location.path(true).split('#')[1] ?? '').get('token') ?? '';
       this.linkValido = /^[A-Za-z0-9_-]{43}$/.test(this.token);
       this.location.replaceState('/redefinir-senha');
+      if (this.linkValido) {
+        this.validandoLink = true;
+        this.requisicao = this.auth.validarTokenRecuperacao(this.token)
+          .pipe(finalize(() => this.validandoLink = false))
+          .subscribe({
+            next: () => this.linkValido = true,
+            error: () => {
+              this.linkValido = false;
+              this.token = '';
+              this.erro = 'O link é inválido, expirou ou já foi utilizado. Solicite um novo link.';
+            }
+          });
+      }
     }
   }
 

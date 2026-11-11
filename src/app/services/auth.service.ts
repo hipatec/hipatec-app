@@ -16,6 +16,10 @@ export class AuthService {
     return this.http.post<void>(`${environment.apiUrl}auth/recuperacao-senha`, { email });
   }
 
+  validarTokenRecuperacao(token: string): Observable<void> {
+    return this.http.post<void>(`${environment.apiUrl}auth/validar-redefinicao`, { token });
+  }
+
   redefinirSenha(token: string, senha: string): Observable<void> {
     return this.http.post<void>(`${environment.apiUrl}auth/redefinir-senha`, { token, senha });
   }

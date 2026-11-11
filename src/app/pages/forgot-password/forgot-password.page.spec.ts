@@ -12,6 +12,7 @@ describe('ForgotPasswordPage', () => {
   let http: HttpTestingController;
   let data: { redefinir?: boolean };
   const url = environment.apiUrl + 'auth/recuperacao-senha';
+  const validacaoUrl = environment.apiUrl + 'auth/validar-redefinicao';
 
   beforeEach(async () => {
     data = {};
@@ -105,6 +106,13 @@ describe('ForgotPasswordPage', () => {
     fixture.detectChanges();
     await fixture.whenStable();
     expect(limparUrl).toHaveBeenCalledWith('/redefinir-senha');
+    if (token.length === 43) {
+      const validacao = http.expectOne(validacaoUrl);
+      expect(validacao.request.body).toEqual({ token });
+      validacao.flush(null, { status: 204, statusText: 'No Content' });
+      fixture.detectChanges();
+      await fixture.whenStable();
+    }
   }
 
   it('valida senhas, envia token no corpo e limpa os campos após redefinir', async () => {
