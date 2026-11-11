@@ -8,6 +8,7 @@ import { EstudanteService } from '../../services/estudante.service';
 import { MentoraService } from '../../services/mentora.service';
 import { PerfilService } from '../../services/perfil.service';
 import { EditProfileModalComponent } from '../../components/edit-profile-modal/edit-profile-modal.component';
+import { CreatePostModalComponent } from '../../components/create-post-modal/create-post-modal.component';
 import { CommentModalComponent } from '../../components/comment-modal/comment-modal.component';
 import { PostsService } from '../../services/posts.service';
 import { AuthService } from '../../services/auth.service';
@@ -49,6 +50,8 @@ export class ProfilePage {
   perfil: any;
   posts: any[] = [];
   reposts: any[] = [];
+  carregandoPosts = false;
+  erroPosts: string | null = null;
   profileTab: 'posts' | 'reposts' = 'posts';
   postMenuId: string | number | null = null;
   iconeCurtir = heartOutline;
@@ -59,6 +62,8 @@ export class ProfilePage {
     this.perfil = undefined;
     this.posts = [];
     this.reposts = [];
+    this.erroPosts = null;
+    this.profileTab = 'posts';
     this.showEditModal = false;
     const role = this.route.snapshot.paramMap.get('role');
     const publicId = Number(this.route.snapshot.paramMap.get('id'));
@@ -89,15 +94,32 @@ export class ProfilePage {
   }
 
   private loadPosts(perfilId: number, includeLocalReposts = true) {
-    this.postsService.getPostsPerfil(perfilId).subscribe(posts => {
-      this.aplicarAvatarDoFeed(posts);
-      this.posts = posts.map(post => this.mapPost(post));
-      if (includeLocalReposts) {
-        const reposts = this.getLocalReposts(perfilId);
-        this.posts = [...this.posts, ...reposts.filter((post: any) => post.repostComComentario)];
-        this.reposts = reposts.filter((post: any) => post.repostPuro);
+    this.carregandoPosts = true;
+    this.erroPosts = null;
+    this.postsService.getPostsPerfil(perfilId).subscribe({
+      next: posts => {
+        this.aplicarAvatarDoFeed(posts);
+        this.posts = posts.map(post => this.mapPost(post));
+        this.reposts = [];
+        if (includeLocalReposts) {
+          const reposts = this.getLocalReposts(perfilId);
+          this.posts = [...this.posts, ...reposts.filter((post: any) => post.repostComComentario)];
+          this.reposts = reposts.filter((post: any) => post.repostPuro);
+        }
+        this.carregandoPosts = false;
+      },
+      error: error => {
+        console.error('Erro ao carregar posts do perfil:', error);
+        this.posts = [];
+        this.reposts = [];
+        this.carregandoPosts = false;
+        this.erroPosts = 'Não foi possível carregar as publicações deste perfil.';
       }
     });
+  }
+
+  recarregarPosts() {
+    if (this.userId) this.loadPosts(this.userId, !this.isPublicProfile);
   }
 
   private aplicarAvatarDoFeed(posts: any[]) {
@@ -166,6 +188,16 @@ export class ProfilePage {
   toggleCurtida(post: any) {
     post.curtidoUsuario = !post.curtidoUsuario;
     post.curtidas = Math.max(0, (post.curtidas ?? 0) + (post.curtidoUsuario ? 1 : -1));
+  }
+
+  async abrirModalPost() {
+    const modal = await this.modalController.create({
+      component: CreatePostModalComponent,
+      cssClass: 'custom-modal-post'
+    });
+    await modal.present();
+    const result = await modal.onDidDismiss();
+    if (result.data?.posted) this.recarregarPosts();
   }
 
   async abrirComentario(post: any) {

@@ -15,3 +15,20 @@
 .reposted-original { margin-top: 14px; padding: 12px; border: 1px solid #e5dcef; border-radius: 8px; background: #faf8fd; }
 .reposted-original strong { color: #472b7a; font-size: 13px; }
 .reposted-original p { margin: 6px 0 0; color: #6d637c; font-size: 13px; }
+.profile-fab {
+  --ion-color-base: #472b7a;
+  bottom: 20px;
+  right: 20px;
+  z-index: 20;
+}
+
+.profile-fab ion-fab-button {
+  --background: #472b7a;
+  --background-activated: #37205f;
+  --color: #fff;
+  --box-shadow: 0 8px 20px rgba(71, 43, 122, 0.28);
+}
+
+@media (max-width: 620px) {
+  .profile-fab { bottom: 12px; right: 12px; }
+}

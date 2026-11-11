@@ -64,6 +64,14 @@
     </div>
 
     <div class="feed-container" *ngIf="profileTab === 'posts'">
+      <div class="feed-state" *ngIf="carregandoPosts" role="status" aria-live="polite">Carregando publicações...</div>
+      <div class="feed-state feed-state-error" *ngIf="!carregandoPosts && erroPosts" role="alert">
+        {{ erroPosts }}
+        <button type="button" class="feed-retry" (click)="recarregarPosts()">Tentar novamente</button>
+      </div>
+      <div class="feed-state" *ngIf="!carregandoPosts && !erroPosts && posts.length === 0">
+        {{ isPublicProfile ? 'Este perfil ainda não publicou nada.' : 'Você ainda não publicou nada.' }}
+      </div>
       <div class="post-card" *ngFor="let post of posts">
         <div class="post-header">
           <div class="post-avatar-placeholder">
@@ -139,6 +147,12 @@
       </div>
       <div class="feed-state" *ngIf="reposts.length === 0">Nenhuma publicação republicada.</div>
     </div>
+
+    <ion-fab *ngIf="!isPublicProfile" vertical="bottom" horizontal="end" slot="fixed" class="profile-fab">
+      <ion-fab-button aria-label="Criar publicação" (click)="abrirModalPost()">
+        <ion-icon name="add" aria-hidden="true"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
 
   </div>
 </ion-content>
