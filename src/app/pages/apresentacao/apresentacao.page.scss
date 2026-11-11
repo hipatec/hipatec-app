@@ -14,7 +14,7 @@ ion-content { --background: #fffaf0; --color: #271743; }
 a { color: #472b7a; font-weight: 700; }
 nav a, .btn { text-decoration: none; }
 img { display: block; max-width: 100%; height: auto; }
-.header-login { display: none; flex: 0 0 auto; }
+.header-login { display: none !important; flex: 0 0 auto; }
 :is(a, button):focus-visible { outline: 3px solid #472b7a; outline-offset: 4px; }
 .btn, .menu-toggle { border: 1px solid #472b7a40; border-radius: 28px; background: #ffffffb8; padding: 12px 20px; color: #472b7a; }
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; }
@@ -50,7 +50,7 @@ p { color: #5d477d; line-height: 1.7; }
 @media (max-width: 940px) {
   .public-header { padding: 14px 0; }
   .public-header nav { display: none; }
-  .header-login { display: inline-flex; }
+  .header-login { display: inline-flex !important; }
   .hero-bottom, .two-column, .cards-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
