@@ -14,6 +14,7 @@ import { PostsService, Comentario } from '../../services/posts.service';
 })
 export class CommentModalComponent implements OnInit {
   @Input() postSelecionado: any;
+  @Input() modoRepost = false;
 
   public iconeFechar = close;
   public iconeImagem = imageOutline;
@@ -49,6 +50,10 @@ export class CommentModalComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.modoRepost) {
+      this.carregando = false;
+      return;
+    }
     const id = this.postId;
     if (!id) {
       this.carregando = false;
@@ -66,8 +71,15 @@ export class CommentModalComponent implements OnInit {
 
   enviar() {
     const texto = this.texto.trim();
+    if (!texto || this.enviando) return;
+
+    if (this.modoRepost) {
+      this.modalController.dismiss({ comment: texto });
+      return;
+    }
+
     const id = this.postId;
-    if (!texto || !id || this.enviando) return;
+    if (!id) return;
     this.enviando = true;
     this.postsService.addComentario(id, texto).subscribe({
       next: () => {

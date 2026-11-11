@@ -122,8 +122,8 @@
 
   .post-body .post-text {
     color: #444444;
-    font-size: 14px;
-    line-height: 1.5;
+    font-size: 16px;
+    line-height: 1.55;
     margin: 0 0 12px;
   }
 
@@ -165,4 +165,6 @@
     margin-bottom: 6px;
     padding: 12px 16px;
   }
+
+  .post-body .post-text { font-size: 15px; }
 }

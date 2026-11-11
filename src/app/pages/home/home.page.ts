@@ -217,7 +217,7 @@ export class HomePage implements OnInit {
     }
   }
 
-  repostar(post: any, comComentario = false) {
+  async repostar(post: any, comComentario = false) {
     const originalId = post.repostOriginal?.id || post.id;
     const reposts = this.getLocalReposts();
     const existente = reposts.find((repost: any) => String(repost.repostOriginalId) === String(originalId));
@@ -226,14 +226,22 @@ export class HomePage implements OnInit {
       localStorage.setItem('hipatec-reposts', JSON.stringify(reposts.filter((repost: any) => repost !== existente)));
       post.repostadoUsuario = false;
       post.reposts = Math.max(0, (post.reposts ?? 0) - 1);
-      if (existente.repostComComentario) {
-        this.posts = this.posts.filter(item => item.id !== existente.id);
-      }
+      if (existente.repostComComentario) this.posts = this.posts.filter(item => item.id !== existente.id);
       return;
     }
 
-    const comentario = comComentario ? window.prompt('Adicione um comentário ao repost:', '') : '';
-    if (comComentario && comentario === null) return;
+    let comentario = '';
+    if (comComentario) {
+      const modal = await this.modalController.create({
+        component: CommentModalComponent,
+        cssClass: 'custom-modal-comment',
+        componentProps: { postSelecionado: post, modoRepost: true }
+      });
+      await modal.present();
+      const result = await modal.onDidDismiss();
+      comentario = result.data?.comment || '';
+      if (!comentario) return;
+    }
 
     const repost = {
       ...post,
@@ -249,11 +257,8 @@ export class HomePage implements OnInit {
     localStorage.setItem('hipatec-reposts', JSON.stringify([repost, ...reposts]));
     post.repostadoUsuario = true;
     post.reposts = (post.reposts ?? 0) + 1;
-    if (comentario) {
-      this.posts = [repost, ...this.posts];
-    } else {
-      this.posts = [post, ...this.posts.filter(item => item.id !== post.id)];
-    }
+    if (comentario) this.posts = [repost, ...this.posts];
+    else this.posts = [post, ...this.posts.filter(item => item.id !== post.id)];
   }
 
 
@@ -273,7 +278,7 @@ export class HomePage implements OnInit {
   async abrirModalComentario(post: any) {
     const modal = await this.modalController.create({
       component: CommentModalComponent,
-      cssClass: 'custom-modal-post', // Reaproveitando o CSS do outro modal!
+      cssClass: 'custom-modal-comment', // Modal de publicação com comentários
       componentProps: {
         postSelecionado: post // Passando o post inteiro para dentro do modal
       }

@@ -5,13 +5,13 @@
         <ion-icon [icon]="iconeFechar"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="draft-title">Responder</ion-title>
+    <ion-title class="draft-title">{{ modoRepost ? 'Republicar' : 'Publicação' }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
   <div class="replying-to">
-    Respondendo a <span>{{ getArroba() }}</span>
+    {{ modoRepost ? 'Adicione um comentário antes de republicar' : 'Comentários da publicação' }}
   </div>
 
   <div class="post-preview" *ngIf="postSelecionado">
@@ -25,7 +25,8 @@
     </div>
   </div>
 
-  <div class="comments-list" *ngIf="!carregando && comentarios.length > 0">
+  <ng-container *ngIf="!modoRepost">
+    <div class="comments-list" *ngIf="!carregando && comentarios.length > 0">
     <article class="comment-item" *ngFor="let comentario of comentarios">
       <div class="comment-avatar">
         <img *ngIf="comentario.autorFoto" [src]="comentario.autorFoto" [alt]="comentario.autorNome || 'Usuário'" />
@@ -38,11 +39,12 @@
     </article>
   </div>
   <p class="comments-state" *ngIf="carregando">Carregando comentários...</p>
-  <p class="comments-state" *ngIf="!carregando && comentarios.length === 0">Ainda não há comentários.</p>
+    <p class="comments-state" *ngIf="!carregando && comentarios.length === 0">Ainda não há comentários.</p>
+  </ng-container>
 
   <div class="post-input-area">
     <div class="post-avatar"></div>
-    <textarea [(ngModel)]="texto" placeholder="Escreva um comentário..." rows="4" maxlength="500"></textarea>
+    <textarea [(ngModel)]="texto" [placeholder]="modoRepost ? 'Adicione um comentário à republicação...' : 'Escreva um comentário...'" rows="4" maxlength="500"></textarea>
   </div>
 </ion-content>
 
@@ -55,7 +57,7 @@
         </ion-button>
       </div>
       <button class="btn-submit-post" type="button" [disabled]="enviando || !texto.trim()" (click)="enviar()">
-        {{ enviando ? 'Enviando...' : 'Responder' }}
+        {{ enviando ? 'Enviando...' : (modoRepost ? 'Republicar' : 'Comentar') }}
       </button>
     </div>
   </ion-toolbar>

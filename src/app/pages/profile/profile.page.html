@@ -149,11 +149,7 @@
       <div class="feed-state" *ngIf="reposts.length === 0">Nenhuma publicação republicada.</div>
     </div>
 
-    <ion-fab *ngIf="!isPublicProfile" vertical="bottom" horizontal="end" slot="fixed" class="profile-fab">
-      <ion-fab-button aria-label="Criar publicação" (click)="abrirModalPost()">
-        <ion-icon name="add" aria-hidden="true"></ion-icon>
-      </ion-fab-button>
-    </ion-fab>
+  <button *ngIf="!isPublicProfile" type="button" class="create-post-button profile-create-post" aria-label="Criar publicação" (click)="abrirModalPost()">+</button>
 
   </div>
 </ion-content>

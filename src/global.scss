@@ -49,6 +49,46 @@
   width: 100%;
 }
 
+.create-post-button {
+  align-items: center;
+  background: #472b7a;
+  border: 0;
+  border-radius: 50%;
+  bottom: 24px;
+  box-shadow: 0 6px 16px rgba(71, 43, 122, 0.35);
+  color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  font-size: 32px;
+  font-weight: 300;
+  height: 56px;
+  justify-content: center;
+  line-height: 1;
+  padding: 0 0 4px;
+  position: fixed;
+  right: 24px;
+  width: 56px;
+  z-index: 2000;
+}
+
+.create-post-button:hover,
+.create-post-button:focus-visible {
+  background: #382260;
+  outline: 3px solid #bda9df;
+  outline-offset: 3px;
+}
+
+@media (max-width: 768px) {
+  .create-post-button { bottom: 16px; right: 16px; }
+}
+
+.custom-modal-comment {
+  --border-radius: 20px;
+  --width: min(640px, calc(100vw - 24px));
+  --height: min(760px, calc(100vh - 32px));
+  --box-shadow: 0 18px 50px rgba(45, 28, 72, 0.28);
+}
+
 .custom-modal-post {
   /* Arredonda as bordas do modal */
   --border-radius: 24px;

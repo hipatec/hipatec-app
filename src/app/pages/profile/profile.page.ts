@@ -209,13 +209,13 @@ export class ProfilePage {
   async abrirComentario(post: any) {
     const modal = await this.modalController.create({
       component: CommentModalComponent,
-      cssClass: 'custom-modal-post',
+      cssClass: 'custom-modal-comment',
       componentProps: { postSelecionado: post }
     });
     await modal.present();
   }
 
-  repostar(post: any, comComentario = false) {
+  async repostar(post: any, comComentario = false) {
     const originalId = post.repostOriginal?.id || post.id;
     const reposts = JSON.parse(localStorage.getItem('hipatec-reposts') || '[]');
     const existente = reposts.find((item: any) => String(item.repostOriginalId) === String(originalId));
@@ -229,8 +229,18 @@ export class ProfilePage {
       return;
     }
 
-    const comentario = comComentario ? window.prompt('Adicione um comentário ao repost:', '') : '';
-    if (comComentario && comentario === null) return;
+    let comentario = '';
+    if (comComentario) {
+      const modal = await this.modalController.create({
+        component: CommentModalComponent,
+        cssClass: 'custom-modal-comment',
+        componentProps: { postSelecionado: post, modoRepost: true }
+      });
+      await modal.present();
+      const result = await modal.onDidDismiss();
+      comentario = result.data?.comment || '';
+      if (!comentario) return;
+    }
 
     const novoRepost = {
       ...post,
