@@ -4,6 +4,13 @@
       <a class="brand" routerLink="/" aria-label="Hipatec — início">
         <img src="assets/logo_roxo.png" alt="Hipatec" width="142" />
       </a>
+      <nav id="public-nav" aria-label="Navegação pública">
+        <a href="#sobre" (click)="scrollToSection(sobre, $event)">Sobre</a>
+        <a href="#mentorias" (click)="scrollToSection(mentorias, $event)">Mentorias</a>
+        <a href="#comunidade" (click)="scrollToSection(comunidade, $event)">Comunidade</a>
+        <a routerLink="/login">Entrar</a>
+        <a class="btn btn-primary" routerLink="/cadastro">Criar conta</a>
+      </nav>
       <a class="btn btn-primary header-login" routerLink="/login">Entrar</a>
     </header>
 

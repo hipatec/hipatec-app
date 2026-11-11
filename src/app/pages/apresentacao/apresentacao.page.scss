@@ -10,10 +10,11 @@ ion-content { --background: #fffaf0; --color: #271743; }
 .public-header, .hero-section, .section, .site-footer { width: min(1180px, calc(100% - 32px)); margin: auto; }
 .public-header, nav, .actions, .site-footer { display: flex; align-items: center; gap: 24px; }
 .public-header { min-height: 76px; justify-content: space-between; }
+.public-header nav { margin-left: auto; }
 a { color: #472b7a; font-weight: 700; }
 nav a, .btn { text-decoration: none; }
 img { display: block; max-width: 100%; height: auto; }
-.header-login { flex: 0 0 auto; }
+.header-login { display: none; flex: 0 0 auto; }
 :is(a, button):focus-visible { outline: 3px solid #472b7a; outline-offset: 4px; }
 .btn, .menu-toggle { border: 1px solid #472b7a40; border-radius: 28px; background: #ffffffb8; padding: 12px 20px; color: #472b7a; }
 .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; }
@@ -21,7 +22,7 @@ img { display: block; max-width: 100%; height: auto; }
 .actions { flex-wrap: wrap; gap: 12px; }
 .hero-section { padding: 34px 0 72px; }
 .eyebrow, .tag { display: inline-block; border-radius: 24px; background: #ffd35852; color: #472b7a; font-size: 13px; font-weight: 800; padding: 8px 12px; }
-h1 { color: #2f1b52; font-size: clamp(42px, 6.2vw, 96px); line-height: 1.05; margin: 18px 0 34px; }
+h1 { color: #2f1b52; font-size: clamp(42px, 5.2vw, 72px); line-height: 1.05; margin: 18px 0 28px; }
 h2 { font-size: clamp(30px, 4vw, 52px); line-height: 1.12; }
 h3 { font-size: 24px; }
 p { color: #5d477d; line-height: 1.7; }
@@ -48,12 +49,16 @@ p { color: #5d477d; line-height: 1.7; }
 .site-footer p { flex: 1; }
 @media (max-width: 940px) {
   .public-header { padding: 14px 0; }
+  .public-header nav { display: none; }
+  .header-login { display: inline-flex; }
   .hero-bottom, .two-column, .cards-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
   .public-header { min-height: 64px; width: calc(100% - 32px); }
   .public-header .brand img { width: 112px; }
   .header-login { min-height: 40px; padding: 9px 18px; }
+  h1 { font-size: clamp(34px, 10.5vw, 48px); line-height: 1.08; margin-bottom: 22px; }
+  .hero-section { padding-top: 24px; }
   .hero-intro p, .two-column > p { font-size: 17px; }
   .hero-bottom, .two-column { gap: 24px; }
   .hero-visual { min-height: auto; display: grid; gap: 16px; }
