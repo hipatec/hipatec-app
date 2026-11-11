@@ -31,6 +31,46 @@ ion-toolbar {
   }
 }
 
+.comments-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 18px 0 24px 52px;
+}
+
+.comment-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  color: #3f3b46;
+
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 32px;
+  }
+
+  strong {
+    color: #472b7a;
+    font-size: 13px;
+  }
+
+  p {
+    margin: 3px 0 0;
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+  }
+}
+
+.comments-state {
+  margin: 24px 0 18px 52px;
+  color: #777080;
+  font-size: 14px;
+}
+
 /* Área de Texto */
 ion-content {
   --background: #ffffff;

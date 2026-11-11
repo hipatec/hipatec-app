@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonAvatar,
@@ -56,8 +56,15 @@ import {
     IonToolbar
   ]
 })
-export class NavbarComponent  implements OnInit {
+export class NavbarComponent  implements OnInit, OnDestroy {
 
+  private readonly profileUpdated = (event: Event) => {
+    const image = (event as CustomEvent<{ pfp?: string }>).detail?.pfp;
+    if (image) {
+      this.profileImage = image;
+      localStorage.setItem('pfpPerfil', image);
+    }
+  };
   public userROLE: string = '';
   public profileImage: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
   public notificacoes: Array<{ tipo: string; texto: string; lida: boolean }> = [];
@@ -81,7 +88,14 @@ export class NavbarComponent  implements OnInit {
   }
 
   ngOnInit() {
+    window.addEventListener('hipatec-profile-updated', this.profileUpdated);
+    const cachedAvatar = localStorage.getItem('pfpPerfil');
+    if (cachedAvatar) this.profileImage = cachedAvatar;
     this.loadUserProfile();
+  }
+
+  ngOnDestroy() {
+    window.removeEventListener('hipatec-profile-updated', this.profileUpdated);
   }
 
   private loadUserProfile() {

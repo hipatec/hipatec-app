@@ -10,14 +10,25 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  
   <div class="replying-to">
     Respondendo a <span>{{ getArroba() }}</span>
   </div>
 
+  <div class="comments-list" *ngIf="!carregando && comentarios.length > 0">
+    <article class="comment-item" *ngFor="let comentario of comentarios">
+      <img [src]="comentario.autorFoto || 'assets/avatar-placeholder.png'" [alt]="comentario.autorNome || 'Usuário'" />
+      <div>
+        <strong>{{ comentario.autorNome }}</strong>
+        <p>{{ comentario.texto }}</p>
+      </div>
+    </article>
+  </div>
+  <p class="comments-state" *ngIf="carregando">Carregando comentários...</p>
+  <p class="comments-state" *ngIf="!carregando && comentarios.length === 0">Ainda não há comentários.</p>
+
   <div class="post-input-area">
     <div class="post-avatar"></div>
-    <textarea placeholder="Poste sua resposta..." rows="5" autofocus></textarea>
+    <textarea [(ngModel)]="texto" placeholder="Escreva um comentário..." rows="4" maxlength="500"></textarea>
   </div>
 </ion-content>
 
@@ -25,11 +36,13 @@
   <ion-toolbar>
     <div class="post-actions-footer">
       <div class="icons-group">
-        <ion-button fill="clear" class="icon-btn">
+        <ion-button fill="clear" class="icon-btn" aria-label="Adicionar imagem">
           <ion-icon [icon]="iconeImagem"></ion-icon>
         </ion-button>
       </div>
-      <button class="btn-submit-post">Responder</button>
+      <button class="btn-submit-post" type="button" [disabled]="enviando || !texto.trim()" (click)="enviar()">
+        {{ enviando ? 'Enviando...' : 'Responder' }}
+      </button>
     </div>
   </ion-toolbar>
 </ion-footer>

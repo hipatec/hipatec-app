@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonContent, IonicModule } from '@ionic/angular';
+import { IonContent, IonicModule, ModalController } from '@ionic/angular';
 import { EstudanteService } from '../../services/estudante.service';
 import { MentoraService } from '../../services/mentora.service';
 import { PerfilService } from '../../services/perfil.service';
 import { EditProfileModalComponent } from '../../components/edit-profile-modal/edit-profile-modal.component';
+import { CommentModalComponent } from '../../components/comment-modal/comment-modal.component';
 import { PostsService } from '../../services/posts.service';
 import { AuthService } from '../../services/auth.service';
 import { close, ellipsisHorizontal, heart, heartOutline, chatbubbleOutline, pencil, trash, repeatOutline } from 'ionicons/icons';
@@ -37,7 +38,8 @@ export class ProfilePage {
     private perfilService: PerfilService,
     private postsService: PostsService,
     private authService: AuthService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private modalController: ModalController
   ) {
     addIcons({ close, ellipsisHorizontal, heart, heartOutline, chatbubbleOutline, pencil, trash, repeatOutline });
   }
@@ -166,9 +168,13 @@ export class ProfilePage {
     post.curtidas = Math.max(0, (post.curtidas ?? 0) + (post.curtidoUsuario ? 1 : -1));
   }
 
-  abrirComentario(post: any) {
-    const comentario = window.prompt('Escreva um comentário:', '');
-    if (comentario?.trim()) post.comentarios = (post.comentarios ?? 0) + 1;
+  async abrirComentario(post: any) {
+    const modal = await this.modalController.create({
+      component: CommentModalComponent,
+      cssClass: 'custom-modal-post',
+      componentProps: { postSelecionado: post }
+    });
+    await modal.present();
   }
 
   repostar(post: any, comComentario = false) {
@@ -290,6 +296,10 @@ export class ProfilePage {
             background: perfil.background || this.perfil?.background
           };
           
+          localStorage.setItem('pfpPerfil', this.perfil.pfp || '');
+          window.dispatchEvent(new CustomEvent('hipatec-profile-updated', {
+            detail: { pfp: this.perfil.pfp }
+          }));
           this.showEditModal = false;
           this.isSaving = false;
         },

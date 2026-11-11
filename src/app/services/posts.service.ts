@@ -15,6 +15,15 @@ export interface Post {
   createdAt?: string;
 }
 
+export interface Comentario {
+  id?: string;
+  autorId: number;
+  autorNome: string;
+  autorFoto?: string;
+  texto: string;
+  dataCriacao?: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -29,6 +38,14 @@ export class PostsService {
 
   getPosts(): Observable<Post[]> {
     return this.http.get<Post[]>(this.apiUrl);
+  }
+
+  getComentarios(postId: string | number): Observable<Comentario[]> {
+    return this.http.get<Comentario[]>(`${this.apiUrl}/${postId}/comments`);
+  }
+
+  addComentario(postId: string | number, texto: string): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${postId}/comment`, { texto });
   }
 
   getPostsPerfil(id: number): Observable<Post[]> {
