@@ -16,22 +16,33 @@
 
     <main>
       <section class="hero-section">
-        <span class="eyebrow">Rede de apoio para mulheres do IFSP</span>
-        <h1>Conectando mulheres para permanecerem e crescerem na tecnologia</h1>
         <div class="hero-bottom">
           <div class="hero-intro">
+            <span class="eyebrow">Rede de apoio para mulheres do IFSP</span>
+            <h1>Conectando mulheres para permanecerem e crescerem na tecnologia</h1>
             <p>A Hipatec aproxima estudantes e mentoras para que mais mulheres avancem na tecnologia com acolhimento, troca de experiências e apoio.</p>
             <div class="actions">
               <a class="btn btn-primary" routerLink="/cadastro">Criar conta grátis</a>
               <a class="btn" href="#mentorias" (click)="scrollToSection(mentorias, $event)">Conhecer mentorias</a>
             </div>
           </div>
-          <div class="hero-visual" aria-label="Prévia da experiência da comunidade">
-            <p class="example-note">A experiência da comunidade será preenchida com dados reais após o cadastro.</p>
+          <div class="hero-visual" aria-label="Exemplos ilustrativos da comunidade">
+            <p class="example-note">Prévia ilustrativa da experiência da comunidade</p>
+            <article class="preview-card profile-preview">
+              <span class="avatar" aria-hidden="true">AC</span>
+              <div><strong>Ana Clara</strong><span>ADS, 3º semestre</span></div>
+              <p>Buscando mentoria em frontend e apoio para construir meu primeiro portfólio.</p>
+            </article>
+            <article class="preview-card feed-preview">
+              <span class="tag">Feed colaborativo</span>
+              <p>“Alguém topa revisar currículo antes da feira de estágios?”</p>
+              <small>24 curtidas · 8 comentários</small>
+            </article>
             <article class="preview-card mentoring-preview">
-              <span class="tag">Comunidade Hipatec</span>
-              <h2>Conexões, aprendizado e apoio</h2>
-              <p>Os conteúdos e interações aparecerão aqui quando estiverem disponíveis.</p>
+              <span class="tag">Exemplo de mentoria</span>
+              <h2>Preparação para entrevista técnica</h2>
+              <p>Um espaço para praticar e ganhar confiança.</p>
+              <a href="#mentorias" (click)="scrollToSection(mentorias, $event)">Conheça a proposta</a>
             </article>
           </div>
         </div>
