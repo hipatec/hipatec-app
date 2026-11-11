@@ -132,6 +132,8 @@ describe('ForgotPasswordPage', () => {
     http.expectOne(environment.apiUrl + 'auth/redefinir-senha').flush(null, { status: 400, statusText: 'Bad Request' });
     fixture.detectChanges();
     expect(fixture.nativeElement.querySelector('form')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.login-title').textContent).toContain('Link expirado');
+    expect(fixture.nativeElement.querySelector('.auth-subtitle').textContent).toContain('não está mais disponível');
     expect(fixture.nativeElement.querySelector('a[href="/forgot-password"]')).not.toBeNull();
     expect(component.senha).toBe('');
   });
