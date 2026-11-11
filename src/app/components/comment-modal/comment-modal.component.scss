@@ -31,6 +31,39 @@ ion-toolbar {
   }
 }
 
+.post-preview {
+  align-items: flex-start;
+  background: #faf8fd;
+  border: 1px solid #e5dcef;
+  border-radius: 12px;
+  display: flex;
+  gap: 10px;
+  margin: 16px 0 22px;
+  padding: 12px;
+}
+
+.post-preview-avatar,
+.comment-avatar {
+  align-items: center;
+  background: #eee8f7;
+  border-radius: 50%;
+  color: #472b7a;
+  display: flex;
+  flex: 0 0 34px;
+  font-size: 11px;
+  font-weight: 700;
+  height: 34px;
+  justify-content: center;
+  overflow: hidden;
+  width: 34px;
+}
+
+.post-preview-avatar img,
+.comment-avatar img { height: 100%; object-fit: cover; width: 100%; }
+.post-preview-content, .comment-copy { min-width: 0; }
+.post-preview-content strong, .comment-copy strong { color: #472b7a; font-size: 13px; }
+.post-preview-content p { color: #4d4258; font-size: 14px; line-height: 1.45; margin: 4px 0 0; white-space: pre-wrap; }
+
 .comments-list {
   display: flex;
   flex-direction: column;

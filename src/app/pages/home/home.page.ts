@@ -31,10 +31,11 @@ export class HomePage implements OnInit {
   erroFeed: string | null = null;
   postMenuId: string | number | null = null;
   userRole: string | null = null;
+  userId: number | null = null;
   postEmDenuncia: any = null;
   motivoDenuncia = '';
 
-  sugestoes: Array<{ nome: string; arroba: string }> = [];
+  sugestoes: Array<{ id: number; role: string; nome: string; arroba: string; pfp?: string }> = [];
   quantidadeSugestoes = 3;
 
   get sugestoesExibidas() {
@@ -53,7 +54,10 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.authService.sessao().subscribe({
-      next: sessao => this.userRole = sessao.role,
+      next: sessao => {
+        this.userRole = sessao.role;
+        this.userId = sessao.id;
+      },
       error: () => this.userRole = null
     });
     this.buscarPosts();
@@ -67,6 +71,15 @@ export class HomePage implements OnInit {
       perfis: this.perfilService.getPerfis()
     }).subscribe({
       next: ({ posts, perfis }) => {
+        this.sugestoes = perfis
+          .filter(perfil => Number(perfil.id) !== Number(this.userId))
+          .map(perfil => ({
+            id: perfil.id,
+            role: perfil.id_mentora ? 'mentoras' : 'estudantes',
+            nome: perfil.nome,
+            arroba: `@${perfil.usuario}`,
+            pfp: perfil.pfp
+          }));
         this.posts = posts.map(post => this.mapPost(post, perfis));
         this.carregando = false;
       },
@@ -81,8 +94,8 @@ export class HomePage implements OnInit {
 
   private mapPost(post: any, perfis: Perfil[]) {
     const perfil = perfis.find(p => p.id === post.autorId);
-    const autor = perfil?.usuario || `Usuário ${post.autorId}`;
-    const avatar = perfil?.pfp || post.autorFoto || 'https://ionicframework.com/docs/img/demos/avatar.svg';
+    const autor = perfil?.nome || perfil?.usuario || `Usuário ${post.autorId}`;
+    const avatar = perfil?.pfp || post.autorFoto || '';
 
     const localReposts = this.getLocalReposts();
     const repostado = localReposts.some((repost: any) => String(repost.repostOriginalId) === String(post.id));
@@ -134,6 +147,19 @@ export class HomePage implements OnInit {
   mostrarMaisSugestoes() {
     this.quantidadeSugestoes = this.sugestoes.length;
   }
+  iniciais(nome: string | null | undefined): string {
+    return (nome || 'Usuário')
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map(parte => parte[0]?.toUpperCase() || '')
+      .join('');
+  }
+
+  abrirSugestao(sugestao: { role: string; id: number }) {
+    this.router.navigate(['/profile', sugestao.role, sugestao.id]);
+  }
+
   abrirPerfil(post: any) {
     const role = post.autorRole || 'estudantes';
     this.router.navigate(['/profile', role, post.autorId]);

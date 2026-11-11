@@ -27,8 +27,29 @@ export class CommentModalComponent implements OnInit {
     private postsService: PostsService
   ) {}
 
+  get postId(): string | number | undefined {
+    return this.postSelecionado?.repostOriginal?.id || this.postSelecionado?.id;
+  }
+
+  get autorNome(): string {
+    return this.postSelecionado?.autor || this.postSelecionado?.repostOriginal?.autor || 'Usuário';
+  }
+
+  get autorFoto(): string {
+    return this.postSelecionado?.avatar || this.postSelecionado?.autorFoto || this.postSelecionado?.repostOriginal?.autorFoto || '';
+  }
+
+  get textoPost(): string {
+    return this.postSelecionado?.repostOriginal?.conteudo || this.postSelecionado?.conteudo || '';
+  }
+
+  iniciais(nome: string): string {
+    return (nome || 'Usuário').trim().split(/\s+/).slice(0, 2)
+      .map(parte => parte[0]?.toUpperCase() || '').join('');
+  }
+
   ngOnInit() {
-    const id = this.postSelecionado?.id;
+    const id = this.postId;
     if (!id) {
       this.carregando = false;
       return;
@@ -45,7 +66,7 @@ export class CommentModalComponent implements OnInit {
 
   enviar() {
     const texto = this.texto.trim();
-    const id = this.postSelecionado?.id;
+    const id = this.postId;
     if (!texto || !id || this.enviando) return;
     this.enviando = true;
     this.postsService.addComentario(id, texto).subscribe({

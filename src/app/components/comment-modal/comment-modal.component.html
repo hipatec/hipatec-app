@@ -14,10 +14,24 @@
     Respondendo a <span>{{ getArroba() }}</span>
   </div>
 
+  <div class="post-preview" *ngIf="postSelecionado">
+    <div class="post-preview-avatar">
+      <img *ngIf="autorFoto" [src]="autorFoto" [alt]="autorNome" />
+      <span *ngIf="!autorFoto">{{ iniciais(autorNome) }}</span>
+    </div>
+    <div class="post-preview-content">
+      <strong>{{ autorNome }}</strong>
+      <p>{{ textoPost }}</p>
+    </div>
+  </div>
+
   <div class="comments-list" *ngIf="!carregando && comentarios.length > 0">
     <article class="comment-item" *ngFor="let comentario of comentarios">
-      <img [src]="comentario.autorFoto || 'assets/avatar-placeholder.png'" [alt]="comentario.autorNome || 'Usuário'" />
-      <div>
+      <div class="comment-avatar">
+        <img *ngIf="comentario.autorFoto" [src]="comentario.autorFoto" [alt]="comentario.autorNome || 'Usuário'" />
+        <span *ngIf="!comentario.autorFoto">{{ iniciais(comentario.autorNome) }}</span>
+      </div>
+      <div class="comment-copy">
         <strong>{{ comentario.autorNome }}</strong>
         <p>{{ comentario.texto }}</p>
       </div>

@@ -151,6 +151,7 @@ export class ProfilePage {
       && (repost.repostPuro === true || repost.repostComComentario === true));
     return {
       ...post,
+      avatar: post.autorFoto || '',
       conteudo: post.conteudo || post.texto || '',
       tempo: this.formatPostTime(post.dataCriacao),
       curtidas: post.likesCount ?? 0,
@@ -158,6 +159,11 @@ export class ProfilePage {
       reposts: (post.repostsCount ?? 0) + (repostado ? 1 : 0),
       repostadoUsuario: repostado
     };
+  }
+
+  iniciais(nome: string | null | undefined): string {
+    return (nome || 'Usuário').trim().split(/\s+/).slice(0, 2)
+      .map(parte => parte[0]?.toUpperCase() || '').join('');
   }
 
   private formatPostTime(timestamp: number) {
@@ -329,6 +335,7 @@ export class ProfilePage {
           };
           
           localStorage.setItem('pfpPerfil', this.perfil.pfp || '');
+          localStorage.setItem('perfilNome', this.perfil.nome || this.perfil.usuario || '');
           window.dispatchEvent(new CustomEvent('hipatec-profile-updated', {
             detail: { pfp: this.perfil.pfp }
           }));

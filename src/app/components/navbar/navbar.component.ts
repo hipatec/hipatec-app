@@ -66,7 +66,8 @@ export class NavbarComponent  implements OnInit, OnDestroy {
     }
   };
   public userROLE: string = '';
-  public profileImage: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
+  public profileName = '';
+  public profileImage = '';
   public notificacoes: Array<{ tipo: string; texto: string; lida: boolean }> = [];
   
   constructor(
@@ -90,7 +91,8 @@ export class NavbarComponent  implements OnInit, OnDestroy {
   ngOnInit() {
     window.addEventListener('hipatec-profile-updated', this.profileUpdated);
     const cachedAvatar = localStorage.getItem('pfpPerfil');
-    if (cachedAvatar) this.profileImage = cachedAvatar;
+    if (cachedAvatar && !cachedAvatar.includes('ionicframework.com')) this.profileImage = cachedAvatar;
+    this.profileName = localStorage.getItem('perfilNome') || '';
     this.loadUserProfile();
   }
 
@@ -104,12 +106,19 @@ export class NavbarComponent  implements OnInit, OnDestroy {
       return this.perfilService.getPerfil(sessao.role, sessao.id);
     })).subscribe({
       next: profile => {
-        this.profileImage = profile.pfp || 'https://ionicframework.com/docs/img/demos/avatar.svg';
+        this.profileName = profile.nome || profile.usuario || '';
+        this.profileImage = profile.pfp || this.profileImage || '';
         localStorage.setItem('perfil', String(profile.id));
-        localStorage.setItem('pfpPerfil', this.profileImage);
+        localStorage.setItem('perfilNome', this.profileName);
+        if (this.profileImage) localStorage.setItem('pfpPerfil', this.profileImage);
       },
       error: () => { this.userROLE = ''; }
     });
+  }
+
+  iniciais(nome: string | null | undefined): string {
+    return (nome || 'Usuário').trim().split(/\s+/).slice(0, 2)
+      .map(parte => parte[0]?.toUpperCase() || '').join('');
   }
 
   get notificacoesNaoLidas() {

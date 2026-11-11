@@ -23,7 +23,8 @@
       </ion-button>
 
       <ion-avatar class="user-avatar" (click)="menuPopover.present($event)" (keydown.enter)="menuPopover.present()" (keydown.space)="menuPopover.present()" role="button" tabindex="0" aria-label="Abrir menu do perfil">
-        <img [src]="profileImage" alt="Foto do perfil" />
+        <img *ngIf="profileImage" [src]="profileImage" alt="Foto do perfil" (error)="profileImage = ''" />
+        <span *ngIf="!profileImage" class="navbar-avatar-initials">{{ iniciais(profileName) }}</span>
       </ion-avatar>
     </ion-buttons>
       

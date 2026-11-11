@@ -15,6 +15,26 @@
 .reposted-original { margin-top: 14px; padding: 12px; border: 1px solid #e5dcef; border-radius: 8px; background: #faf8fd; }
 .reposted-original strong { color: #472b7a; font-size: 13px; }
 .reposted-original p { margin: 6px 0 0; color: #6d637c; font-size: 13px; }
+
+.profile-avatar-initials {
+  align-items: center;
+  background: #eee8f7;
+  color: #472b7a;
+  display: flex;
+  font-size: 24px;
+  font-weight: 700;
+  justify-content: center;
+}
+
+.profile-page .feed-container,
+.feed-container {
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-tabs { justify-content: center; }
+
 .profile-fab {
   --ion-color-base: #472b7a;
   bottom: 20px;

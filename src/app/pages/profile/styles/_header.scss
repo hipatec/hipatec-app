@@ -40,10 +40,11 @@
 
 .profile-details {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-top: 12px;
   flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  padding-top: 12px;
 
   .user-meta {
     .user-name { font-family: 'Roboto', sans-serif; color: #472b7a; font-size: 22px; font-weight: 700; margin: 0; }
@@ -51,9 +52,19 @@
     .user-role { font-family: 'Roboto', sans-serif; color: #7b59b8; font-size: 16px; font-weight: 500; margin: 4px 0 0 0; }
   }
 
+  .user-bio { color: #444444; font-size: 16px; line-height: 1.5; margin: 0; }
+
+  .profile-summary-row {
+    align-items: center;
+    display: flex;
+    gap: 16px;
+    justify-content: space-between;
+  }
+
   .profile-stats {
     display: flex;
     gap: 15px;
+    flex-wrap: wrap;
 
     .stats-item {
       font-family: 'Roboto', sans-serif;
@@ -66,6 +77,21 @@
       strong { color: #472b7a; font-weight: 700; }
       span { color: #472b7a; }
     }
+  }
+
+  .btn-edit-profile {
+    flex: 0 0 auto;
+    height: 36px;
+    width: 100px;
+    background: #472b7a;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(71, 43, 122, 0.2);
   }
 }
 
@@ -106,22 +132,16 @@
   .avatar-box .profile-avatar { width: 84px; height: 84px; }
 
   .profile-details {
-    align-items: flex-start;
-    flex-direction: column;
+    align-items: stretch;
     gap: 10px;
     padding-top: 0;
     width: 100%;
   }
 
-  .profile-details .user-meta .user-name { font-size: 20px; }
-  .profile-details .user-meta .user-role { font-size: 14px; }
-
-  .profile-details .profile-stats {
-    flex-wrap: wrap;
-    gap: 8px 14px;
-    font-size: 14px;
-    width: 100%;
-  }
+  .profile-details .user-bio { font-size: 14px; }
+  .profile-details .profile-summary-row { align-items: center; gap: 8px; width: 100%; }
+  .profile-details .profile-stats { gap: 8px 12px; font-size: 14px; min-width: 0; }
+  .profile-details .btn-edit-profile { height: 34px; padding: 0 12px; width: auto; }
 
   .profile-bio-row {
     align-items: stretch;

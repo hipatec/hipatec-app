@@ -43,6 +43,18 @@
       width: 36px;
 
       img { height: 100%; object-fit: cover; width: 100%; }
+
+      .avatar-initials {
+        align-items: center;
+        background: #eee8f7;
+        color: #472b7a;
+        display: flex;
+        font-size: 12px;
+        font-weight: 700;
+        height: 100%;
+        justify-content: center;
+        width: 100%;
+      }
     }
 
     .post-meta {

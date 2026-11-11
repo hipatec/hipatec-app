@@ -12,40 +12,37 @@
 
         <div class="profile-info-container">
           <div class="avatar-box">
-            <!-- Uso do ?. e fallback para foto padrão -->
-            <img [src]="perfil?.pfp || '../../../assets/avatar-placeholder.png'" [alt]="perfil?.nome || 'Usuário'" class="profile-avatar" />
+            <img *ngIf="perfil?.pfp" [src]="perfil.pfp" [alt]="perfil?.nome || 'Usuário'" class="profile-avatar" (error)="perfil.pfp = ''" />
+            <span *ngIf="!perfil?.pfp" class="profile-avatar profile-avatar-initials">{{ iniciais(perfil?.nome) }}</span>
           </div>
           
           <div class="profile-details">
             <div class="user-meta">
-              <!-- Adicionado o ?. em todas as propriedades do perfil -->
               <h2 class="user-name">{{ perfil?.nome || 'Carregando...' }}</h2>
               <p class="user-username">@{{ perfil?.usuario || 'usuario' }}</p>
               <p class="user-role">{{ userRole }} - IFSP Pirituba</p>
             </div>
 
-            <div class="profile-stats">
-              <div class="stats-item">
-                <strong class="num-posts">{{ perfil?.num_publicacoes || 0 }}</strong> 
-                <span>Posts</span>
+            <p class="user-bio">{{ perfil?.biografia || 'Nenhuma biografia informada.' }}</p>
+
+            <div class="profile-summary-row">
+              <div class="profile-stats">
+                <div class="stats-item">
+                  <strong class="num-posts">{{ perfil?.num_publicacoes || 0 }}</strong>
+                  <span>Posts</span>
+                </div>
+                <div class="stats-item">
+                  <strong class="num-seguidores">{{ perfil?.num_seguidores || 0 }}</strong>
+                  <span>Seguidores</span>
+                </div>
+                <div class="stats-item">
+                  <strong class="num-seguindo">{{ perfil?.num_seguindo || 0 }}</strong>
+                  <span>Seguindo</span>
+                </div>
               </div>
-              <div class="stats-item">
-                <strong class="num-seguidores">{{ perfil?.num_seguidores || 0 }}</strong>
-                <span>Seguidores</span>
-              </div>
-              <div class="stats-item">
-                <strong class="num-seguindo">{{ perfil?.num_seguindo || 0 }}</strong> 
-                <span>Seguindo</span>
-              </div>
+              <button class="btn-edit-profile" (click)="editProfile()" *ngIf="!isPublicProfile">Editar perfil</button>
             </div>
           </div>
-        </div>
-        
-        <div class="profile-bio-row">
-          <p class="user-bio">
-            {{ perfil?.biografia || 'Nenhuma biografia informada.' }}
-          </p>
-          <button class="btn-edit-profile" (click)="editProfile()" *ngIf="!isPublicProfile">Editar perfil</button>
         </div>
 
         <app-edit-profile-modal
@@ -75,7 +72,8 @@
       <div class="post-card" *ngFor="let post of posts">
         <div class="post-header">
           <div class="post-avatar-placeholder">
-            <img [src]="perfil?.pfp || post.autorFoto" [alt]="perfil?.nome || post.autor || 'Usuário'" />
+            <img *ngIf="post.avatar || perfil?.pfp" [src]="post.avatar || perfil.pfp" [alt]="perfil?.nome || post.autor || 'Usuário'" (error)="post.avatar = ''" />
+            <span *ngIf="!post.avatar && !perfil?.pfp" class="avatar-initials">{{ iniciais(perfil?.nome || post.autor) }}</span>
           </div>
           <div class="post-meta">
             <span class="post-author">{{ perfil?.nome || post.autor }}</span>
@@ -133,7 +131,10 @@
       <div class="post-card" *ngFor="let repost of reposts">
         <div class="repost-status" aria-label="Você republicou esta publicação"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon></div>
         <div class="post-header">
-          <div class="post-avatar-placeholder"><img [src]="repost.avatar" [alt]="repost.autor || 'Usuário'" /></div>
+          <div class="post-avatar-placeholder">
+            <img *ngIf="repost.avatar" [src]="repost.avatar" [alt]="repost.autor || 'Usuário'" (error)="repost.avatar = ''" />
+            <span *ngIf="!repost.avatar" class="avatar-initials">{{ iniciais(repost.autor) }}</span>
+          </div>
           <div class="post-meta"><span class="post-author">{{ repost.autor }}</span></div>
           <span class="post-time">{{ repost.tempo }}</span>
         </div>

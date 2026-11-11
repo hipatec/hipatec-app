@@ -22,8 +22,9 @@
 
             <div class="post-card" *ngFor="let post of posts">
               <div class="post-header">
-                <div class="post-avatar-placeholder">
-                  <img [src]="post.avatar" [alt]="post.autor" />
+                <div class="post-avatar-placeholder" [attr.aria-label]="'Avatar de ' + post.autor">
+                  <img *ngIf="post.avatar" [src]="post.avatar" [alt]="post.autor" (error)="post.avatar = ''" />
+                  <span *ngIf="!post.avatar" class="avatar-initials">{{ iniciais(post.autor) }}</span>
                 </div>
                 <div class="post-meta">
                   <button type="button" class="post-author-link" (click)="abrirPerfil(post)">{{ post.autor }}</button>
@@ -115,12 +116,15 @@
             <h3>Quem seguir</h3>
             
             <div class="sidebar-item" *ngFor="let sugestao of sugestoesExibidas">
-              <div class="item-avatar"></div>
-              <div class="item-info">
+              <button type="button" class="item-avatar-button" (click)="abrirSugestao(sugestao)" [attr.aria-label]="'Abrir perfil de ' + sugestao.nome">
+                <img *ngIf="sugestao.pfp" [src]="sugestao.pfp" [alt]="sugestao.nome" (error)="sugestao.pfp = undefined" />
+                <span *ngIf="!sugestao.pfp" class="avatar-initials">{{ iniciais(sugestao.nome) }}</span>
+              </button>
+              <button type="button" class="item-info" (click)="abrirSugestao(sugestao)">
                 <span class="item-name">{{ sugestao.nome }}</span>
                 <span class="item-handle">{{ sugestao.arroba }}</span>
-              </div>
-              <button class="btn-follow">Seguir</button>
+              </button>
+              <button type="button" class="btn-follow" (click)="abrirSugestao(sugestao)">Ver perfil</button>
             </div>
 
             <div class="sidebar-more" *ngIf="quantidadeSugestoes < sugestoes.length">
