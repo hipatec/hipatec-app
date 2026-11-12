@@ -10,26 +10,29 @@
 
       <h2 class="login-title">{{ role === 'estudantes' ? 'Login Estudante' : 'Login Mentora' }}</h2>
 
-      <ion-segment class="role-toggle" [value]="role" (ionChange)="switchRole($event)">
-        <ion-segment-button value="estudantes">
-          <ion-label>Estudante</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="mentoras">
-          <ion-label>Mentora</ion-label>
-        </ion-segment-button>
-      </ion-segment>
+      <form #loginForm="ngForm" (ngSubmit)="login()">
+        <ion-segment class="role-toggle" [value]="role" (ionChange)="switchRole($event)">
+          <ion-segment-button value="estudantes">
+            <ion-label>Estudante</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="mentoras">
+            <ion-label>Mentora</ion-label>
+          </ion-segment-button>
+        </ion-segment>
 
-      <div class="input-group">
-        <label>E-mail</label>
-        <input type="email" [(ngModel)]="email" placeholder="Digite seu email" />
-      </div>
+        <div class="input-group">
+          <label for="login-identifier">E-mail ou usuário</label>
+          <input id="login-identifier" name="identificador" type="text" [(ngModel)]="email" placeholder="Digite seu e-mail ou usuário" autocomplete="username" required />
+          <small class="field-hint">Use o e-mail ou o nome de usuário do cadastro.</small>
+        </div>
 
-      <div class="input-group">
-        <label>Senha</label>
-        <input type="password" [(ngModel)]="password" placeholder="Digite sua senha" />
-      </div>
+        <div class="input-group">
+          <label for="login-password">Senha</label>
+          <input id="login-password" name="senha" type="password" [(ngModel)]="password" placeholder="Digite sua senha" autocomplete="current-password" required />
+        </div>
 
-      <button class="btn-login" (click)="login()">Fazer login</button>
+        <button class="btn-login" type="submit">Fazer login</button>
+      </form>
 
       <div class="login-footer-links">
         <a class="footer-link" routerLink="/forgot-password">Esqueceu sua senha?</a>

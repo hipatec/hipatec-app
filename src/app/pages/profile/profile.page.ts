@@ -52,6 +52,8 @@ export class ProfilePage {
   reposts: any[] = [];
   carregandoPosts = false;
   erroPosts: string | null = null;
+  seguindoPerfil = false;
+  alterandoSeguimento = false;
   profileTab: 'posts' | 'reposts' = 'posts';
   postMenuId: string | number | null = null;
   iconeCurtir = heartOutline;
@@ -63,6 +65,8 @@ export class ProfilePage {
     this.posts = [];
     this.reposts = [];
     this.erroPosts = null;
+    this.seguindoPerfil = false;
+    this.alterandoSeguimento = false;
     this.profileTab = 'posts';
     this.showEditModal = false;
     const role = this.route.snapshot.paramMap.get('role');
@@ -74,6 +78,10 @@ export class ProfilePage {
       this.userId = publicId;
       this.perfilService.getPerfil(role, publicId).subscribe(perfil => {
         this.perfil = perfil;
+        this.perfilService.statusSeguimento(publicId).subscribe({
+          next: status => this.seguindoPerfil = status.seguindo,
+          error: () => this.seguindoPerfil = false
+        });
         this.loadPosts(publicId, false);
       });
       return;
@@ -119,7 +127,8 @@ export class ProfilePage {
   }
 
   recarregarPosts() {
-    if (this.userId) this.loadPosts(this.userId, !this.isPublicProfile);
+    const perfilId = Number(this.perfil?.id || this.userId);
+    if (perfilId) this.loadPosts(perfilId, !this.isPublicProfile);
   }
 
   private aplicarAvatarDoFeed(posts: any[]) {
@@ -287,6 +296,22 @@ export class ProfilePage {
   excluirPost(post: any) {
     this.postMenuId = null;
     alert('A exclusão do post será conectada à API de moderação.');
+  }
+
+  alternarSeguimento() {
+    if (!this.isPublicProfile || !this.perfil?.id || this.alterandoSeguimento) return;
+    this.alterandoSeguimento = true;
+    const perfilId = Number(this.perfil.id);
+    const request = this.seguindoPerfil
+      ? this.perfilService.deixarDeSeguir(perfilId)
+      : this.perfilService.seguir(perfilId);
+    request.subscribe({
+      next: status => {
+        this.seguindoPerfil = status.seguindo;
+        this.alterandoSeguimento = false;
+      },
+      error: () => this.alterandoSeguimento = false
+    });
   }
 
   editProfile() {

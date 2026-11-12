@@ -32,7 +32,7 @@ export class LoginPage {
 
   login() {
     if (!this.email || !this.password) {
-      alert('Informe email e senha para continuar.');
+      alert('Informe seu e-mail ou usuário e a senha para continuar.');
       return;
     }
 
@@ -44,9 +44,16 @@ export class LoginPage {
         },
         error: (err) => {
           this.password = '';
-          alert(err.status === 403 ? 'Cadastro de mentora aguardando aprovação da equipe.'
-            : err.status === 429 ? 'Muitas tentativas. Aguarde 15 minutos.'
-            : err.status === 0 ? 'Não foi possível conectar. Tente novamente.' : 'Email ou senha inválidos');
+          const mensagem = err.status === 403 && this.role === 'mentoras'
+            ? 'Cadastro de mentora aguardando aprovação da equipe.'
+            : err.status === 403
+              ? 'Não foi possível entrar com este tipo de conta. Confira a opção Estudante ou Mentora.'
+              : err.status === 429
+                ? 'Muitas tentativas. Aguarde 15 minutos.'
+                : err.status === 0
+                  ? 'Não foi possível conectar. Tente novamente.'
+                  : 'E-mail, usuário ou senha inválidos';
+          alert(mensagem);
         }
       });
   }

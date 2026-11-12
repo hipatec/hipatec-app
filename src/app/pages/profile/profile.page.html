@@ -15,7 +15,11 @@
             <img *ngIf="perfil?.pfp" [src]="perfil.pfp" [alt]="perfil?.nome || 'Usuário'" class="profile-avatar" (error)="perfil.pfp = ''" />
             <span *ngIf="!perfil?.pfp" class="profile-avatar profile-avatar-initials">{{ iniciais(perfil?.nome) }}</span>
           </div>
-          
+
+          <button class="btn-edit-profile" [class.following]="seguindoPerfil" [disabled]="alterandoSeguimento" (click)="isPublicProfile ? alternarSeguimento() : editProfile()">
+            {{ isPublicProfile ? (seguindoPerfil ? 'Seguindo' : 'Seguir') : 'Editar perfil' }}
+          </button>
+
           <div class="profile-details">
             <div class="user-meta">
               <h2 class="user-name">{{ perfil?.nome || 'Carregando...' }}</h2>
@@ -40,7 +44,6 @@
                   <span>Seguindo</span>
                 </div>
               </div>
-              <button class="btn-edit-profile" (click)="editProfile()" *ngIf="!isPublicProfile">Editar perfil</button>
             </div>
           </div>
         </div>

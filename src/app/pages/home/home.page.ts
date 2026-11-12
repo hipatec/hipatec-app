@@ -270,9 +270,11 @@ export class HomePage implements OnInit {
   async abrirModalPost() {
     const modal = await this.modalController.create({
       component: CreatePostModalComponent,
-      cssClass: 'custom-modal-post' // Classe opcional para estilizar o fundo do modal futuramente
+      cssClass: 'custom-modal-post'
     });
-    return await modal.present();
+    await modal.present();
+    const result = await modal.onDidDismiss();
+    if (result.data?.posted) this.buscarPosts();
   }
 
   async abrirModalComentario(post: any) {

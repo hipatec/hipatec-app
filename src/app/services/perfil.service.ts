@@ -41,4 +41,16 @@ export class PerfilService {
         );
     }
 
+    statusSeguimento(perfilId: number) {
+        return this.http.get<{ seguindo: boolean }>(`${environment.apiUrl}perfil/${perfilId}/seguindo`);
+    }
+
+    seguir(perfilId: number) {
+        return this.http.post<{ seguindo: boolean }>(`${environment.apiUrl}perfil/${perfilId}/seguir`, {});
+    }
+
+    deixarDeSeguir(perfilId: number) {
+        return this.http.delete<{ seguindo: boolean }>(`${environment.apiUrl}perfil/${perfilId}/seguir`);
+    }
+
 }
