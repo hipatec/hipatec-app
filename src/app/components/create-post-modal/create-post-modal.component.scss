@@ -1,93 +1,42 @@
-/* Cabeçalho */
-ion-toolbar {
-  --background: #ffffff;
-}
-
-.draft-title {
-  color: #472b7a;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: right;
-  padding-right: 16px;
-  cursor: pointer;
-}
-
-/* Área de Texto */
-ion-content {
-  --background: #ffffff;
+/* Estrutura, tamanho e rodapé vêm do app-modal-shell e de ion-modal.hipatec-modal/custom-modal-post. */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .post-input-area {
   display: flex;
-  gap: 12px;
-  margin-top: 10px;
+  gap: var(--hipatec-space-3);
 
-  .post-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #e0e0e0;
-    border: 1px solid #999999;
-    flex-shrink: 0;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .avatar-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-  }
+  .post-avatar { --avatar-size: 40px; }
 
   textarea {
-    width: 100%;
+    background: transparent;
     border: none;
-    outline: none;
-    resize: none;
+    border-radius: var(--hipatec-radius-sm);
+    color: var(--hipatec-color-text);
+    flex: 1;
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
-    color: #000000;
-    background: transparent;
+    min-height: 140px;
+    min-width: 0;
     padding-top: 8px;
+    resize: none;
 
-    &::placeholder {
-      color: #483a61;
-    }
+    &::placeholder { color: #483a61; }
+    &:focus-visible { outline-offset: 4px; }
   }
 }
 
-/* Rodapé de Ações */
 .post-actions-footer {
+  align-items: center;
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 8px 16px;
-  background: #ffffff;
-  border-top: 1px solid #ebeef0;
+  width: 100%;
 
   .icon-btn {
-    --color: #472b7a;
+    --color: var(--hipatec-color-brand);
     margin: 0;
-  }
-
-  .btn-submit-post {
-    background: #472b7a;
-    color: #ffffff;
-    border: none;
-    border-radius: 20px;
-    padding: 8px 20px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(71, 43, 122, 0.2);
-    transition: background-color 0.2s;
-
-    &:hover {
-      background: #382260;
-    }
   }
 }

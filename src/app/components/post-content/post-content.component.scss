@@ -1,0 +1,9 @@
+:host { display: block; min-width: 0; }
+.post-text { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+.repost-context { margin-top: 12px; }
+.original { border: 1px solid var(--hipatec-color-border, #ded6eb); border-radius: 12px; padding: 12px; }
+.original-author { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; min-width: 0; }
+.original-author strong { overflow-wrap: anywhere; min-width: 0; }
+app-avatar { --avatar-size: 34px; flex-shrink: 0; }
+.context-note { color: var(--hipatec-color-text-muted, #6d637c); font-size: 13px; line-height: 1.5; margin: 10px 0; overflow-wrap: anywhere; }
+.post-media { display: block; width: 100%; max-height: 480px; object-fit: contain; margin-top: 12px; }

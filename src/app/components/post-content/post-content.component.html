@@ -1,0 +1,18 @@
+<p class="post-text">{{ post?.conteudo }}</p>
+<img *ngIf="post?.imagemUrl && imagemFalhou !== post.imagemUrl" class="post-media" [src]="post.imagemUrl" alt="Imagem da publicação" loading="lazy" (error)="imagemFalhou = post.imagemUrl" />
+<p *ngIf="post?.imagemUrl && imagemFalhou === post.imagemUrl" class="context-note">Imagem indisponível.</p>
+<section *ngIf="post?.repostComComentario" class="repost-context" aria-label="Publicação original">
+  <p class="context-note">Republicação com comentário</p>
+  <div class="original" *ngIf="original; else indisponivel">
+    <div class="original-author">
+      <app-avatar [src]="original.avatar || original.autorFoto" [nome]="original.autor || 'Usuário'" />
+      <strong>{{ original.autor || 'Usuário' }}</strong>
+    </div>
+    <p class="post-text">{{ original.conteudo }}</p>
+    <img *ngIf="original.imagemUrl && imagemFalhou !== original.imagemUrl" class="post-media" [src]="original.imagemUrl" alt="Imagem da publicação original" loading="lazy" (error)="imagemFalhou = original.imagemUrl" />
+    <p *ngIf="original.imagemUrl && imagemFalhou === original.imagemUrl" class="context-note">Imagem indisponível.</p>
+  </div>
+</section>
+<p *ngIf="post?.repostOriginalId && !post?.originalIndisponivel" class="context-note">Curtidas e comentários pertencem à publicação original.</p>
+<ng-template #indisponivel><p class="context-note">Publicação original indisponível.</p></ng-template>
+<p *ngIf="post?.originalIndisponivel && !post?.repostComComentario" class="context-note">Publicação original indisponível.</p>

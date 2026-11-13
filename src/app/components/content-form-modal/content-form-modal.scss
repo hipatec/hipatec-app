@@ -1,0 +1,75 @@
+/* Estrutura, tamanho e rodapé vêm do app-modal-shell; campos de curso e mentoria. */
+:host {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.content-notice {
+  background: var(--hipatec-color-surface-soft);
+  border: 1px solid var(--hipatec-color-border);
+  border-radius: var(--hipatec-radius-md);
+  color: var(--hipatec-color-text);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 var(--hipatec-space-4);
+  padding: var(--hipatec-space-3) var(--hipatec-space-4);
+}
+
+.content-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hipatec-space-4);
+}
+
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+
+  label {
+    color: var(--hipatec-color-text);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  input,
+  select,
+  textarea {
+    background: #faf8fd;
+    border: 1px solid var(--hipatec-color-border);
+    border-radius: var(--hipatec-radius-md);
+    box-sizing: border-box;
+    color: var(--hipatec-color-text);
+    font: inherit;
+    font-size: 16px; /* evita zoom automático do iOS ao focar */
+    min-height: 44px;
+    padding: 10px 12px;
+    width: 100%;
+
+    &:focus-visible { border-color: var(--hipatec-color-brand-soft); }
+    &[aria-invalid='true'] { border-color: var(--hipatec-color-danger); }
+  }
+
+  textarea { resize: vertical; }
+}
+
+.required { color: var(--hipatec-color-danger); }
+
+
+.form-hint {
+  color: var(--hipatec-color-text-muted);
+  font-size: 13px;
+  margin: 0;
+}
+
+
+.content-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hipatec-space-2) var(--hipatec-space-3);
+  justify-content: flex-end;
+  width: 100%;
+}

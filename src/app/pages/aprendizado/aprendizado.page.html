@@ -1,4 +1,5 @@
 <ion-content>
+<app-feedback-notice [mensagem]="aviso" />
   <main class="aprendizado-shell">
     <header class="page-header">
       <div>
@@ -70,7 +71,7 @@
       <div class="suggestions-heading">
         <div>
           <h2 id="sugestoes-title">Continuar aprendendo</h2>
-          <p>Confira outras oportunidades de estudo com inscrições abertas.</p>
+          <p>Cursos e mentorias publicados na Hipatec.</p>
         </div>
         <select aria-label="Filtrar sugestões" [ngModel]="filtroSugestao" (ngModelChange)="alterarFiltroSugestao($event)">
           <option>Todos</option>
@@ -78,6 +79,9 @@
           <option>Curso</option>
         </select>
       </div>
+      <app-feedback-notice [mensagem]="erroCatalogo" [erro]="true" />
+      <button *ngIf="erroCatalogo" type="button" class="hipatec-btn-secondary" (click)="carregarCatalogo()">Tentar novamente</button>
+      <p *ngIf="carregandoCatalogo" role="status">Carregando catálogo…</p>
       <div class="suggestions-grid" *ngIf="sugestoesPaginadas.length > 0">
         <article class="suggestion-card" *ngFor="let sugestao of sugestoesPaginadas">
           <div class="suggestion-image" aria-hidden="true"></div>

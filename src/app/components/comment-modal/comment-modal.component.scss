@@ -43,26 +43,10 @@ ion-toolbar {
 }
 
 .post-preview-avatar,
-.comment-avatar {
-  align-items: center;
-  background: #eee8f7;
-  border-radius: 50%;
-  color: #472b7a;
-  display: flex;
-  flex: 0 0 34px;
-  font-size: 11px;
-  font-weight: 700;
-  height: 34px;
-  justify-content: center;
-  overflow: hidden;
-  width: 34px;
-}
-
-.post-preview-avatar img,
-.comment-avatar img { height: 100%; object-fit: cover; width: 100%; }
-.post-preview-content, .comment-copy { min-width: 0; }
+.comment-avatar { --avatar-size: 34px; }
+.post-preview-content, .comment-copy { min-width: 0; flex: 1; }
 .post-preview-content strong, .comment-copy strong { color: #472b7a; font-size: 13px; }
-.post-preview-content p { color: #4d4258; font-size: 14px; line-height: 1.45; margin: 4px 0 0; white-space: pre-wrap; }
+.post-preview-content p { color: #4d4258; font-size: 14px; line-height: 1.45; margin: 4px 0 0; overflow-wrap: anywhere; white-space: pre-wrap; }
 
 .comments-list {
   display: flex;
@@ -77,14 +61,6 @@ ion-toolbar {
   align-items: flex-start;
   color: #3f3b46;
 
-  img {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    object-fit: cover;
-    flex: 0 0 32px;
-  }
-
   strong {
     color: #472b7a;
     font-size: 13px;
@@ -94,6 +70,7 @@ ion-toolbar {
     margin: 3px 0 0;
     font-size: 14px;
     line-height: 1.4;
+    overflow-wrap: anywhere;
     white-space: pre-wrap;
   }
 }
@@ -114,19 +91,14 @@ ion-content {
   gap: 12px;
   margin-top: 10px;
 
-  .post-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #e0e0e0;
-    border: 1px solid #999999;
-    flex-shrink: 0;
-  }
+  .post-avatar { --avatar-size: 40px; }
+  .composer-copy { flex: 1; min-width: 0; }
+  .composer-copy strong { color: #472b7a; display: block; font-size: 13px; margin-bottom: 2px; }
 
   textarea {
     width: 100%;
     border: none;
-    outline: none;
+    border-radius: var(--hipatec-radius-sm);
     resize: none;
     font-family: 'Roboto', sans-serif;
     font-size: 18px;
@@ -137,6 +109,8 @@ ion-content {
     &::placeholder {
       color: #483a61;
     }
+
+    &:focus-visible { outline-offset: 4px; }
   }
 }
 
@@ -155,20 +129,7 @@ ion-content {
   }
 
   .btn-submit-post {
-    background: #472b7a;
-    color: #ffffff;
-    border: none;
-    border-radius: 20px;
-    padding: 8px 20px;
     font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
     box-shadow: 0 4px 12px rgba(71, 43, 122, 0.2);
-    transition: background-color 0.2s;
-
-    &:hover {
-      background: #382260;
-    }
   }
 }

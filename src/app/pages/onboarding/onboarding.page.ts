@@ -111,7 +111,7 @@ export class OnboardingPage {
     this.onboardingService.salvarRespostas(this.respostas).subscribe({
       next: () => {
         this.enviando = false;
-        this.router.navigate(['/mentorias']);
+        this.router.navigate(['/painel']);
       },
       error: (erro: { error?: { message?: string } }) => {
         this.enviando = false;

@@ -1,47 +1,47 @@
-<div class="edit-modal-backdrop" *ngIf="show">
-  <div class="edit-modal-preview">
-    
-    <div class="modal-header">
-      <button class="modal-close-btn" (click)="closeModal()">✕</button>
-      <h3>Editar perfil</h3>
-      <button class="btn-save" (click)="saveProfile()" [disabled]="saving">
-        {{ saving ? 'Salvando...' : 'Salvar' }}
-      </button>
-    </div>
-
-    <div class="modal-body-preview">
+<ion-modal [isOpen]="show" [canDismiss]="canDismiss" cssClass="hipatec-modal" (didDismiss)="descartado()">
+  <ng-template>
+    <app-modal-shell appContentModalFocus titulo="Editar perfil" (fechar)="closeModal()">
+    <div class="modal-body-preview"><app-feedback-notice [mensagem]="erro" [erro]="true" />
       
       <div class="preview-banner">
-        <img *ngIf="previewBackground" [src]="previewBackground" alt="Capa" class="banner-img" />
+        <img *ngIf="previewBackground" [src]="previewBackground" (error)="previewBackground = null" alt="Capa" class="banner-img" />
         
         <label class="upload-overlay" for="bg-upload">
-          <span class="upload-icon">📷 Alterar Capa</span>
+          <span class="upload-icon">Alterar capa</span>
         </label>
-        <input id="bg-upload" type="file" accept="image/png,image/jpeg" (change)="onBackgroundSelected($event)" class="hidden-file-input" />
+        <input id="bg-upload" type="file" accept="image/png,image/jpeg" (change)="onBackgroundSelected($event)" [disabled]="saving" />
       </div>
 
       <div class="preview-avatar-section">
         <div class="preview-avatar">
-          <img *ngIf="previewPfp" [src]="previewPfp" alt="Perfil" class="avatar-img" />
+          <img *ngIf="previewPfp" [src]="previewPfp" (error)="previewPfp = null" alt="Perfil" class="avatar-img" />
           
           <label class="upload-overlay-circle" for="pfp-upload">
-            <span class="upload-icon-circle">📷</span>
+            <span class="upload-icon-circle">Alterar foto</span>
           </label>
-          <input id="pfp-upload" type="file" accept="image/png,image/jpeg" (change)="onPfpSelected($event)" class="hidden-file-input" />
+          <input id="pfp-upload" type="file" accept="image/png,image/jpeg" (change)="onPfpSelected($event)" [disabled]="saving" />
         </div>
       </div>
 
       <div class="preview-info-section">
-        <input type="text" class="input-name" placeholder="Nome de exibição" maxlength="100" [(ngModel)]="editModel.nome" />
+        <label for="perfil-nome">Nome de exibição</label>
+        <input id="perfil-nome" [disabled]="saving" type="text" class="input-name" placeholder="Nome de exibição" maxlength="100" [(ngModel)]="editModel.nome" />
         
+        <label for="perfil-usuario">Usuário</label>
         <div class="input-username-row">
           <span class="arroba">@</span>
-          <input type="text" class="input-username" placeholder="usuario" maxlength="100" [(ngModel)]="editModel.usuario" />
+          <input id="perfil-usuario" [disabled]="saving" type="text" class="input-username" placeholder="usuario" maxlength="100" [(ngModel)]="editModel.usuario" />
         </div>
         
-        <textarea class="input-bio" rows="3" placeholder="Adicione uma biografia..." maxlength="255" [(ngModel)]="editModel.biografia"></textarea>
+        <label for="perfil-bio">Biografia</label>
+        <textarea id="perfil-bio" [disabled]="saving" class="input-bio" rows="3" placeholder="Adicione uma biografia..." maxlength="255" [(ngModel)]="editModel.biografia"></textarea>
       </div>
 
-    </div>
-  </div>
 </div>
+      <div modalFooter class="content-actions">
+        <button type="button" class="hipatec-btn-secondary" [disabled]="saving" (click)="closeModal()">Cancelar</button>
+        <button type="button" class="btn-save hipatec-btn-primary" [disabled]="saving" (click)="saveProfile()">{{ saving ? 'Salvando…' : 'Salvar' }}</button>
+      </div>
+    </app-modal-shell>
+  </ng-template>
+</ion-modal>

@@ -1,3 +1,5 @@
+import { PasswordFieldComponent } from '../../components/password-field/password-field.component';
+import { QueryList, ViewChildren } from '@angular/core';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,11 +15,18 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
   standalone: true,
-  imports: [IonLabel, IonSegment, IonSegmentButton, CommonModule, FormsModule, RouterLink] // adicionei o RouterLink aqui
+  imports: [PasswordFieldComponent, IonLabel, IonSegment, IonSegmentButton, CommonModule, FormsModule, RouterLink] // adicionei o RouterLink aqui
 })
 export class LoginPage {
+  ionViewWillLeave() { this.passwordFields?.forEach(field => field.hide()); }
+
+  @ViewChildren(PasswordFieldComponent) passwordFields?: QueryList<PasswordFieldComponent>;
+
 
   role: 'estudantes' | 'mentoras' = 'estudantes';
+  erro = '';
+  tentou = false;
+  enviando = false;
   email = '';
   password = '';
 
@@ -31,11 +40,14 @@ export class LoginPage {
   }
 
   login() {
+    if (this.enviando) return;
+    this.tentou = true; this.erro = '';
     if (!this.email || !this.password) {
-      alert('Informe seu e-mail ou usuário e a senha para continuar.');
+      document.getElementById(!this.email ? 'login-identifier' : 'login-password')?.focus();
       return;
     }
 
+    this.enviando = true;
     this.auth.login(this.role, this.email, this.password)
       .subscribe({
         next: () => {
@@ -43,6 +55,7 @@ export class LoginPage {
           window.location.assign('/home');
         },
         error: (err) => {
+          this.enviando = false;
           this.password = '';
           const mensagem = err.status === 403 && this.role === 'mentoras'
             ? 'Cadastro de mentora aguardando aprovação da equipe.'
@@ -53,7 +66,7 @@ export class LoginPage {
                 : err.status === 0
                   ? 'Não foi possível conectar. Tente novamente.'
                   : 'E-mail, usuário ou senha inválidos';
-          alert(mensagem);
+          this.erro = mensagem;
         }
       });
   }

@@ -1,3 +1,5 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
@@ -7,7 +9,7 @@ describe('AprendizadoPage', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AprendizadoPage, IonicModule.forRoot()],
-      providers: [provideRouter([])]
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])]
     }).compileComponents();
   });
 

@@ -1,3 +1,9 @@
+import { CursosService } from '../../services/cursos.service';
+import { MentoriasService } from '../../services/mentorias.service';
+import { PerfilService } from '../../services/perfil.service';
+import { mensagemErro } from '../../services/posts.service';
+import { forkJoin } from 'rxjs';
+import { FeedbackNoticeComponent } from '../../components/feedback-notice/feedback-notice.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,9 +25,10 @@ interface AprendizadoItem {
   templateUrl: './aprendizado.page.html',
   styleUrls: ['./aprendizado.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [FeedbackNoticeComponent, IonicModule, CommonModule, FormsModule]
 })
 export class AprendizadoPage {
+  aviso = '';
   itens: AprendizadoItem[] = [];
   sugestoes: Array<{ titulo: string; tipo: string; descricao: string; mentora: string }> = [];
 
@@ -30,6 +37,27 @@ export class AprendizadoPage {
   filtroSugestao = 'Todos';
   paginaAtividades = 1;
   paginaSugestoes = 1;
+
+  erroCatalogo = '';
+  carregandoCatalogo = false;
+
+  constructor(private cursos: CursosService, private mentorias: MentoriasService, private perfis: PerfilService) {
+    addIcons({ bookOutline, checkmarkCircleOutline, timeOutline, calendarOutline });
+  }
+
+  ionViewWillEnter() { this.carregarCatalogo(); }
+  carregarCatalogo() {
+    this.carregandoCatalogo = true; this.erroCatalogo = '';
+    forkJoin({ cursos: this.cursos.getAll(), mentorias: this.mentorias.getAll(), perfis: this.perfis.getPerfis() }).subscribe({
+      next: ({ cursos, mentorias, perfis }) => {
+        this.sugestoes = [...cursos.map(c => ({ ...c, tipo: 'Curso' })), ...mentorias.map(m => ({ ...m, tipo: 'Mentoria' }))]
+          .map(c => ({ titulo: c.titulo, descricao: c.descricao || '', tipo: c.tipo,
+            mentora: perfis.find(p => p.id_mentora === c.idMentora)?.usuario || 'Mentora' }));
+        this.carregandoCatalogo = false;
+      },
+      error: erro => { this.carregandoCatalogo = false; this.erroCatalogo = mensagemErro(erro); }
+    });
+  }
 
   get itensFiltrados() {
     if (this.filtroAtividade === 'Em andamento') return this.itens.filter(item => item.progresso < 1);
@@ -79,21 +107,17 @@ export class AprendizadoPage {
       this.paginaSugestoes = Math.min(this.totalPaginasSugestoes, Math.max(1, this.paginaSugestoes + direcao));
     }
   }
-  constructor() {
-    addIcons({ bookOutline, checkmarkCircleOutline, timeOutline, calendarOutline });
-  }
-
   get percentualConcluido() {
     if (this.itens.length === 0) return 0;
     return Math.round(this.itens.reduce((total, item) => total + item.progresso, 0) / this.itens.length * 100);
   }
 
   continuar(item: AprendizadoItem) {
-    alert(`Continuar: ${item.titulo}`);
+    this.aviso = 'O conteúdo deste curso ainda não está disponível.';
   }
 
   inscrever(sugestao: { titulo: string }) {
-    alert(`Inscrição: ${sugestao.titulo}`);
+    this.aviso = 'A inscrição em cursos ainda não está disponível. Nenhuma inscrição foi realizada.';
   }
 
 }

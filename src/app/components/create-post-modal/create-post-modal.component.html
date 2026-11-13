@@ -1,34 +1,17 @@
-<ion-header class="ion-no-border">
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="fechar()">
-        <ion-icon [icon]="iconeFechar"></ion-icon>
-      </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="ion-padding">
+<app-modal-shell [titulo]="post ? 'Editar publicação' : 'Criar publicação'" (fechar)="fechar()">
   <div class="post-input-area">
-    <div class="post-avatar">
-      <img [src]="pfp" alt="Avatar do usuário" class="avatar-img" />
-    </div>
-    <textarea [(ngModel)]="conteudo" placeholder="Digite aqui..." rows="6" autofocus></textarea>
+    <app-avatar class="post-avatar" [src]="pfp" [nome]="nome" />
+    <textarea id="publicacao-conteudo" maxlength="5000" name="conteudo" [disabled]="isSubmitting" [(ngModel)]="conteudo" (ngModelChange)="atualizarAlterado()" [attr.aria-invalid]="erroConteudo ? true : null" aria-describedby="publicacao-conteudo-erro" aria-label="Conteúdo da publicação" placeholder="Digite aqui…" rows="6"></textarea>
   </div>
-</ion-content>
 
-<ion-footer class="ion-no-border">
-  <ion-toolbar>
-    <div class="post-actions-footer">
-      <div class="icons-group">
-        <ion-button fill="clear" class="icon-btn">
-          <ion-icon [icon]="iconeImagem"></ion-icon>
-        </ion-button>
-      </div>
-      
-      <button class="btn-submit-post" (click)="postar()" [disabled]="isSubmitting">
-        {{ isSubmitting ? 'Postando...' : 'Postar' }}
-      </button>
-    </div>
-  </ion-toolbar>
-</ion-footer>
+  <p class="hipatec-state-error" id="publicacao-conteudo-erro" role="alert" *ngIf="erroConteudo">{{ erroConteudo }}</p>
+  <p class="hipatec-state hipatec-state-error" role="alert" *ngIf="erro">{{ erro }}</p>
+  <div modalFooter class="post-actions-footer">
+    <label *ngIf="!post" class="image-picker">Imagem (PNG ou JPEG, até 5 MB)
+      <input type="file" accept="image/png,image/jpeg" [disabled]="isSubmitting" (change)="selecionarImagem($event)" />
+    </label>
+    <button type="button" class="btn-submit-post hipatec-btn-primary" (click)="postar()" [disabled]="isSubmitting">
+      {{ isSubmitting ? 'Postando…' : 'Postar' }}
+    </button>
+  </div>
+</app-modal-shell>

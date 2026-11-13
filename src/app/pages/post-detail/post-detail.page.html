@@ -1,0 +1,54 @@
+<ion-content class="post-detail-content">
+<app-feedback-notice [mensagem]="aviso" />
+  <main class="post-detail-shell">
+    <button type="button" class="back-link" (click)="voltar()">Voltar</button>
+
+    <div class="hipatec-state" *ngIf="carregando" role="status" aria-live="polite">Carregando publicação...</div>
+    <div class="hipatec-state hipatec-state-error" *ngIf="!carregando && erro" role="alert">{{ erro }}</div>
+
+    <section class="detail-card" *ngIf="!carregando && post" aria-label="Publicação">
+      <app-post-author-header class="detail-header" [autor]="post.autor" [avatar]="post.avatar || post.autorFoto" [funcao]="post.autorRole || 'estudantes'" [tempo]="post.tempo" (autorClick)="abrirPerfilAutor($event)">
+        <button type="button" role="menuitem" class="hipatec-menu-item" *ngIf="ehDonoPost()" (click)="editarPublicacao()">Editar publicação</button>
+        <button type="button" role="menuitem" class="hipatec-menu-item hipatec-menu-item-danger" *ngIf="ehDonoPost()" (click)="excluirPublicacao()">Excluir publicação</button>
+        <button type="button" role="menuitem" class="hipatec-menu-item" *ngIf="!ehDonoPost()" (click)="denunciarComentario()">Denunciar publicação</button>
+      </app-post-author-header>
+
+      <article class="publication-body">
+        <app-post-content [post]="post" />
+      </article>
+
+      <p *ngIf="post.erroInteracao" role="alert" class="hipatec-state-error">{{ post.erroInteracao }}</p>
+          <app-post-actions class="publication-actions" [post]="post" (recuperar)="recuperarInteracoes(post)" (repostar)="repostar()" (repostarComComentario)="repostar(true)"
+        (curtir)="toggleCurtida()"
+        (comentar)="focarComposer()" />
+
+      <section class="comments-section" *ngIf="!post.originalIndisponivel" aria-labelledby="comments-title">
+        <h2 id="comments-title">Comentários</h2>
+        <p class="hipatec-state" *ngIf="carregandoComentarios" role="status" aria-live="polite">Carregando comentários...</p>
+        <p class="hipatec-state" *ngIf="!carregandoComentarios && !erroCarregamento && comentarios.length === 0">Ainda não há comentários.</p>
+
+        <article class="comment-item" *ngFor="let comentario of comentarios">
+          <app-avatar class="comment-avatar" [src]="comentario.autorFoto" [nome]="comentario.autorNome" />
+          <div class="comment-content">
+            <div class="comment-heading">
+              <strong>{{ comentario.autorNome || 'Usuário' }}</strong>
+              <button type="button" class="comment-menu-button" aria-haspopup="menu" [attr.aria-expanded]="menuComentarioAberto === comentario.id" [attr.aria-label]="'Opções do comentário de ' + (comentario.autorNome || 'Usuário')" (click)="alternarMenuComentario(comentario.id, $event)"><ion-icon name="ellipsis-horizontal" aria-hidden="true"></ion-icon></button>
+              <div class="hipatec-menu comment-menu" role="menu" *ngIf="menuComentarioAberto === comentario.id">
+                <button type="button" role="menuitem" class="hipatec-menu-item" (click)="denunciarComentario(comentario)">Denunciar comentário</button>
+              </div>
+            </div>
+            <p>{{ comentario.texto }}</p>
+            <button type="button" class="reply-button" (click)="alternarResposta(comentario.id || '')">Responder</button>
+          </div>
+        </article>
+      </section>
+
+      <form *ngIf="!post.originalIndisponivel" class="comment-composer" (ngSubmit)="enviarComentario()">
+        <p *ngIf="erroComentario" role="alert">{{ erroComentario }}</p>
+      <p *ngIf="erroCarregamento" role="alert">{{ erroCarregamento }}</p>
+      <textarea #composer name="comentario" aria-label="Escreva um comentário" [(ngModel)]="texto" rows="3" maxlength="500" placeholder="Escreva um comentário…"></textarea>
+        <button type="submit" class="hipatec-btn-primary" [disabled]="enviando || !texto.trim()">{{ enviando ? 'Enviando…' : 'Comentar' }}</button>
+      </form>
+    </section>
+  </main>
+</ion-content>

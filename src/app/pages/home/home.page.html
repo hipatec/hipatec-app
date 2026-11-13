@@ -1,5 +1,6 @@
 
 <ion-content>
+<app-feedback-notice [mensagem]="aviso" />
   <div class="gradient-bg">
     <div class="main-layout-wrapper">
       
@@ -7,134 +8,86 @@
         
         <div class="feed-column">
           <div class="feed-container">
-            <div class="feed-state" *ngIf="carregando" role="status" aria-live="polite">
+            <div class="hipatec-state" *ngIf="carregando" role="status" aria-live="polite">
               Carregando publicações...
             </div>
 
-            <div class="feed-state feed-state-error" *ngIf="erroFeed" role="alert">
+            <div class="hipatec-state hipatec-state-error" *ngIf="erroFeed" role="alert">
               {{ erroFeed }}
-              <button type="button" class="feed-retry" (click)="buscarPosts()">Tentar novamente</button>
+              <button type="button" class="hipatec-state-retry" (click)="buscarPosts()">Tentar novamente</button>
             </div>
 
-            <div class="feed-state" *ngIf="!carregando && !erroFeed && posts.length === 0">
+            <div class="hipatec-state" *ngIf="!carregando && !erroFeed && posts.length === 0">
               Nenhuma publicação ainda.
             </div>
 
-            <div class="post-card" *ngFor="let post of posts">
-              <div class="post-header">
-                <div class="post-avatar-placeholder" [attr.aria-label]="'Avatar de ' + post.autor">
-                  <img *ngIf="post.avatar" [src]="post.avatar" [alt]="post.autor" (error)="post.avatar = ''" />
-                  <span *ngIf="!post.avatar" class="avatar-initials">{{ iniciais(post.autor) }}</span>
-                </div>
-                <div class="post-meta">
-                  <button type="button" class="post-author-link" (click)="abrirPerfil(post)">{{ post.autor }}</button>
-                  <!-- <span class="post-role">{{ post.role }}</span> -->
-                </div>
-                <span class="post-time">{{ post.tempo }}</span>
-                <button type="button" class="btn-options" [attr.aria-label]="'Mais opções da publicação de ' + post.autor" (click)="togglePostMenu(post)">
-                  <ion-icon name="ellipsis-horizontal" aria-hidden="true"></ion-icon>
+            <div class="post-card" *ngFor="let post of posts" role="article" tabindex="0" (click)="abrirPublicacao(post, $event)" (keydown.enter)="abrirPublicacao(post, $event)">
+              <app-post-author-header class="post-header" [autor]="post.autor" [avatar]="post.avatar" [tempo]="post.tempo" (autorClick)="abrirPerfil(post)">
+                <button type="button" role="menuitem" class="hipatec-menu-item" *ngIf="canEditPost(post)" (click)="editarPost(post)">
+                  <ion-icon name="pencil" aria-hidden="true"></ion-icon>
+                  <span>Editar publicação</span>
                 </button>
-                <div class="post-menu" *ngIf="postMenuId === post.id" role="menu">
-                  <button type="button" role="menuitem" *ngIf="canEditPost(post)" (click)="editarPost(post)">
-                    <ion-icon name="pencil" aria-hidden="true"></ion-icon>
-                    <span>Editar publicação</span>
-                  </button>
-                  <button type="button" role="menuitem" class="post-menu-danger" *ngIf="canDeletePost(post)" (click)="excluirPost(post)">
-                    <ion-icon name="trash" aria-hidden="true"></ion-icon>
-                    <span>Excluir publicação</span>
-                  </button>
-                  <button type="button" role="menuitem" (click)="abrirDenuncia(post)">
-                    <ion-icon name="flag-outline" aria-hidden="true"></ion-icon>
-                    <span>Denunciar publicação</span>
-                  </button>
-                </div>
-              </div>
+                <button type="button" role="menuitem" class="hipatec-menu-item hipatec-menu-item-danger" *ngIf="canDeletePost(post)" (click)="excluirPost(post)">
+                  <ion-icon name="trash" aria-hidden="true"></ion-icon>
+                  <span>Excluir publicação</span>
+                </button>
+                <button type="button" role="menuitem" class="hipatec-menu-item" (click)="abrirDenuncia(post)">
+                  <ion-icon name="flag-outline" aria-hidden="true"></ion-icon>
+                  <span>Denunciar publicação</span>
+                </button>
+              </app-post-author-header>
 
               <div class="post-body">
-                <p class="post-text">{{ post.conteudo }}</p>
+                <app-post-content [post]="post" />
               </div>
 
-              <div class="post-actions">
-                <button 
-                  type="button"
-                  class="action-btn btn-like" 
-                  [attr.aria-label]="(post.curtidoUsuario ? 'Descurtir' : 'Curtir') + ' publicação de ' + post.autor"
-                  [class.active-like]="post.curtidoUsuario" 
-                  (click)="toggleCurtida(post)">
-                    
-                  <ion-icon [icon]="post.curtidoUsuario ? iconeCurtido : iconeCurtir"></ion-icon>
-                    
-                  <span class="action-count">{{ post.curtidas }}</span>
-                </button>
-                <button type="button" class="action-btn btn-comment" [attr.aria-label]="'Comentar publicação de ' + post.autor" (click)="abrirModalComentario(post)">
-                  <ion-icon [icon]="iconeComentar"></ion-icon>
-                  <span class="action-count">{{ post.comentarios }}</span>
-                </button>
-                <button type="button" class="action-btn btn-repost" [class.active-repost]="post.repostadoUsuario" aria-label="Repostar publicação" (click)="repostar(post)">
-                  <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
-                  <span class="action-count">{{ post.reposts }}</span>
-                </button>
-                <button type="button" class="action-btn btn-repost-comment" [class.active-repost]="post.repostadoUsuario" aria-label="Repostar com comentário" (click)="repostar(post, true)">
-                  <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
-                  <span>Comentar</span>
-                </button>
-              </div>
+              <p *ngIf="post.erroInteracao" role="alert" class="hipatec-state-error">{{ post.erroInteracao }}</p>
+          <app-post-actions [post]="post" (recuperar)="recuperarInteracoes(post)"
+                (curtir)="toggleCurtida(post)"
+                (comentar)="abrirModalComentario(post)"
+                (repostar)="repostar(post)"
+                (repostarComComentario)="repostar(post, true)" />
 
-              <div class="report-dialog-backdrop" *ngIf="postEmDenuncia?.id === post.id" role="presentation">
-                <section class="report-dialog" role="dialog" aria-modal="true" aria-labelledby="report-title">
-                  <div class="report-dialog-header">
-                    <div>
-                      <span class="report-kicker">MODERAÇÃO</span>
-                      <h3 id="report-title">Denunciar publicação</h3>
-                    </div>
-                    <button type="button" class="report-close" aria-label="Fechar denúncia" (click)="fecharDenuncia()">
-                      <ion-icon name="close" aria-hidden="true"></ion-icon>
-                    </button>
-                  </div>
-                  <p>Conte-nos o que há de errado. A equipe poderá analisar o conteúdo.</p>
-                  <label for="report-reason">Motivo da denúncia</label>
-                  <select id="report-reason" [(ngModel)]="motivoDenuncia">
-                    <option value="">Selecione um motivo</option>
-                    <option value="assédio">Assédio ou ataque</option>
-                    <option value="discurso-odioso">Discurso de ódio</option>
-                    <option value="spam">Spam ou fraude</option>
-                    <option value="conteudo-inadequado">Conteúdo inadequado</option>
-                  </select>
-                  <div class="report-dialog-actions">
-                    <button type="button" class="report-cancel" (click)="fecharDenuncia()">Cancelar</button>
-                    <button type="button" class="report-submit" (click)="enviarDenuncia()">Enviar denúncia</button>
-                  </div>
-                </section>
-              </div>
+
             </div>
 
           </div>
         </div>
 
-        <div class="sidebar-column">
+        <aside class="sidebar-column" aria-label="Sugestões de perfis">
           <div class="sidebar-card" *ngIf="sugestoesExibidas.length > 0">
             <h3>Quem seguir</h3>
             
-            <div class="sidebar-item" *ngFor="let sugestao of sugestoesExibidas">
-              <button type="button" class="item-avatar-button" (click)="abrirSugestao(sugestao)" [attr.aria-label]="'Abrir perfil de ' + sugestao.nome">
-                <img *ngIf="sugestao.pfp" [src]="sugestao.pfp" [alt]="sugestao.nome" (error)="sugestao.pfp = undefined" />
-                <span *ngIf="!sugestao.pfp" class="avatar-initials">{{ iniciais(sugestao.nome) }}</span>
-              </button>
-              <button type="button" class="item-info" (click)="abrirSugestao(sugestao)">
-                <span class="item-name">{{ sugestao.nome }}</span>
-                <span class="item-handle">{{ sugestao.arroba }}</span>
-              </button>
-              <button type="button" class="btn-follow" (click)="abrirSugestao(sugestao)">Ver perfil</button>
-            </div>
+            <ul class="sidebar-list">
+              <li class="sidebar-item" *ngFor="let sugestao of sugestoesExibidas">
+                <button type="button" class="item-link" [attr.aria-label]="'Abrir perfil de ' + sugestao.nome" (click)="abrirSugestao(sugestao)">
+                  <app-avatar class="item-avatar" [src]="sugestao.pfp" [nome]="sugestao.nome" />
+                  <span class="item-info">
+                    <span class="item-name">{{ sugestao.nome }}</span>
+                    <span class="item-handle" *ngIf="sugestao.arroba">{{ sugestao.arroba }}</span>
+                  </span>
+                </button>
+                <button *ngIf="sessaoAutenticada" type="button" class="btn-follow"
+                  [class.following]="sugestao.seguindo === true"
+                  [attr.aria-disabled]="sugestao.pendente ? 'true' : null"
+                  [attr.aria-busy]="sugestao.pendente ? 'true' : null"
+                  [attr.aria-describedby]="sugestao.erro ? 'seguir-erro-' + sugestao.perfilId : null"
+                  (click)="alternarSeguimento(sugestao)">
+                  {{ sugestao.seguindo === null ? 'Verificar' : (sugestao.seguindo ? 'Seguindo' : 'Seguir') }}<span class="hipatec-visually-hidden">{{ sugestao.seguindo === null ? ' status de ' : ' ' }}{{ sugestao.nome }}</span>
+                </button>
+                <p class="item-error" role="alert" *ngIf="sugestao.erro" [id]="'seguir-erro-' + sugestao.perfilId">{{ sugestao.erro }}</p>
+              </li>
+            </ul>
+            <p class="hipatec-visually-hidden" role="status" aria-live="polite">{{ anuncioSeguimento }}</p>
 
             <div class="sidebar-more" *ngIf="quantidadeSugestoes < sugestoes.length">
               <button type="button" class="sidebar-more-button" (click)="mostrarMaisSugestoes()">Mostrar mais</button>
             </div>
           </div>
-          <div class="sidebar-card feed-state" *ngIf="sugestoesExibidas.length === 0">
+          <div class="sidebar-card hipatec-state" *ngIf="sugestoesExibidas.length === 0">
             Sugestões de pessoas aparecerão quando essa função estiver conectada à API.
           </div>
-        </div>
+        </aside>
 
       </div>
 

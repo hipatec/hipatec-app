@@ -37,16 +37,131 @@
 /* @import '@ionic/angular/css/palettes/dark.system.css'; */
 
 
-.avatar-initials,
-.navbar-avatar-initials {
+/* --- Padrões compartilhados da área interna (tokens em theme/variables.scss) --- */
+
+/* Foco visível padrão: vale para todo controle que não define um substituto próprio. */
+:where(a, button, select, textarea, input, summary, [role='button'], [role='menuitem'], [tabindex]:not([tabindex='-1'])):focus-visible {
+  outline: var(--hipatec-focus-width) solid var(--hipatec-focus-ring);
+  outline-offset: var(--hipatec-focus-offset);
+}
+
+.hipatec-btn-primary,
+.hipatec-btn-secondary {
   align-items: center;
-  background: #eee8f7;
-  color: #472b7a;
-  display: flex;
+  border-radius: var(--hipatec-radius-pill);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 14px;
   font-weight: 700;
-  height: 100%;
+  gap: var(--hipatec-space-2);
   justify-content: center;
+  min-height: max(40px, var(--hipatec-target-min));
+  padding: 0 18px;
+  transition: background-color 160ms ease, border-color 160ms ease, color 160ms ease;
+}
+
+.hipatec-btn-primary {
+  background: var(--hipatec-color-brand);
+  border: 1px solid var(--hipatec-color-brand);
+  color: #ffffff;
+
+  &:hover:not(:disabled) { background: var(--hipatec-color-brand-strong); border-color: var(--hipatec-color-brand-strong); }
+}
+
+.hipatec-btn-secondary {
+  background: var(--hipatec-color-surface);
+  border: 1px solid var(--hipatec-color-border);
+  color: var(--hipatec-color-brand);
+
+  &:hover:not(:disabled) { background: var(--hipatec-color-surface-soft); border-color: #bca9cb; }
+}
+
+.hipatec-btn-primary:disabled,
+.hipatec-btn-secondary:disabled {
+  cursor: not-allowed;
+  opacity: .5;
+}
+
+/* Menu contextual (itens são projetados pelas páginas, que mantêm as permissões). */
+.hipatec-menu {
+  background: var(--hipatec-color-surface);
+  border: 1px solid var(--hipatec-color-border);
+  border-radius: var(--hipatec-radius-md);
+  box-shadow: var(--hipatec-shadow-overlay);
+  min-width: 200px;
+  overscroll-behavior: contain;
+  padding: 6px;
+  position: absolute;
+  z-index: 5;
+}
+
+.hipatec-menu-item {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--hipatec-radius-sm);
+  color: var(--hipatec-color-text);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  font-size: 13px;
+  gap: 10px;
+  min-height: var(--hipatec-target-min);
+  padding: 8px 12px;
+  text-align: left;
+  transition: background-color 160ms ease, color 160ms ease;
   width: 100%;
+
+  ion-icon { color: var(--hipatec-color-brand-soft); flex: 0 0 auto; font-size: 17px; }
+
+  &:hover,
+  &:focus-visible { background: var(--hipatec-color-surface-soft); color: var(--hipatec-color-brand); }
+  &:focus-visible { outline-offset: -2px; }
+}
+
+.hipatec-menu-item-danger,
+.hipatec-menu-item-danger ion-icon { color: var(--hipatec-color-danger); }
+.hipatec-menu-item-danger:hover,
+.hipatec-menu-item-danger:focus-visible { background: var(--hipatec-color-danger-soft); color: var(--hipatec-color-danger); }
+
+/* Texto só para leitores de tela. */
+.hipatec-visually-hidden {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+/* Estados de carregamento, vazio e erro. */
+.hipatec-state {
+  color: var(--hipatec-color-text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+  padding: var(--hipatec-space-5) var(--hipatec-space-3);
+  text-align: center;
+}
+
+.hipatec-state-error { color: var(--hipatec-color-danger); }
+
+.hipatec-state-retry {
+  background: none;
+  border: 0;
+  border-radius: var(--hipatec-radius-sm);
+  color: var(--hipatec-color-brand);
+  cursor: pointer;
+  display: block;
+  font: inherit;
+  font-weight: 700;
+  margin: 10px auto 0;
+  min-height: var(--hipatec-target-min);
+  padding: 6px 12px;
+
+  &:hover { text-decoration: underline; }
 }
 
 .create-post-button {
@@ -85,16 +200,77 @@
 .custom-modal-comment {
   --border-radius: 20px;
   --width: min(640px, calc(100vw - 24px));
-  --height: min(760px, calc(100vh - 32px));
   --box-shadow: 0 18px 50px rgba(45, 28, 72, 0.28);
 }
 
-.custom-modal-post {
-  /* Arredonda as bordas do modal */
-  --border-radius: 24px;
-  
-  /* Opcional: Se quiser que ele não ocupe 100% da tela e fique como um "cartão flutuante" */
-  --width: 600px; /* Largura máxima */
-  --height: 350px; /* Altura fixa */
-  --box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+
+/* Comentários e republicações compartilham altura intrínseca e rolagem no corpo. */
+ion-modal.custom-modal-comment {
+  --height: auto;
+  --min-height: 0;
+  --max-height: calc(100dvh - 32px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+}
+
+/* Preserva o mínimo já aprovado para republicações curtas. */
+ion-modal.custom-modal-repost {
+  --min-height: min(355px, var(--max-height));
+}
+
+ion-modal.custom-modal-comment .ion-page {
+  contain: content;
+  min-height: var(--min-height);
+  max-height: var(--max-height);
+  position: relative;
+}
+
+ion-modal.custom-modal-comment ion-content {
+  contain: none;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  height: auto;
+  min-height: 0;
+}
+
+ion-modal.custom-modal-comment ion-content::part(scroll) {
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+}
+
+/*
+ * Modal pequeno compartilhado (criação de post e de evento): cartão centralizado,
+ * altura pelo conteúdo e limitada à viewport dinâmica; a rolagem fica no corpo do app-modal-shell.
+ */
+ion-modal.hipatec-modal,
+ion-modal.custom-modal-post {
+  --border-radius: 20px;
+  --box-shadow: 0 18px 50px rgba(45, 28, 72, 0.28);
+  --height: auto;
+  --max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  --width: min(600px, calc(100vw - 24px));
+}
+
+ion-modal.hipatec-modal .ion-page,
+ion-modal.custom-modal-post .ion-page {
+  contain: content;
+  display: flex;
+  flex-direction: column;
+  max-height: calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  position: relative;
+}
+/* Feedback compartilhado: confirmação usa tokens; toast não captura foco/toques. */
+ion-toast.hipatec-toast {
+  pointer-events: none;
+  --background: var(--hipatec-color-text);
+  --color: var(--hipatec-color-surface);
+  --border-radius: var(--hipatec-radius-md);
+  --max-width: min(440px, calc(100% - 24px));
+}
+ion-alert.hipatec-confirmacao {
+  --background: var(--hipatec-color-surface);
+  --max-width: min(440px, calc(100% - 24px));
+  .alert-title, .alert-message { color: var(--hipatec-color-text); }
+  .alert-button { color: var(--hipatec-color-brand); min-height: 44px; }
+  .alert-button-role-destructive { color: var(--hipatec-color-danger); }
 }

@@ -1,0 +1,77 @@
+:host {
+  background: var(--hipatec-color-surface);
+  color: var(--hipatec-color-text);
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.modal-header {
+  align-items: center;
+  border-bottom: 1px solid var(--hipatec-color-surface-tint);
+  display: flex;
+  flex: 0 0 auto;
+  gap: var(--hipatec-space-3);
+  padding: var(--hipatec-space-3) var(--hipatec-space-3) var(--hipatec-space-3) var(--hipatec-space-5);
+}
+
+.modal-title {
+  color: var(--hipatec-color-brand);
+  flex: 1;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.3;
+  margin: 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+
+  &:focus { outline: none; }
+  &:focus-visible { outline: var(--hipatec-focus-width) solid var(--hipatec-focus-ring); outline-offset: var(--hipatec-focus-offset); }
+}
+
+.modal-close {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 50%;
+  color: var(--hipatec-color-text-muted);
+  cursor: pointer;
+  display: flex;
+  flex: 0 0 auto;
+  height: max(40px, var(--hipatec-target-min));
+  justify-content: center;
+  padding: 0;
+  transition: background-color 160ms ease, color 160ms ease;
+  width: max(40px, var(--hipatec-target-min));
+
+  ion-icon { font-size: 22px; }
+  &:hover { background: var(--hipatec-color-surface-soft); color: var(--hipatec-color-brand); }
+}
+
+.modal-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: var(--hipatec-space-4) var(--hipatec-space-5);
+}
+
+.modal-footer {
+  align-items: center;
+  border-top: 1px solid var(--hipatec-color-surface-tint);
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  gap: var(--hipatec-space-2) var(--hipatec-space-3);
+  justify-content: flex-end;
+  padding: var(--hipatec-space-3) var(--hipatec-space-5) calc(var(--hipatec-space-3) + env(safe-area-inset-bottom));
+
+  &:empty { display: none; }
+}
+
+@media (max-width: 480px) {
+  .modal-header { padding-left: var(--hipatec-space-4); }
+  .modal-body { padding: var(--hipatec-space-3) var(--hipatec-space-4); }
+  .modal-footer { padding-left: var(--hipatec-space-4); padding-right: var(--hipatec-space-4); }
+}

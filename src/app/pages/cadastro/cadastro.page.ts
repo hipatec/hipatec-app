@@ -1,3 +1,7 @@
+import { inject } from '@angular/core';
+import { FeedbackService } from '../../services/feedback.service';
+import { PasswordFieldComponent } from '../../components/password-field/password-field.component';
+import { QueryList, ViewChildren } from '@angular/core';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -13,9 +17,17 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './cadastro.page.html',
   styleUrls: ['./cadastro.page.scss'],
   standalone: true,
-  imports: [IonLabel, IonSegment, IonSegmentButton, CommonModule, FormsModule, RouterLink]
+  imports: [PasswordFieldComponent, IonLabel, IonSegment, IonSegmentButton, CommonModule, FormsModule, RouterLink]
 })
 export class CadastroPage {
+  private feedback = inject(FeedbackService);
+  erro = '';
+  tentou = false;
+  enviando = false;
+  ionViewWillLeave() { this.passwordFields?.forEach(field => field.hide()); }
+
+  @ViewChildren(PasswordFieldComponent) passwordFields?: QueryList<PasswordFieldComponent>;
+
 
   role: 'estudantes' | 'mentoras' = 'estudantes';
   nome = '';
@@ -41,6 +53,8 @@ export class CadastroPage {
 
 
   cadastrar() {
+    if (this.enviando) return;
+    this.tentou = true; this.erro = '';
     if (
       !this.nome ||
       !this.email ||
@@ -48,7 +62,8 @@ export class CadastroPage {
       !this.dataNascimento ||
       !this.usuario
     ) {
-      alert('Preencha todos os campos para continuar.');
+      const vazio = ['nome', 'dataNascimento', 'email', 'usuario', 'senha'].find(campo => !(this as any)[campo]);
+      document.getElementById(vazio === 'senha' ? 'cadastro-password' : 'cadastro-' + vazio)?.focus();
       return;
     }
 
@@ -60,19 +75,22 @@ export class CadastroPage {
       usuario: this.usuario,
     };
 
-    const request = this.role === 'estudantes'
+    const papelEnviado = this.role;
+    const request = papelEnviado === 'estudantes'
       ? this.estudanteService.create(payload)
       : this.mentoraService.create(payload);
 
+    this.enviando = true;
     request.subscribe({
       next: response => {
-        alert(this.role === 'mentoras' ? 'Cadastro recebido. Aguarde a aprovação da equipe para entrar.' : 'Cadastro realizado. Você já pode entrar.');
+        this.enviando = false;
+        this.feedback.sucesso(papelEnviado === 'mentoras' ? 'Cadastro recebido. Aguarde a aprovação da equipe para entrar.' : 'Cadastro realizado. Você já pode entrar.');
         this.senha = '';
         this.router.navigate(['/login']);
       },
       error: err => {
-        console.error('Cadastro error:', err);
-        alert('Falha ao enviar cadastro. Verifique os dados e tente novamente.');
+        this.enviando = false;
+        this.erro = 'Falha ao enviar cadastro. Verifique os dados e tente novamente.';
       }
     });
   }

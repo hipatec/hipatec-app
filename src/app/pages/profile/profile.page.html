@@ -1,5 +1,6 @@
 
 <ion-content class="gradient-bg">
+<app-feedback-notice [mensagem]="aviso" />
   <div class="main-layout-wrapper">
 
     <div class="header-container">
@@ -12,11 +13,10 @@
 
         <div class="profile-info-container">
           <div class="avatar-box">
-            <img *ngIf="perfil?.pfp" [src]="perfil.pfp" [alt]="perfil?.nome || 'Usuário'" class="profile-avatar" (error)="perfil.pfp = ''" />
-            <span *ngIf="!perfil?.pfp" class="profile-avatar profile-avatar-initials">{{ iniciais(perfil?.nome) }}</span>
+            <app-avatar class="profile-avatar" [src]="perfil?.pfp" [nome]="perfil?.nome" [alt]="'Foto de ' + (perfil?.nome || 'Usuário')" />
           </div>
 
-          <button class="btn-edit-profile" [class.following]="seguindoPerfil" [disabled]="alterandoSeguimento" (click)="isPublicProfile ? alternarSeguimento() : editProfile()">
+          <button type="button" class="btn-edit-profile" [class.following]="seguindoPerfil" [disabled]="isPublicProfile && (alterandoSeguimento || seguindoPerfil === null)" (click)="isPublicProfile ? alternarSeguimento() : editProfile()">
             {{ isPublicProfile ? (seguindoPerfil ? 'Seguindo' : 'Seguir') : 'Editar perfil' }}
           </button>
 
@@ -48,111 +48,74 @@
           </div>
         </div>
 
-        <app-edit-profile-modal
-          [show]="showEditModal"
+        <p *ngIf="erroSeguimento" role="alert">{{ erroSeguimento }}</p>
+<app-edit-profile-modal
+          [show]="showEditModal" [saving]="isSaving" [erro]="erroSalvarPerfil"
           [perfil]="perfil"
           (closed)="showEditModal = false"
           (requestSave)="salvarFromModal($event)">
         </app-edit-profile-modal>
 
         <div class="profile-tabs" role="tablist" aria-label="Conteúdo do perfil">
-          <button type="button" [class.active]="profileTab === 'posts'" (click)="profileTab = 'posts'">Posts</button>
-          <button type="button" [class.active]="profileTab === 'reposts'" (click)="profileTab = 'reposts'">Republicados</button>
+          <button type="button" role="tab" [class.active]="profileTab === 'posts'" [attr.aria-selected]="profileTab === 'posts'" (click)="profileTab = 'posts'">Posts</button>
+          <button type="button" role="tab" [class.active]="profileTab === 'reposts'" [attr.aria-selected]="profileTab === 'reposts'" (click)="profileTab = 'reposts'">Republicados</button>
         </div>
 
       </header>
     </div>
 
     <div class="feed-container" *ngIf="profileTab === 'posts'">
-      <div class="feed-state" *ngIf="carregandoPosts" role="status" aria-live="polite">Carregando publicações...</div>
-      <div class="feed-state feed-state-error" *ngIf="!carregandoPosts && erroPosts" role="alert">
+      <div class="hipatec-state" *ngIf="carregandoPosts" role="status" aria-live="polite">Carregando publicações...</div>
+      <div class="hipatec-state hipatec-state-error" *ngIf="!carregandoPosts && erroPosts" role="alert">
         {{ erroPosts }}
-        <button type="button" class="feed-retry" (click)="recarregarPosts()">Tentar novamente</button>
+        <button type="button" class="hipatec-state-retry" (click)="recarregarPosts()">Tentar novamente</button>
       </div>
-      <div class="feed-state" *ngIf="!carregandoPosts && !erroPosts && posts.length === 0">
+      <div class="hipatec-state" *ngIf="!carregandoPosts && !erroPosts && posts.length === 0">
         {{ isPublicProfile ? 'Este perfil ainda não publicou nada.' : 'Você ainda não publicou nada.' }}
       </div>
-      <div class="post-card" *ngFor="let post of posts">
-        <div class="post-header">
-          <div class="post-avatar-placeholder">
-            <img *ngIf="post.avatar || perfil?.pfp" [src]="post.avatar || perfil.pfp" [alt]="perfil?.nome || post.autor || 'Usuário'" (error)="post.avatar = ''" />
-            <span *ngIf="!post.avatar && !perfil?.pfp" class="avatar-initials">{{ iniciais(perfil?.nome || post.autor) }}</span>
-          </div>
-          <div class="post-meta">
-            <span class="post-author">{{ perfil?.nome || post.autor }}</span>
-            <span class="post-role">{{ userRole }}</span>
-          </div>
-          <span class="post-time">{{ post.tempo }}</span>
-          <button type="button" class="btn-options" aria-label="Opções da publicação" (click)="togglePostMenu(post)">
-            <ion-icon name="ellipsis-horizontal" aria-hidden="true"></ion-icon>
+      <div class="post-card" *ngFor="let post of posts" role="article" tabindex="0" (click)="abrirPublicacao(post, $event)" (keydown.enter)="abrirPublicacao(post, $event)">
+        <app-post-author-header class="post-header" [autor]="post.autor || perfil?.nome" [avatar]="post.avatar" [funcao]="post.autorRole || userRole" [tempo]="post.tempo" (autorClick)="abrirPerfilAutor(post, $event)">
+          <button type="button" role="menuitem" class="hipatec-menu-item" *ngIf="canEditPost(post)" (click)="editarPost(post)">
+            <ion-icon name="pencil" aria-hidden="true"></ion-icon>
+            <span>Editar publicação</span>
           </button>
-          <div class="post-menu" *ngIf="postMenuId === post.id" role="menu">
-            <button type="button" role="menuitem" *ngIf="canEditPost(post)" (click)="editarPost(post)">
-              <ion-icon name="pencil" aria-hidden="true"></ion-icon>
-              <span>Editar publicação</span>
-            </button>
-            <button type="button" role="menuitem" class="post-menu-danger" *ngIf="canDeletePost(post)" (click)="excluirPost(post)">
-              <ion-icon name="trash" aria-hidden="true"></ion-icon>
-              <span>Excluir publicação</span>
-            </button>
-          </div>
+          <button type="button" role="menuitem" class="hipatec-menu-item hipatec-menu-item-danger" *ngIf="canDeletePost(post)" (click)="excluirPost(post)">
+            <ion-icon name="trash" aria-hidden="true"></ion-icon>
+            <span>Excluir publicação</span>
+          </button>
+          <button type="button" role="menuitem" class="hipatec-menu-item" *ngIf="!isPostOwner(post)" (click)="denunciarPost(post)">Denunciar publicação</button>
+        </app-post-author-header>
+
+        <div class="post-body post-open-area" role="button" tabindex="0" (click)="abrirComentario(post)" (keydown.enter)="abrirComentario(post)">
+          <app-post-content [post]="post" />
         </div>
 
-        <div class="post-body">
-          <p class="post-text">{{ post.conteudo }}</p>
-          <div class="repost-comment-context" *ngIf="post.repostComComentario">
-            <div class="repost-label"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon> Repost com comentário</div>
-            <div class="reposted-original" *ngIf="post.repostOriginal">
-              <strong>{{ post.repostOriginal.autor }}</strong>
-              <p>{{ post.repostOriginal.conteudo }}</p>
-            </div>
-          </div>
-        </div>
-
-        <div class="post-actions">
-          <button type="button" class="action-btn btn-like" [class.active-like]="post.curtidoUsuario" [attr.aria-label]="'Curtir publicação de ' + (perfil?.nome || post.autor)" (click)="toggleCurtida(post)">
-            <ion-icon [icon]="post.curtidoUsuario ? iconeCurtido : iconeCurtir"></ion-icon>
-            <span class="action-count">{{ post.curtidas }}</span>
-          </button>
-          <button type="button" class="action-btn btn-comment" [attr.aria-label]="'Comentar publicação de ' + (perfil?.nome || post.autor)" (click)="abrirComentario(post)">
-            <ion-icon [icon]="iconeComentar"></ion-icon>
-            <span class="action-count">{{ post.comentarios }}</span>
-          </button>
-          <button type="button" class="action-btn btn-repost" [class.active-repost]="post.repostadoUsuario" aria-label="Repostar publicação" (click)="repostar(post)">
-            <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
-            <span class="action-count">{{ post.reposts }}</span>
-          </button>
-          <button type="button" class="action-btn btn-repost-comment" [class.active-repost]="post.repostadoUsuario" aria-label="Repostar com comentário" (click)="repostar(post, true)">
-            <ion-icon name="repeat-outline" aria-hidden="true"></ion-icon>
-            <span>Comentar</span>
-          </button>
-        </div>
+        <p *ngIf="post.erroInteracao" role="alert" class="hipatec-state-error">{{ post.erroInteracao }}</p>
+          <app-post-actions [post]="post" (recuperar)="recuperarInteracoes(post)"
+          (curtir)="toggleCurtida(post)"
+          (comentar)="abrirComentario(post)"
+          (repostar)="repostar(post)"
+          (repostarComComentario)="repostar(post, true)" />
       </div>
     </div>
 
     <div class="feed-container reposts-feed" *ngIf="profileTab === 'reposts'">
-      <div class="post-card" *ngFor="let repost of reposts">
-        <div class="repost-status" aria-label="Você republicou esta publicação"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon></div>
-        <div class="post-header">
-          <div class="post-avatar-placeholder">
-            <img *ngIf="repost.avatar" [src]="repost.avatar" [alt]="repost.autor || 'Usuário'" (error)="repost.avatar = ''" />
-            <span *ngIf="!repost.avatar" class="avatar-initials">{{ iniciais(repost.autor) }}</span>
-          </div>
-          <div class="post-meta"><span class="post-author">{{ repost.autor }}</span></div>
-          <span class="post-time">{{ repost.tempo }}</span>
-        </div>
-        <div class="post-body"><p class="post-text">{{ repost.conteudo }}</p></div>
-        <div class="post-actions">
-          <button type="button" class="action-btn btn-like" [class.active-like]="repost.curtidoUsuario" aria-label="Curtir publicação" (click)="toggleCurtida(repost)"><ion-icon [icon]="repost.curtidoUsuario ? iconeCurtido : iconeCurtir"></ion-icon><span class="action-count">{{ repost.curtidas || 0 }}</span></button>
-          <button type="button" class="action-btn btn-comment" aria-label="Comentar publicação" (click)="abrirComentario(repost)"><ion-icon [icon]="iconeComentar"></ion-icon><span class="action-count">{{ repost.comentarios || 0 }}</span></button>
-          <button type="button" class="action-btn btn-repost" [class.active-repost]="repost.repostadoUsuario" aria-label="Repostar publicação" (click)="repostar(repost)"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon><span class="action-count">{{ repost.reposts || 1 }}</span></button>
-          <button type="button" class="action-btn btn-repost-comment" aria-label="Repostar com comentário" (click)="repostar(repost, true)"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon><span>Comentar</span></button>
-        </div>
+      <div class="post-card" *ngFor="let repost of reposts" role="article" tabindex="0" (click)="abrirPublicacao(repost, $event)" (keydown.enter)="abrirPublicacao(repost, $event)">
+        <div class="repost-status" role="img" aria-label="Você republicou esta publicação"><ion-icon name="repeat-outline" aria-hidden="true"></ion-icon></div>
+        <app-post-author-header class="post-header" [menu]="false" [autor]="repost.autor || repost.repostOriginal?.autor" [avatar]="repost.avatar" [funcao]="repost.autorRole || repost.repostOriginal?.autorRole || 'estudantes'" [tempo]="repost.tempo" (autorClick)="abrirPerfilAutor(repost, $event)" />
+        <div class="post-body post-open-area" role="button" tabindex="0" (click)="abrirComentario(repost)" (keydown.enter)="abrirComentario(repost)"><app-post-content [post]="repost" /></div>
+        <p *ngIf="repost.erroInteracao" role="alert" class="hipatec-state-error">{{ repost.erroInteracao }}</p>
+          <app-post-actions [post]="repost" (recuperar)="recuperarInteracoes(repost)"
+          (curtir)="toggleCurtida(repost)"
+          (comentar)="abrirComentario(repost)"
+          (repostar)="repostar(repost)"
+          (repostarComComentario)="repostar(repost, true)" />
       </div>
-      <div class="feed-state" *ngIf="reposts.length === 0">Nenhuma publicação republicada.</div>
+      <div class="hipatec-state" *ngIf="reposts.length === 0">Nenhuma publicação republicada.</div>
     </div>
 
   <button *ngIf="!isPublicProfile" type="button" class="create-post-button profile-create-post" aria-label="Criar publicação" (click)="abrirModalPost()">+</button>
 
   </div>
+<p *ngIf="erroSeguimento" role="alert">{{ erroSeguimento }}</p>
 </ion-content>

@@ -1,7 +1,7 @@
 <ion-content class="ion-padding">
   <main class="painel-shell">
     <header class="painel-header">
-      <p class="eyebrow">PAINEL</p><h1>Meu painel</h1><p class="section-subtitle">Um resumo rápido do seu progresso na Hipatec.</p>
+      <p class="eyebrow">PAINEL</p><h1>Painel</h1><p class="section-subtitle">Um resumo rápido do seu progresso na Hipatec.</p>
     </header>
     <section class="summary-grid" aria-label="Resumo do aprendizado">
       <article class="summary-card"><span class="summary-label">Matrículas</span><strong>{{ minhasMentorias.length }}</strong><small>cursos e mentorias carregados</small></article>
@@ -9,12 +9,12 @@
       <article class="summary-card"><span class="summary-label">Em andamento</span><strong>{{ mentoriasEmAndamento }}</strong><small>aprendizados ativos</small></article>
     </section>
     <section class="calendar-section" aria-labelledby="agenda-title">
-      <div class="section-heading"><div><h2 id="agenda-title" class="section-title">Minha agenda</h2><p class="section-subtitle">Prazos e encontros importantes do seu aprendizado.</p></div><ion-icon name="calendar-outline" aria-hidden="true"></ion-icon></div>
+      <div class="section-heading"><div><h2 id="agenda-title" class="section-title">Minha agenda</h2><p class="section-subtitle">Prazos e encontros importantes do seu aprendizado.</p></div><div class="agenda-heading-actions"><button #botaoEvento type="button" class="hipatec-btn-primary add-event-button" aria-haspopup="dialog" (click)="abrirEvento()">Adicionar evento</button><ion-icon name="calendar-outline" aria-hidden="true"></ion-icon></div></div>
       <div class="agenda-layout">
         <div class="calendar-column">
           <div class="calendar-widget" [attr.aria-label]="'Calendário de ' + tituloDoMes"><div class="calendar-header"><button type="button" aria-label="Mês anterior" (click)="mudarMes(-1)"><ion-icon name="chevron-back-outline" aria-hidden="true"></ion-icon></button><strong>{{ tituloDoMes }}</strong><button type="button" aria-label="Próximo mês" (click)="mudarMes(1)"><ion-icon name="chevron-forward-outline" aria-hidden="true"></ion-icon></button></div><div class="calendar-weekdays" aria-hidden="true"><span *ngFor="let dia of ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom']">{{ dia }}</span></div><div class="calendar-grid"><span *ngFor="let dia of diasDoMes" class="calendar-day" [class.has-event]="dia !== null && diasComEvento.includes(dia)">{{ dia || '' }}<i *ngIf="dia !== null && diasComEvento.includes(dia)" aria-label="Há evento neste dia"></i></span></div></div>
         </div>
-        <aside class="agenda-details" aria-labelledby="agenda-details-title"><h3 id="agenda-details-title">Próximos eventos</h3><p class="details-subtitle">Veja os prazos e encontros destacados no calendário.</p><div class="agenda-list" *ngIf="agenda.length > 0"><article class="agenda-item" *ngFor="let evento of agenda"><time>{{ evento.data }}</time><div><strong>{{ evento.titulo }}</strong><span>{{ evento.tipo }}</span></div></article></div><p class="feed-state" *ngIf="agenda.length === 0">Nenhum evento cadastrado.</p></aside>
+        <aside class="agenda-details" aria-labelledby="agenda-details-title"><h3 id="agenda-details-title">Eventos do mês</h3><p class="details-subtitle">Veja os prazos e encontros destacados no calendário.</p><p role="status" *ngIf="avisoEvento">{{ avisoEvento }}</p><p role="status" *ngIf="carregandoEventos">Carregando eventos…</p><div role="alert" *ngIf="erroEventos"><p>{{ erroEventos }}</p><button type="button" class="hipatec-btn-secondary" (click)="carregarEventos()">Tentar novamente</button></div><div class="agenda-list" *ngIf="agenda.length > 0"><article class="agenda-item" *ngFor="let evento of agenda"><time>{{ evento.data }}</time><div><strong>{{ evento.titulo }}</strong><span>{{ evento.tipo }}</span><span *ngIf="evento.local">{{ evento.local }}</span><span *ngIf="evento.descricao">{{ evento.descricao }}</span></div></article></div><p class="feed-state" *ngIf="!carregandoEventos && !erroEventos && agenda.length === 0">Nenhum evento cadastrado.</p></aside>
       </div>
     </section>
     <section class="panel-links" aria-label="Acesso ao aprendizado"><div><h2>Quer continuar estudando?</h2><p>Acesse Meu aprendizado para ver todas as atividades, progresso e próximas etapas.</p></div><ion-button (click)="goToAprendizado()" fill="solid">Ver meu aprendizado</ion-button></section>

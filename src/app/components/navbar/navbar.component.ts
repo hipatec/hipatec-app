@@ -1,3 +1,4 @@
+import { FeedbackNoticeComponent } from '../feedback-notice/feedback-notice.component';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -20,6 +21,7 @@ import { Router } from '@angular/router';
 import { PerfilService } from '../../services/perfil.service';
 import { AuthService } from '../../services/auth.service';
 import { switchMap } from 'rxjs';
+import { AvatarComponent } from '../avatar/avatar.component';
 import { addIcons } from 'ionicons';
 import {
   bookOutline,
@@ -38,8 +40,9 @@ import {
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   standalone: true,
-  imports: [
+  imports: [FeedbackNoticeComponent,
     CommonModule,
+    AvatarComponent,
     IonAvatar,
     IonBadge,
     IonButton,
@@ -57,8 +60,12 @@ import {
   ]
 })
 export class NavbarComponent  implements OnInit, OnDestroy {
+  erroLogout = '';
+
 
   private readonly profileUpdated = (event: Event) => {
+    const perfil = (event as CustomEvent).detail;
+    if (perfil?.nome || perfil?.usuario) this.profileName = perfil.nome || perfil.usuario;
     const image = (event as CustomEvent<{ pfp?: string }>).detail?.pfp;
     if (image) {
       this.profileImage = image;
@@ -116,11 +123,6 @@ export class NavbarComponent  implements OnInit, OnDestroy {
     });
   }
 
-  iniciais(nome: string | null | undefined): string {
-    return (nome || 'Usuário').trim().split(/\s+/).slice(0, 2)
-      .map(parte => parte[0]?.toUpperCase() || '').join('');
-  }
-
   get notificacoesNaoLidas() {
     return this.notificacoes.filter(notificacao => !notificacao.lida).length;
   }
@@ -154,7 +156,7 @@ export class NavbarComponent  implements OnInit, OnDestroy {
   }
   goToMentoria(popover: any) {
     popover.dismiss().then(() => {
-      this.router.navigate(['/mentorias']);
+      this.router.navigate(['/painel']);
     });
   }
   goToHome(popover?: any) {
@@ -172,15 +174,13 @@ export class NavbarComponent  implements OnInit, OnDestroy {
   }
 
   goToSettings(popover: any) {
-    popover.dismiss().then(() => { 
-      // Lógica futura para configurações
-    });
+    popover.dismiss().then(() => this.router.navigate(['/configuracoes']));
   }
   logout(popover: any) {
     popover.dismiss().then(() => {
       this.authService.logout().subscribe({
         next: () => { window.location.assign('/login'); },
-        error: () => { alert('Não foi possível encerrar a sessão. Tente novamente.'); }
+        error: () => { this.erroLogout = 'Não foi possível encerrar a sessão. Abra o menu e tente novamente.'; }
       });
     });
   }

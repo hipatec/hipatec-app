@@ -10,8 +10,9 @@
 
 .main-layout-wrapper {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--hipatec-content-max);
   margin: 0 auto;
+  padding-inline: var(--hipatec-content-padding);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -26,8 +27,9 @@
   align-items: start;
 
   @media (max-width: 992px) {
-    grid-template-columns: 1fr; /* Em telas menores, a sidebar some e o feed ocupa 100% */
-    .sidebar-column { display: none; }
+    /* Telas menores: a mesma sidebar desce para depois do feed (ordem visual = ordem do DOM e do foco). */
+    grid-template-columns: minmax(0, 1fr);
+    .sidebar-column { padding-bottom: 88px; } /* não fica sob o botão flutuante de criar post */
   }
 }
 
@@ -35,4 +37,7 @@
   .gradient-bg {
     padding: 0;
   }
+
+  .main-layout-wrapper { padding-inline: 0; }
+  .sidebar-column { padding-inline: var(--hipatec-space-3); }
 }

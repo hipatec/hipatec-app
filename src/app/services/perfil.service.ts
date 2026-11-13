@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 export interface Perfil {
     id: number;
     nome: string;
+    email?: string;
     biografia?: string;
     usuario: string;
     num_posts?: number;

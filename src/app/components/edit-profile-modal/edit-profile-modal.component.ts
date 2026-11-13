@@ -1,4 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { IonicModule, IonModal, AlertController } from '@ionic/angular';
+import { ModalShellComponent } from '../modal-shell/modal-shell.component';
+import { ContentModalFocusDirective } from '../content-form-modal/content-modal-focus.directive';
+import { confirmarAcao } from '../../services/feedback.service';
+import { FeedbackNoticeComponent } from '../feedback-notice/feedback-notice.component';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -7,7 +12,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './edit-profile-modal.component.html',
   styleUrls: ['./edit-profile-modal.component.scss'],
   standalone: true,
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule, FeedbackNoticeComponent, IonicModule, ModalShellComponent, ContentModalFocusDirective]
 })
 export class EditProfileModalComponent implements OnChanges {
   @Input() show = false;
@@ -26,28 +31,40 @@ export class EditProfileModalComponent implements OnChanges {
   previewPfp: string | null = null;
   previewBackground: string | null = null;
 
-  saving = false;
+  @Input() saving = false;
+  @Input() erro = '';
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['perfil']) {
-      this.editModel = { ...(this.perfil || {}) };
-      this.previewPfp = this.perfil?.pfp || null;
-      this.previewBackground = this.perfil?.background || null;
-      this.selectedPfpFile = null;
-      this.selectedBackgroundFile = null;
-    }
+    if (changes['perfil'] || changes['show']?.currentValue === true) this.restaurarPerfil();
   }
 
-  closeModal() {
-    this.closed.emit();
+  private restaurarPerfil() {
+    this.editModel = { ...(this.perfil || {}) };
+    this.previewPfp = this.perfil?.pfp || null;
+    this.previewBackground = this.perfil?.background || null;
+    this.selectedPfpFile = null;
+    this.selectedBackgroundFile = null;
+    this.erro = '';
   }
+
+  descartado() { this.restaurarPerfil(); this.closed.emit(); }
+
+  @ViewChild(IonModal) modal?: IonModal;
+  constructor(private alertas: AlertController) {}
+  readonly canDismiss = async () => {
+    if (this.saving) return false;
+    const alterado = ['nome', 'usuario', 'biografia'].some(key => (this.editModel[key] || '') !== (this.perfil?.[key] || ''))
+      || !!this.selectedPfpFile || !!this.selectedBackgroundFile;
+    return !this.show || !alterado || confirmarAcao(this.alertas, 'Descartar alterações?', 'As alterações do perfil serão perdidas.', 'Descartar');
+  };
+  closeModal() { if (!this.saving) void this.modal?.dismiss(undefined, 'cancel'); }
 
   onPfpSelected(event: any) {
     const file: File = event.target.files && event.target.files[0];
     if (file) {
       this.selectedPfpFile = file;
       const reader = new FileReader();
-      reader.onload = e => this.previewPfp = (e.target as any).result;
+      reader.onload = e => { if (this.selectedPfpFile === file) this.previewPfp = (e.target as any).result; };
       reader.readAsDataURL(file);
     }
   }
@@ -57,14 +74,14 @@ export class EditProfileModalComponent implements OnChanges {
     if (file) {
       this.selectedBackgroundFile = file;
       const reader = new FileReader();
-      reader.onload = e => this.previewBackground = (e.target as any).result;
+      reader.onload = e => { if (this.selectedBackgroundFile === file) this.previewBackground = (e.target as any).result; };
       reader.readAsDataURL(file);
     }
   }
 
   saveProfile() {
     if (this.saving) return;
-    this.saving = true;
+
 
     // Emit save request to parent with both files
     this.requestSave.emit({ 
@@ -74,6 +91,6 @@ export class EditProfileModalComponent implements OnChanges {
     });
     
     // Reset saving state after emission
-    this.saving = false;
+
   }
 }

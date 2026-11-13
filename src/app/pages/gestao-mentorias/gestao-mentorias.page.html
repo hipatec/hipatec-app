@@ -1,19 +1,42 @@
 <ion-content>
   <main class="management-shell">
-    <p class="eyebrow">ÁREA DA MENTORA</p>
+
     <h1>Gestão de mentorias</h1>
     <p class="subtitle">Crie, acompanhe e configure os conteúdos que você ministra.</p>
     <section class="management-summary">
-      <article><strong>{{ conteudos.length }}</strong><span>conteúdos ativos</span></article>
+      <article><strong>{{ carregando || erro ? '—' : conteudos.length }}</strong><span>conteúdos ativos</span></article>
       <article><strong>—</strong><span>matrículas recebidas</span></article>
       <article><strong>—</strong><span>conclusão média</span></article>
     </section>
-    <div class="toolbar"><h2>Meus conteúdos</h2><ion-button fill="solid">Criar conteúdo</ion-button></div>
+    <div class="toolbar">
+      <h2>Meus conteúdos</h2>
+      <div class="content-creation">
+        <button type="button" class="content-create-button"
+          aria-haspopup="dialog" aria-controls="content-create-popover"
+          [attr.aria-expanded]="creationOpen" (click)="toggleCreation($event)">
+          Criar conteúdo
+        </button>
+        <ion-popover #creationPopover id="content-create-popover" role="dialog"
+          aria-label="Criar conteúdo" [isOpen]="creationOpen" [event]="creationEvent"
+          [dismissOnSelect]="false" [animated]="false" side="bottom" alignment="end"
+          (didPresent)="focusCreationLink($event)" (didDismiss)="creationDismissed()">
+          <ng-template>
+            <nav class="content-create-menu" aria-label="Criar conteúdo">
+              <a href="/aprendizado/cursos/novo" (click)="openContent($event, 'course')">Criar curso</a>
+              <a href="/mentorias/novo" (click)="openContent($event, 'mentoring')">Criar mentoria</a>
+            </nav>
+          </ng-template>
+        </ion-popover>
+      </div>
+    </div>
+    <app-feedback-notice [mensagem]="erro" [erro]="true" />
+    <button *ngIf="erro" type="button" class="hipatec-btn-secondary" (click)="carregar()">Tentar novamente</button>
+    <p *ngIf="carregando" role="status">Carregando conteúdos…</p>
     <div class="content-list" *ngIf="conteudos.length > 0">
       <article class="content-card" *ngFor="let item of conteudos">
-        <div class="cover"></div><div><span class="status">Publicado</span><h3>{{ item.titulo }}</h3><p>{{ item.descricao }}</p><small>{{ item.matriculas }} matrículas · {{ item.conclusao }}% concluído</small></div><ion-button fill="outline">Configurar</ion-button>
+        <div class="cover"></div><div><span class="status">Publicado</span><h3>{{ item.titulo }}</h3><p>{{ item.descricao }}</p><small>{{ item.tipo }} · {{ item.formato }}</small></div>
       </article>
     </div>
-    <p class="feed-state" *ngIf="conteudos.length === 0">Nenhum conteúdo cadastrado.</p>
+    <p class="feed-state" *ngIf="!carregando && !erro && conteudos.length === 0">Nenhum conteúdo cadastrado.</p>
   </main>
 </ion-content>

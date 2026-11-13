@@ -1,8 +1,67 @@
-import { Routes } from '@angular/router';
+import { inject } from '@angular/core';
+import { Router, Routes } from '@angular/router';
 import { authGuard } from './services/auth.guard';
 import { guestGuard } from './guards/guest.guard';
 
 export const routes: Routes = [
+  {
+    path: 'configuracoes',
+    canActivate: [authGuard],
+    data: { mode: 'settings' },
+    loadComponent: () => import('./pages/workspace-form/workspace-form.page').then(m => m.WorkspaceFormPage)
+  },
+  {
+    path: 'aprendizado/cursos/novo',
+    canActivate: [authGuard],
+    canDeactivate: [(page: { canLeave(): Promise<boolean> }) => page.canLeave()],
+    data: { mode: 'course', roles: ['mentoras', 'administradores', 'administrador'] },
+    loadComponent: () => import('./pages/content-create/content-create.page').then(m => m.ContentCreatePage)
+  },
+  {
+    path: 'aprendizado/cursos/:id/editar',
+    canActivate: [authGuard],
+    data: { mode: 'course', roles: ['mentoras', 'administradores', 'administrador'] },
+    loadComponent: () => import('./pages/workspace-form/workspace-form.page').then(m => m.WorkspaceFormPage)
+  },
+  {
+    path: 'mentorias/novo',
+    canActivate: [authGuard],
+    canDeactivate: [(page: { canLeave(): Promise<boolean> }) => page.canLeave()],
+    data: { mode: 'mentoring', roles: ['mentoras', 'administradores', 'administrador'] },
+    loadComponent: () => import('./pages/content-create/content-create.page').then(m => m.ContentCreatePage)
+  },
+  {
+    path: 'mentorias/:id/editar',
+    canActivate: [authGuard],
+    data: { mode: 'mentoring', roles: ['mentoras', 'administradores', 'administrador'] },
+    loadComponent: () => import('./pages/workspace-form/workspace-form.page').then(m => m.WorkspaceFormPage)
+  },
+  {
+    path: 'vagas/nova',
+    canActivate: [authGuard],
+    data: { mode: 'job', roles: ['mentoras', 'administradores', 'administrador'] },
+    loadComponent: () => import('./pages/workspace-form/workspace-form.page').then(m => m.WorkspaceFormPage)
+  },
+  {
+    path: 'vagas/:id/editar',
+    canActivate: [authGuard],
+    data: { mode: 'job', roles: ['mentoras', 'administradores', 'administrador'] },
+    loadComponent: () => import('./pages/workspace-form/workspace-form.page').then(m => m.WorkspaceFormPage)
+  },
+  {
+    // Evento novo abre sobre o painel, preservando os demais parâmetros e o fragmento.
+    path: 'calendario/eventos/novo',
+    redirectTo: ({ queryParams, fragment }) => inject(Router).createUrlTree(['/painel'], {
+      queryParams: { ...queryParams, evento: 'novo' }, fragment: fragment ?? undefined
+    }),
+    pathMatch: 'full'
+  },
+  {
+    path: 'calendario/eventos/:id/editar',
+    canActivate: [authGuard],
+    data: { mode: 'event' },
+    loadComponent: () => import('./pages/workspace-form/workspace-form.page').then(m => m.WorkspaceFormPage)
+  },
   {
     path: 'home',
     loadComponent: () => import('./pages/home/home.page').then((m) => m.HomePage),
@@ -35,15 +94,24 @@ export const routes: Routes = [
   {
     path: 'gestao-mentorias',
     canActivate: [authGuard],
+    canDeactivate: [(page: { canLeave(): Promise<boolean> }) => page.canLeave()],
+    data: { roles: ['mentoras', 'administradores', 'administrador'] },
     loadComponent: () => import('./pages/gestao-mentorias/gestao-mentorias.page').then(m => m.GestaoMentoriasPage)
   },
   {
     path: 'admin/perfis',
     canActivate: [authGuard],
+    data: { roles: ['administradores', 'administrador'] },
     loadComponent: () => import('./pages/admin-perfis/admin-perfis.page').then(m => m.AdminPerfisPage)
   },
   {
     path: 'mentorias',
+    pathMatch: 'full',
+    redirectTo: ({ queryParams, fragment }) => inject(Router).createUrlTree(['/painel'], { queryParams, fragment: fragment ?? undefined })
+  },
+  {
+    path: 'painel',
+    title: 'Painel',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/mentorias/mentorias.page').then( m => m.MentoriasPage)
   },
@@ -58,6 +126,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/cadastro/cadastro.page').then( m => m.CadastroPage)
   },
   {
+    path: 'post/:id',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/post-detail/post-detail.page').then(m => m.PostDetailPage)
+  },
+  {
     path: 'profile/:role/:id',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/profile/profile.page').then(m => m.ProfilePage)
@@ -69,9 +142,7 @@ export const routes: Routes = [
   },
   {
     path: 'mentorias/cadastro',
-    canActivate: [authGuard],
-    data: { mentora: true },
-    loadComponent: () => import('./pages/mentorias/cadastro/cadastro.page').then( m => m.CadastroPage)
+    redirectTo: '/mentorias/novo', pathMatch: 'full'
   },
   {
     path: 'forgot-password',

@@ -28,12 +28,8 @@
   display: inline-block;
 
   .profile-avatar {
-    width: 108px;
-    height: 108px;
-    border-radius: 50%;
+    --avatar-size: 108px;
     border: 1px solid #999999;
-    background: #e0e0e0;
-    object-fit: cover;
   }
 }
 
@@ -111,7 +107,7 @@
   .avatar-box {
     top: -48px;
     left: 16px;
-    .profile-avatar { width: 88px; height: 88px; }
+    .profile-avatar { --avatar-size: 88px; }
   }
 
   .btn-edit-profile {

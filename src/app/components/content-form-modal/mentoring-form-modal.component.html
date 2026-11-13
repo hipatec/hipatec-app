@@ -1,0 +1,33 @@
+<app-modal-shell appContentModalFocus titulo="Adicionar mentoria" (fechar)="cancelar()">
+  <app-feedback-notice [mensagem]="erro" [erro]="true" />
+  <form class="content-form" (ngSubmit)="salvar()">
+    <div class="field">
+      <label for="mentoria-titulo">Título da mentoria <span class="required" aria-hidden="true">*</span></label>
+      <input [disabled]="estado.enviando" (blur)="tituloTocado = true" [attr.aria-invalid]="tituloTocado && !form.titulo.trim()" aria-describedby="mentoria-titulo-erro" id="mentoria-titulo" maxlength="160" name="titulo" type="text" autocomplete="off" required placeholder="Ex.: Carreira em tecnologia…"
+        [(ngModel)]="form.titulo" (ngModelChange)="atualizarAlterado()" />
+      @if (tituloTocado && !form.titulo.trim()) { <p id="mentoria-titulo-erro" class="hipatec-state-error">Informe um título.</p> }
+    </div>
+    <div class="field">
+      <label for="mentoria-area">Área</label>
+      <input [disabled]="estado.enviando" id="mentoria-area" maxlength="160" name="area" type="text" autocomplete="off" placeholder="Ex.: Produto, dados, comunicação…"
+        [(ngModel)]="form.area" (ngModelChange)="atualizarAlterado()" />
+    </div>
+    <div class="field">
+      <label for="mentoria-formato">Formato <span class="required" aria-hidden="true">*</span></label>
+      <select [disabled]="estado.enviando" id="mentoria-formato" name="formato" required [(ngModel)]="form.formato" (ngModelChange)="atualizarAlterado()">
+        <option value="" disabled>Selecione</option>
+        <option>Online</option><option>Presencial</option><option>Híbrido</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="mentoria-descricao">Descrição</label>
+      <textarea [disabled]="estado.enviando" id="mentoria-descricao" maxlength="4000" name="descricao" rows="4" placeholder="Explique para quem é a mentoria e o que será desenvolvido." autocomplete="off"
+        [(ngModel)]="form.descricao" (ngModelChange)="atualizarAlterado()"></textarea>
+    </div>
+    <p class="form-hint"><span aria-hidden="true">*</span> Campos obrigatórios.</p>
+  </form>
+  <div modalFooter class="content-actions">
+    <button type="button" class="hipatec-btn-secondary" [disabled]="estado.enviando" (click)="cancelar()">Cancelar</button>
+    <button type="button" class="hipatec-btn-primary" [disabled]="!valido || estado.enviando" (click)="salvar()">Salvar mentoria</button>
+  </div>
+</app-modal-shell>

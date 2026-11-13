@@ -1,0 +1,78 @@
+<app-modal-shell titulo="Adicionar evento" (fechar)="cancelar()">
+  <p class="event-notice" id="evento-aviso">
+    Horários em America/Sao_Paulo. Sem horário, o evento dura o dia inteiro.
+    Público: somente pessoas autenticadas com acesso permitido ao Hipatec. Privado: somente você.
+  </p>
+
+  <form id="evento-form" class="event-form" novalidate (ngSubmit)="salvar()" [attr.aria-busy]="salvando" (input)="atualizarAlterado()" (change)="atualizarAlterado()">
+    <div class="field">
+      <label for="evento-titulo">Nome do evento <span class="required" aria-hidden="true">*</span></label>
+      <input id="evento-titulo" name="titulo" maxlength="160" type="text" autocomplete="off" required
+        placeholder="Ex.: Encontro da comunidade…"
+        [disabled]="salvando" [(ngModel)]="form.titulo"
+        (blur)="tocar('titulo')"
+        [attr.aria-invalid]="erro('titulo') ? 'true' : null"
+        [attr.aria-describedby]="erro('titulo') ? 'evento-titulo-erro' : null" />
+      <p class="field-error" id="evento-titulo-erro" *ngIf="erro('titulo')">{{ erro('titulo') }}</p>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="evento-data">Data <span class="required" aria-hidden="true">*</span></label>
+        <input id="evento-data" name="data" type="date" min="2000-01-01" max="2100-12-31" required
+          [disabled]="salvando" [(ngModel)]="form.data"
+        (blur)="tocar('data')"
+          [attr.aria-invalid]="erro('data') ? 'true' : null"
+          [attr.aria-describedby]="erro('data') ? 'evento-data-erro' : null" />
+        <p class="field-error" id="evento-data-erro" *ngIf="erro('data')">{{ erro('data') }}</p>
+      </div>
+
+      <div class="field">
+        <label for="evento-horario">Horário (opcional)</label>
+        <input id="evento-horario" name="horario" type="time"
+          [disabled]="salvando" [(ngModel)]="form.horario"
+        (blur)="tocar('horario')"
+          [attr.aria-invalid]="erro('horario') ? 'true' : null"
+          [attr.aria-describedby]="erro('horario') ? 'evento-horario-erro' : null" />
+        <p class="field-error" id="evento-horario-erro" *ngIf="erro('horario')">{{ erro('horario') }}</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="evento-local">Local ou link</label>
+      <input id="evento-local" name="local" maxlength="1000" type="text" autocomplete="off" spellcheck="false"
+        placeholder="Endereço ou URL da transmissão…"
+        [disabled]="salvando" [(ngModel)]="form.local" [attr.aria-invalid]="erro('local') ? true : null" aria-describedby="evento-local-erro" />
+      <p id="evento-local-erro" class="field-error" *ngIf="erro('local')">{{ erro('local') }}</p>
+    </div>
+
+    <div class="field">
+      <label for="evento-descricao">Descrição</label>
+      <textarea id="evento-descricao" name="descricao" maxlength="4000" rows="4"
+        placeholder="Adicione as informações principais do evento…"
+        [disabled]="salvando" [(ngModel)]="form.descricao" [attr.aria-invalid]="erro('descricao') ? true : null" aria-describedby="evento-descricao-erro"></textarea>
+      <p id="evento-descricao-erro" class="field-error" *ngIf="erro('descricao')">{{ erro('descricao') }}</p>
+    </div>
+
+    <div class="field" *ngIf="podePublicar; else visibilidadeEstudante">
+      <label for="evento-privacidade">Visibilidade</label>
+      <select [attr.aria-invalid]="erro('visibilidade') ? true : null" aria-describedby="evento-visibilidade-erro" id="evento-privacidade" name="privacidade" [disabled]="salvando" [(ngModel)]="form.privacidade">
+        <option value="Privado">Privado</option>
+        <option value="Público">Público</option>
+      </select>
+      <p id="evento-visibilidade-erro" class="field-error" *ngIf="erro('visibilidade')">{{ erro('visibilidade') }}</p>
+    </div>
+    <ng-template #visibilidadeEstudante>
+      <p class="field-hint">Seus eventos ficam privados.</p>
+    </ng-template>
+
+    <p class="form-hint"><span aria-hidden="true">*</span> Campos obrigatórios.</p>
+    <p class="field-error" role="alert" *ngIf="erroSalvar">{{ erroSalvar }}</p>
+  </form>
+
+  <div modalFooter class="event-actions">
+    <button type="button" class="hipatec-btn-secondary evento-cancelar" [disabled]="salvando" (click)="cancelar()">Cancelar</button>
+    <button type="submit" form="evento-form" class="hipatec-btn-primary evento-salvar" [disabled]="salvando || !formularioValido">
+      {{ salvando ? 'Salvando…' : 'Salvar evento' }}</button>
+  </div>
+</app-modal-shell>

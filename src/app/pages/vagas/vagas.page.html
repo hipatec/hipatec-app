@@ -1,4 +1,5 @@
 <ion-content class="vagas-content">
+<app-feedback-notice [mensagem]="aviso" />
   <main class="vagas-shell">
     <header class="vagas-header">
       <div>
@@ -18,6 +19,7 @@
             <h2 id="resultados-title">Oportunidades abertas</h2>
             <span>{{ vagasFiltradas.length }} vagas encontradas</span>
           </div>
+          <ion-button *ngIf="podePublicarVaga" fill="solid" size="small" routerLink="/vagas/nova">Adicionar vaga</ion-button>
           <ion-button fill="clear" class="mobile-filter-button" (click)="limparFiltros()">
             <ion-icon slot="start" name="funnel-outline"></ion-icon>
             Limpar filtros

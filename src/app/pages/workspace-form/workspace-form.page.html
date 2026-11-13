@@ -1,0 +1,52 @@
+<ion-content [fullscreen]="true" class="workspace-content">
+  <main class="workspace-shell">
+    <a class="back-link" [routerLink]="config.back">Voltar</a>
+
+    <section class="form-card" aria-labelledby="form-title">
+      <div class="form-heading">
+        <span class="eyebrow">Hipatec</span>
+        <h1 id="form-title">{{ config.title }}</h1>
+        <p>{{ config.subtitle }}</p>
+      </div>
+
+      <p *ngIf="loading" role="status">Carregando seus dados…</p>
+      <div *ngIf="mode === 'settings' && !loading && !loaded" role="alert">
+        <p>{{ formError }}</p><button type="button" (click)="carregarConfiguracoes()">Tentar novamente</button>
+      </div>
+      <form *ngIf="mode !== 'settings' || loaded" (ngSubmit)="save()" #workspaceForm="ngForm">
+        <div class="fields-grid">
+          <ng-container *ngFor="let field of config.fields">
+            <div class="field" [class.field-wide]="field.type === 'textarea'" *ngIf="campoVisivel(field)">
+            <label [for]="field.key">{{ field.label }}<strong *ngIf="field.required"> *</strong></label>
+            <textarea [id]="field.key" *ngIf="field.type === 'textarea'" [name]="field.key" [attr.name]="field.key" [(ngModel)]="form[field.key]" (ngModelChange)="onFieldChange(field.key, $event)" [placeholder]="field.placeholder || ''" [required]="field.required || false" rows="5"></textarea>
+            <select [id]="field.key" *ngIf="field.type === 'select'" [name]="field.key" [attr.name]="field.key" [(ngModel)]="form[field.key]" (ngModelChange)="onFieldChange(field.key, $event)" [required]="field.required || false" [disabled]="(field.key === 'estado' || field.key === 'cidade') && !form[field.key === 'estado' ? 'pais' : 'estado']">
+              <option value="">Selecione uma opção</option>
+              <option *ngFor="let option of optionsFor(field)" [value]="option">{{ option }}</option>
+            </select>
+            <input [id]="field.key" *ngIf="field.type !== 'password' && field.type !== 'textarea' && field.type !== 'select'" [type]="field.type || 'text'" [name]="field.key" [attr.name]="field.key" [(ngModel)]="form[field.key]" (ngModelChange)="onFieldChange(field.key, $event)" [placeholder]="field.placeholder || ''" [required]="field.required || false" />
+            <app-password-field *ngIf="field.type === 'password'">
+              <input [id]="field.key" type="password" [name]="field.key" [attr.name]="field.key" [(ngModel)]="form[field.key]" (ngModelChange)="onFieldChange(field.key, $event)" [placeholder]="field.placeholder || ''" autocomplete="new-password" [disabled]="saving" />
+            </app-password-field>
+          </div>
+          </ng-container>
+        </div>
+
+        <p class="form-error" *ngIf="formError" role="alert">{{ formError }}</p>
+
+        <p *ngIf="saved" role="status">{{ mode === 'settings' ? 'Dados confirmados pelo servidor.' : 'Rascunho salvo apenas neste navegador. Não foi enviado ao servidor.' }}</p>
+        <div class="form-actions">
+          <button type="button" class="button-secondary" (click)="cancelar()">Cancelar</button>
+          <button type="submit" class="button-primary" [disabled]="workspaceForm.invalid || saving || loading">{{ saving ? 'Salvando…' : 'Salvar' }}</button>
+        </div>
+
+        <div class="danger-zone" *ngIf="mode === 'settings'">
+          <div>
+            <h2>Excluir conta</h2>
+            <p>A exclusão pela aplicação ainda não está disponível. Sua conta permanece ativa.</p>
+          </div>
+          <button type="button" class="button-danger" (click)="excluirConta()">Excluir conta</button>
+        </div>
+      </form>
+    </section>
+  </main>
+</ion-content>

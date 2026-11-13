@@ -1,0 +1,26 @@
+<button type="button" class="author" [attr.aria-label]="'Abrir perfil de ' + nome" (click)="autorClick.emit($event)">
+  <app-avatar [src]="avatar" [nome]="nome" />
+  <span class="author-text">
+    <span class="author-name">{{ nome }}</span>
+    @if (funcaoLabel) {
+      <span class="author-role">{{ funcaoLabel }}</span>
+    }
+  </span>
+</button>
+
+@if (tempo) {
+  <time class="time">{{ tempo }}</time>
+}
+
+@if (menu) {
+  <button #gatilho type="button" class="btn-options" aria-haspopup="menu"
+    [attr.aria-expanded]="aberto"
+    [attr.aria-label]="'Mais opções da publicação de ' + nome"
+    (click)="alternarMenu()">
+    <ion-icon name="ellipsis-horizontal" aria-hidden="true"></ion-icon>
+  </button>
+  <div #menuEl class="hipatec-menu menu" role="menu" [attr.aria-label]="'Opções da publicação de ' + nome"
+    [hidden]="!aberto" (click)="aoEscolherItem(); $event.stopPropagation()" (keydown)="navegarMenu($event)">
+    <ng-content />
+  </div>
+}

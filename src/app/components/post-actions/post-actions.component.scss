@@ -1,0 +1,49 @@
+:host {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--hipatec-space-2);
+  margin-top: var(--hipatec-space-3);
+}
+
+.action-btn,
+.action-static {
+  align-items: center;
+  border-radius: var(--hipatec-radius-pill);
+  color: var(--hipatec-color-text-muted);
+  display: inline-flex;
+  font: inherit;
+  font-size: 13px;
+  gap: 6px;
+  min-height: var(--hipatec-target-min);
+  padding: 0 12px;
+
+  ion-icon { font-size: 18px; }
+}
+
+.action-btn {
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease;
+
+  &:hover {
+    background: var(--hipatec-color-surface-soft);
+    color: var(--hipatec-color-brand);
+  }
+}
+
+.action-count { font-variant-numeric: tabular-nums; }
+
+.btn-like.active-like { color: var(--hipatec-color-brand); }
+.btn-like.active-like ion-icon { transform: scale(1.15); }
+.btn-like ion-icon { transition: transform 200ms cubic-bezier(.175, .885, .32, 1.275); }
+
+.active-repost { color: var(--hipatec-color-success); }
+
+@media (max-width: 768px) {
+  :host { gap: var(--hipatec-space-1); margin-top: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-like ion-icon { transition: none; }
+}

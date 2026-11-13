@@ -1,3 +1,5 @@
+import { PasswordFieldComponent } from '../../components/password-field/password-field.component';
+import { QueryList, ViewChildren } from '@angular/core';
 import { Component, OnDestroy, inject } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
@@ -14,9 +16,11 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './forgot-password.page.html',
   styleUrls: ['./forgot-password.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule]
+  imports: [PasswordFieldComponent, IonicModule, CommonModule, FormsModule, RouterModule]
 })
 export class ForgotPasswordPage implements OnDestroy {
+  @ViewChildren(PasswordFieldComponent) passwordFields?: QueryList<PasswordFieldComponent>;
+
   private readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly location = inject(Location);
@@ -66,6 +70,7 @@ export class ForgotPasswordPage implements OnDestroy {
   }
 
   ionViewWillLeave(): void {
+    this.passwordFields?.forEach(field => field.hide());
     this.requisicao?.unsubscribe();
     this.enviando = false;
     this.token = '';

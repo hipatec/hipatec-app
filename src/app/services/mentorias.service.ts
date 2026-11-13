@@ -5,12 +5,20 @@ import { environment } from '../../environments/environment';
 
 export interface Mentoria {
   id?: number;
+  idMentora?: number;
+  area?: string;
+  formato?: string;
+  requisicaoId?: string;
   titulo: string;
   descricao?: string;
   progresso?: number;
 }
 
 export interface MentoriaCreate {
+  idMentora?: number;
+  area?: string;
+  formato?: string;
+  requisicaoId?: string;
   titulo: string;
   descricao?: string;
   progresso?: number;

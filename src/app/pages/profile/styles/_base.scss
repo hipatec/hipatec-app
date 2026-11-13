@@ -9,8 +9,9 @@
 
 .main-layout-wrapper {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--hipatec-content-max);
   margin: 0 auto;
+  padding-inline: var(--hipatec-content-padding);
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -32,6 +33,6 @@
     padding: 20px 0;
   }
 
-  .main-layout-wrapper { width: 100%; }
+  .main-layout-wrapper { width: 100%; padding-inline: 0; }
   .header-container { border-radius: 16px; padding: 12px; }
 }

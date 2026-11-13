@@ -113,24 +113,7 @@ ion-toolbar {
   overflow: hidden;
   width: 36px;
 
-  img {
-    display: block;
-    height: 100%;
-    object-fit: cover;
-    width: 100%;
-  }
-
-  .navbar-avatar-initials {
-    align-items: center;
-    background: #eee8f7;
-    color: #472b7a;
-    display: flex;
-    font-size: 13px;
-    font-weight: 700;
-    height: 100%;
-    justify-content: center;
-    width: 100%;
-  }
+  app-avatar { --avatar-size: 100%; font-size: 13px; }
 
   &:focus-visible {
     outline: 2px solid #7b59b8;
@@ -148,6 +131,13 @@ ion-button {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
   text-transform: none;
+}
+
+/* O fundo de foco do Ionic é transparente aqui; o anel substitui o indicador. */
+ion-button.ion-focused {
+  border-radius: var(--hipatec-radius-sm);
+  outline: var(--hipatec-focus-width) solid var(--hipatec-focus-ring);
+  outline-offset: var(--hipatec-focus-offset);
 }
 
 .notificacoes-popover {

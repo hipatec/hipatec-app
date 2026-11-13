@@ -1,155 +1,31 @@
+/* Cabeçalho, ações, avatar, menu e estados vêm dos componentes/padrões compartilhados. */
 .feed-container {
-  background: #ffffff;
+  background: var(--hipatec-color-surface);
   border-radius: 24px;
   box-sizing: border-box;
   margin-top: 15px;
-  padding: 40px 80px;
+  padding: 12px 80px 40px;
   width: 100%;
 }
 
-.feed-state {
-  color: #666666;
-  font-family: 'Roboto', sans-serif;
-  font-size: 14px;
-  padding: 24px 12px;
-  text-align: center;
-}
-
 .post-card {
-  background: #ffffff;
-  border-radius: 12px;
+  background: var(--hipatec-color-surface);
+  border-radius: var(--hipatec-radius-md);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
   margin-bottom: 20px;
-  padding: 16px;
+  padding: var(--hipatec-space-4);
 
   &:last-child { margin-bottom: 0; }
 
-  .post-header {
-    align-items: center;
-    display: flex;
-    margin-bottom: 12px;
-    position: relative;
-
-    .post-avatar-placeholder {
-      align-items: center;
-      background: #ffffff;
-      border: 1px solid #999999;
-      border-radius: 50%;
-      display: flex;
-      height: 36px;
-      justify-content: center;
-      margin-right: 12px;
-      overflow: hidden;
-      width: 36px;
-
-      img { height: 100%; object-fit: cover; width: 100%; }
-
-      .avatar-initials {
-        align-items: center;
-        background: #eee8f7;
-        color: #472b7a;
-        display: flex;
-        font-size: 12px;
-        font-weight: 700;
-        height: 100%;
-        justify-content: center;
-        width: 100%;
-      }
-    }
-
-    .post-meta {
-      display: flex;
-      flex-direction: column;
-
-      .post-author { color: #472b7a; font-size: 14px; font-weight: 700; }
-      .post-role { color: #7b59b8; font-size: 12px; }
-    }
-
-    .post-time { color: #666666; font-size: 11px; margin-left: auto; margin-right: 35px; }
-
-    .btn-options {
-      align-items: center;
-      background: transparent;
-      border: 0;
-      border-radius: 50%;
-      color: #666666;
-      cursor: pointer;
-      display: flex;
-      height: 32px;
-      justify-content: center;
-      padding: 0;
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 32px;
-
-      ion-icon { font-size: 20px; }
-      &:hover, &:focus-visible { background: #f1ecf8; color: #472b7a; outline: none; }
-    }
-
-    .post-menu {
-      background: #ffffff;
-      border: 1px solid #e5def0;
-      border-radius: 12px;
-      box-shadow: 0 14px 28px rgba(54, 34, 86, 0.18);
-      min-width: 220px;
-      padding: 6px;
-      position: absolute;
-      right: 0;
-      top: 38px;
-      z-index: 3;
-
-      button {
-        align-items: center;
-        background: transparent;
-        border: 0;
-        border-radius: 8px;
-        color: #4b3d57;
-        cursor: pointer;
-        display: flex;
-        font-size: 13px;
-        gap: 10px;
-        padding: 11px 12px;
-        text-align: left;
-        width: 100%;
-
-        ion-icon { color: #8b3d5c; font-size: 17px; }
-        &.post-menu-danger { color: #8b3d5c; }
-        &:hover, &:focus-visible { background: #f7edf3; color: #8b3d5c; outline: none; }
-      }
-    }
-  }
+  .post-header { margin-bottom: var(--hipatec-space-3); }
 
   .post-body .post-text {
     color: #444444;
     font-size: 16px;
     line-height: 1.55;
-    margin: 0 0 12px;
-  }
-
-  .post-actions {
-    display: flex;
-    gap: 8px;
-    margin-top: 15px;
-
-    .action-btn {
-      align-items: center;
-      background: transparent;
-      border: 0;
-      border-radius: 20px;
-      color: #666666;
-      cursor: pointer;
-      display: flex;
-      font-size: 13px;
-      gap: 6px;
-      padding: 6px 12px;
-
-      ion-icon { font-size: 18px; }
-      &:hover, &:focus-visible { color: #472b7a; outline: none; }
-    }
-
-    .btn-like.active-like { color: #472b7a; }
-    .btn-repost.active-repost, .btn-repost-comment.active-repost { color: #2d8f68; }
+    margin: 0 0 var(--hipatec-space-3);
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
   }
 }
 
@@ -163,7 +39,7 @@
     border-radius: 0;
     box-shadow: none;
     margin-bottom: 6px;
-    padding: 12px 16px;
+    padding: var(--hipatec-space-3) var(--hipatec-space-4);
   }
 
   .post-body .post-text { font-size: 15px; }

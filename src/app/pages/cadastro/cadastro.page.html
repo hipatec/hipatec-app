@@ -23,31 +23,31 @@
       </ion-segment>
 
       <div class="input-group">
-        <label>Nome completo</label>
-        <input type="text" required [(ngModel)]="nome" placeholder="digite seu nome completo" />
+        <label for="cadastro-nome">Nome completo</label>
+        <input type="text" required id="cadastro-nome" name="nome" aria-describedby="cadastro-nome-erro" [attr.aria-invalid]="tentou && !nome ? true : null" [(ngModel)]="nome" placeholder="digite seu nome completo" /><p id="cadastro-nome-erro" class="hipatec-state-error" role="alert" *ngIf="tentou && !nome">Preencha este campo.</p>
       </div>
 
       <div class="input-group">
-        <label>Data de nascimento</label>
-        <input type="text" required [(ngModel)]="dataNascimento" placeholder="dd / mm / aaaa" onfocus="(this.type='date')" onblur="(this.type='text')" />
+        <label for="cadastro-dataNascimento">Data de nascimento</label>
+        <input type="text" required id="cadastro-dataNascimento" name="dataNascimento" aria-describedby="cadastro-dataNascimento-erro" [attr.aria-invalid]="tentou && !dataNascimento ? true : null" [(ngModel)]="dataNascimento" placeholder="dd / mm / aaaa" onfocus="(this.type='date')" onblur="(this.type='text')" /><p id="cadastro-dataNascimento-erro" class="hipatec-state-error" role="alert" *ngIf="tentou && !dataNascimento">Preencha este campo.</p>
       </div>
 
       <div class="input-group">
-        <label>Email</label>
-        <input type="email" required [(ngModel)]="email" placeholder="seuemail@exemplo.com" />
+        <label for="cadastro-email">Email</label>
+        <input type="email" required id="cadastro-email" name="email" aria-describedby="cadastro-email-erro" [attr.aria-invalid]="tentou && !email ? true : null" [(ngModel)]="email" placeholder="seuemail@exemplo.com" /><p id="cadastro-email-erro" class="hipatec-state-error" role="alert" *ngIf="tentou && !email">Preencha este campo.</p>
       </div>
 
       <div class="input-group">
-        <label>Usuário</label>
-        <input type="text" required [(ngModel)]="usuario" placeholder="digite seu usuário" />
+        <label for="cadastro-usuario">Usuário</label>
+        <input type="text" required id="cadastro-usuario" name="usuario" aria-describedby="cadastro-usuario-erro" [attr.aria-invalid]="tentou && !usuario ? true : null" [(ngModel)]="usuario" placeholder="digite seu usuário" /><p id="cadastro-usuario-erro" class="hipatec-state-error" role="alert" *ngIf="tentou && !usuario">Preencha este campo.</p>
       </div>
 
       <div class="input-group">
-        <label>Senha</label>
-        <input type="password" required [(ngModel)]="senha" placeholder="digite sua senha" />
+        <label for="cadastro-password">Senha</label>
+        <app-password-field [resetKey]="role"><input id="cadastro-password" aria-describedby="cadastro-senha-erro" [attr.aria-invalid]="tentou && !senha ? true : null" name="senha" autocomplete="new-password" type="password" required [(ngModel)]="senha" placeholder="digite sua senha" /></app-password-field><p id="cadastro-senha-erro" class="hipatec-state-error" role="alert" *ngIf="tentou && !senha">Informe sua senha.</p>
       </div>
 
-      <button class="btn-register" (click)="cadastrar()">Cadastrar</button>
+      <p class="hipatec-state-error" role="alert" *ngIf="erro">{{ erro }}</p><button type="button" class="btn-register" [disabled]="enviando" (click)="cadastrar()">{{ enviando ? 'Enviando…' : 'Cadastrar' }}</button>
 
       <div class="register-footer-links">
         <a class="footer-link" routerLink="/login">Já possui uma conta?</a>

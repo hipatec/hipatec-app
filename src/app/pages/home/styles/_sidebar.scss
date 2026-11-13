@@ -14,59 +14,72 @@
   }
 }
 
+.sidebar-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Item inteiro abre o perfil (link esticado); o botão Seguir fica acima, sem aninhar interativos. */
 .sidebar-item {
-  display: flex;
   align-items: center;
+  column-gap: 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
   padding: 12px 20px;
-  gap: 12px;
-  cursor: pointer;
+  position: relative;
   transition: background-color 0.2s;
 
-  &:hover {
-    background-color: #f9f9f9;
-  }
+  &:hover { background-color: #f9f7fc; }
 }
 
-.item-avatar-button {
+.item-link {
   align-items: center;
-  background: #eee8f7;
-  border: 1px solid #d7c9ed;
-  border-radius: 50%;
-  color: #472b7a;
-  cursor: pointer;
-  display: flex;
-  flex: 0 0 40px;
-  height: 40px;
-  justify-content: center;
-  overflow: hidden;
-  padding: 0;
-  width: 40px;
-
-  img { height: 100%; object-fit: cover; width: 100%; }
-}
-
-.item-info {
-  align-items: flex-start;
   background: transparent;
   border: 0;
+  border-radius: var(--hipatec-radius-sm);
+  color: inherit;
   cursor: pointer;
   display: flex;
-  flex-direction: column;
-  flex-grow: 1;
+  font: inherit;
+  gap: 12px;
+  min-height: var(--hipatec-target-min);
   min-width: 0;
   padding: 0;
   text-align: left;
+
+  &::after {
+    content: '';
+    inset: 0;
+    position: absolute;
+  }
+
+  &:hover .item-name { text-decoration: underline; }
 }
 
-.avatar-initials {
-  align-items: center;
-  color: #472b7a;
+.item-avatar { --avatar-size: 40px; }
+
+.item-info {
   display: flex;
-  font-size: 13px;
-  font-weight: 700;
-  height: 100%;
-  justify-content: center;
-  width: 100%;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.item-error {
+  color: var(--hipatec-color-danger);
+  font-size: 12px;
+  grid-column: 1 / -1;
+  line-height: 1.4;
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+}
+
+.item-name,
+.item-handle {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .item-name {
@@ -85,20 +98,31 @@
 .btn-follow {
   background-color: #472b7a;
   color: #ffffff;
-  border: none;
+  border: 1px solid #472b7a;
   border-radius: 8px; /* Combinando com o seu .btn-edit-profile */
   padding: 0 16px;
   font-family: 'Roboto', sans-serif;
   font-weight: 400;
   font-size: 13px;
-  height: 32px;
+  min-height: var(--hipatec-target-min);
+  min-width: 88px;
   cursor: pointer;
   box-shadow: 0 4px 12px rgba(71, 43, 122, 0.2);
-  transition: background-color 0.2s;
+  position: relative; /* acima do link esticado do item */
+  transition: background-color 0.2s, color 0.2s;
+  z-index: 1;
 
-  &:hover {
-    background-color: #382260;
+  &:hover { background-color: #382260; }
+
+  &.following {
+    background-color: #ffffff;
+    box-shadow: none;
+    color: #472b7a;
+
+    &:hover { background-color: var(--hipatec-color-surface-soft); }
   }
+
+  &[aria-busy='true'] { cursor: progress; opacity: .7; }
 }
 
 .sidebar-more {
@@ -111,13 +135,15 @@
     cursor: pointer;
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
+    min-height: var(--hipatec-target-min);
     padding: 0;
 
     &:hover,
     &:focus-visible {
       color: #472b7a;
       text-decoration: underline;
-      outline: none;
     }
   }
 }
+
+.sidebar-card.hipatec-state { padding: var(--hipatec-space-5) 20px; }

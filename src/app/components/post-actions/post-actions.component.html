@@ -1,0 +1,45 @@
+<button type="button" class="action-btn btn-like"
+  [disabled]="curtidaDesconhecida || post.interacaoPendente || post.originalIndisponivel"
+  [class.active-like]="post.curtidoUsuario"
+  [attr.aria-pressed]="curtidaDesconhecida ? null : post.curtidoUsuario"
+  [attr.aria-label]="'Curtir publicação de ' + autor"
+  (click)="curtir.emit()">
+  <ion-icon [icon]="post.curtidoUsuario ? iconeCurtido : iconeCurtir" aria-hidden="true"></ion-icon>
+  <span class="action-count">{{ post.interacoesDesconhecidas ? '—' : (post.curtidas ?? '—') }}</span>
+</button>
+
+<button type="button" class="action-btn btn-comment" [disabled]="post.originalIndisponivel || post.repostPendente"
+  [attr.aria-label]="'Comentar publicação de ' + autor"
+  (click)="comentar.emit()">
+  <ion-icon [icon]="iconeComentar" aria-hidden="true"></ion-icon>
+  <span class="action-count">{{ post.interacoesDesconhecidas ? '—' : (post.comentarios ?? '—') }}</span>
+</button>
+
+@if (repostavel) {
+  <button type="button" class="action-btn btn-repost" [disabled]="repostDesconhecido || post.interacaoPendente || post.originalIndisponivel || post.repostPendente"
+    [class.active-repost]="post.repostadoUsuario"
+    [attr.aria-pressed]="repostDesconhecido ? null : post.repostadoUsuario"
+    [attr.aria-label]="'Repostar publicação de ' + autor"
+    (click)="repostar.emit()">
+    <ion-icon [icon]="iconeRepostar" aria-hidden="true"></ion-icon>
+    <span class="action-count">{{ post.interacoesDesconhecidas ? '—' : (post.reposts ?? '—') }}</span>
+  </button>
+  <button type="button" class="action-btn btn-repost-comment" [disabled]="post.originalIndisponivel || post.repostPendente"
+    [class.active-repost]="post.repostadoUsuario"
+    [attr.aria-label]="'Comentar e repostar publicação de ' + autor"
+    (click)="repostarComComentario.emit()">
+    <ion-icon [icon]="iconeRepostar" aria-hidden="true"></ion-icon>
+    <span>Comentar</span>
+  </button>
+} @else {
+  <span class="action-static">
+    <ion-icon [icon]="iconeRepostar" aria-hidden="true"></ion-icon>
+    <span class="action-count">{{ post.interacoesDesconhecidas ? '—' : (post.reposts ?? '—') }}</span>
+    <span class="hipatec-visually-hidden">republicações</span>
+  </span>
+}
+
+@if (post.interacoesDesconhecidas) {
+  <span role="status">Interações desconhecidas.</span>
+  <button type="button" class="action-btn retry-interactions" [disabled]="post.interacaoPendente" (click)="recuperar.emit()">{{ post.interacaoPendente ? 'Atualizando…' : 'Tentar novamente' }}</button>
+}

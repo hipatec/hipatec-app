@@ -8,8 +8,8 @@
     </ion-buttons>
 
     <div class="search-box desktop-only">
-      <ion-searchbar placeholder="digite aqui para buscar..." class="custom-search"></ion-searchbar>
-      <ion-icon name="star-outline" class="star-icon"></ion-icon>
+      <ion-searchbar placeholder="digite aqui para buscar..." aria-label="Buscar" class="custom-search"></ion-searchbar>
+      <ion-icon name="star-outline" class="star-icon" aria-hidden="true"></ion-icon>
     </div>
 
     <ion-buttons slot="end" class="nav-actions">
@@ -17,22 +17,26 @@
       <ion-button class="desktop-only" (click)="aprendizadoPopover.present($event)" fill="clear">Aprendizado</ion-button>
       <ion-button class="desktop-only" (click)="goToVagas()" fill="clear">Vagas</ion-button>
 
-      <ion-button id="notification-trigger" class="notification-button" fill="clear" aria-label="Notificações" (click)="marcarNotificacoesComoLidas()">
+      <ion-button class="notification-button" fill="clear" aria-label="Notificações" aria-haspopup="dialog" (click)="notificationPopover.present($event); marcarNotificacoesComoLidas()">
         <ion-icon name="notifications-outline" aria-hidden="true"></ion-icon>
         <ion-badge *ngIf="notificacoesNaoLidas > 0" class="notification-badge">{{ notificacoesNaoLidas }}</ion-badge>
       </ion-button>
 
       <ion-avatar class="user-avatar" (click)="menuPopover.present($event)" (keydown.enter)="menuPopover.present()" (keydown.space)="menuPopover.present()" role="button" tabindex="0" aria-label="Abrir menu do perfil">
-        <img *ngIf="profileImage" [src]="profileImage" alt="Foto do perfil" (error)="profileImage = ''" />
-        <span *ngIf="!profileImage" class="navbar-avatar-initials">{{ iniciais(profileName) }}</span>
+        <app-avatar [src]="profileImage" [nome]="profileName" />
       </ion-avatar>
     </ion-buttons>
       
-    <ion-popover class="notificacoes-popover" trigger="notification-trigger" side="bottom" alignment="end" arrow="true">
+    <ion-popover #notificationPopover class="notificacoes-popover" side="bottom" alignment="end" arrow="true">
       <ng-template>
         <ion-content>
           <ion-list lines="none">
-            <ion-list-header>Notificações</ion-list-header>
+            <ion-list-header class="notifications-header">
+              <ion-label>Notificações</ion-label>
+              <ion-button fill="clear" size="small" aria-label="Fechar notificações" (click)="notificationPopover.dismiss()">
+                <ion-icon name="close" aria-hidden="true"></ion-icon>
+              </ion-button>
+            </ion-list-header>
             <ion-item *ngFor="let notificacao of notificacoes; let i = index">
               <ion-icon name="notifications-outline" slot="start" aria-hidden="true"></ion-icon>
               <ion-label>{{ notificacao.texto }}</ion-label>
@@ -123,4 +127,4 @@
     </ion-popover>
 
   </ion-toolbar>
-</ion-header>
+<app-feedback-notice [mensagem]="erroLogout" [erro]="true" /></ion-header>

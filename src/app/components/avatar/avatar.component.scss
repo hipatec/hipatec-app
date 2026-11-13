@@ -1,0 +1,25 @@
+:host {
+  align-items: center;
+  background: var(--hipatec-color-surface-tint);
+  border-radius: 50%;
+  box-sizing: border-box;
+  color: var(--hipatec-color-brand);
+  display: inline-flex;
+  flex: 0 0 var(--avatar-size, 40px);
+  font-size: calc(var(--avatar-size, 40px) * .34);
+  font-weight: 700;
+  height: var(--avatar-size, 40px);
+  justify-content: center;
+  line-height: 1;
+  overflow: hidden;
+  width: var(--avatar-size, 40px);
+}
+
+img {
+  display: block;
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.avatar-initials { user-select: none; }

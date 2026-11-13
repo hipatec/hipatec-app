@@ -1,50 +1,57 @@
 <ion-header class="ion-no-border">
   <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-button (click)="fechar()">
-        <ion-icon [icon]="iconeFechar"></ion-icon>
+    <ion-buttons slot="end">
+      <ion-button (click)="fechar()" aria-label="Fechar">
+        <ion-icon name="close" slot="icon-only" aria-hidden="true"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title class="draft-title">{{ modoRepost ? 'Republicar' : 'Publicação' }}</ion-title>
+    <ion-title *ngIf="!modoRepost" class="draft-title">Publicação</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="replying-to">
-    {{ modoRepost ? 'Adicione um comentário antes de republicar' : 'Comentários da publicação' }}
+  <div class="replying-to" *ngIf="!modoRepost">
+    {{ postSelecionado?.repostOriginalId ? 'Comentários da publicação original' : 'Comentários da publicação' }}
+  </div>
+
+  <div class="post-input-area repost-input" *ngIf="modoRepost">
+    <app-avatar class="post-avatar" [src]="usuarioAtualFoto" [nome]="usuarioAtualNome" />
+    <div class="composer-copy">
+      <strong>{{ usuarioAtualNome }}</strong>
+      <textarea [(ngModel)]="texto" aria-label="Comentário da republicação" placeholder="Adicione um comentário à republicação…" rows="2" maxlength="500"></textarea>
+    </div>
   </div>
 
   <div class="post-preview" *ngIf="postSelecionado">
-    <div class="post-preview-avatar">
-      <img *ngIf="autorFoto" [src]="autorFoto" [alt]="autorNome" />
-      <span *ngIf="!autorFoto">{{ iniciais(autorNome) }}</span>
-    </div>
+    <app-avatar class="post-preview-avatar" [src]="autorFoto" [nome]="autorNome" />
     <div class="post-preview-content">
       <strong>{{ autorNome }}</strong>
-      <p>{{ textoPost }}</p>
+      <app-post-content [post]="postSelecionado" />
     </div>
   </div>
 
-  <ng-container *ngIf="!modoRepost">
+  <p *ngIf="erro" role="alert">{{ erro }}</p>
+  <p *ngIf="erroCarregamento" role="alert">{{ erroCarregamento }}</p>
+  <ng-container *ngIf="!modoRepost && postId">
     <div class="comments-list" *ngIf="!carregando && comentarios.length > 0">
     <article class="comment-item" *ngFor="let comentario of comentarios">
-      <div class="comment-avatar">
-        <img *ngIf="comentario.autorFoto" [src]="comentario.autorFoto" [alt]="comentario.autorNome || 'Usuário'" />
-        <span *ngIf="!comentario.autorFoto">{{ iniciais(comentario.autorNome) }}</span>
-      </div>
+      <app-avatar class="comment-avatar" [src]="comentario.autorFoto" [nome]="comentario.autorNome" />
       <div class="comment-copy">
         <strong>{{ comentario.autorNome }}</strong>
         <p>{{ comentario.texto }}</p>
       </div>
     </article>
   </div>
-  <p class="comments-state" *ngIf="carregando">Carregando comentários...</p>
-    <p class="comments-state" *ngIf="!carregando && comentarios.length === 0">Ainda não há comentários.</p>
+  <p class="comments-state" *ngIf="carregando" role="status" aria-live="polite">Carregando comentários...</p>
+    <p class="comments-state" *ngIf="!carregando && !erroCarregamento && comentarios.length === 0">Ainda não há comentários.</p>
   </ng-container>
 
-  <div class="post-input-area">
-    <div class="post-avatar"></div>
-    <textarea [(ngModel)]="texto" [placeholder]="modoRepost ? 'Adicione um comentário à republicação...' : 'Escreva um comentário...'" rows="4" maxlength="500"></textarea>
+  <div class="post-input-area" *ngIf="!modoRepost && postId">
+    <app-avatar class="post-avatar" [src]="usuarioAtualFoto" [nome]="usuarioAtualNome" />
+    <div class="composer-copy">
+      <strong>{{ usuarioAtualNome }}</strong>
+      <textarea [(ngModel)]="texto" aria-label="Escreva um comentário" placeholder="Escreva um comentário…" rows="2" maxlength="500"></textarea>
+    </div>
   </div>
 </ion-content>
 
@@ -52,12 +59,12 @@
   <ion-toolbar>
     <div class="post-actions-footer">
       <div class="icons-group">
-        <ion-button fill="clear" class="icon-btn" aria-label="Adicionar imagem">
-          <ion-icon [icon]="iconeImagem"></ion-icon>
+        <ion-button fill="clear" class="icon-btn" aria-label="Anexos a comentários ainda não disponíveis" [disabled]="true">
+          <ion-icon name="image-outline" slot="icon-only" aria-hidden="true"></ion-icon>
         </ion-button>
       </div>
-      <button class="btn-submit-post" type="button" [disabled]="enviando || !texto.trim()" (click)="enviar()">
-        {{ enviando ? 'Enviando...' : (modoRepost ? 'Republicar' : 'Comentar') }}
+      <button class="btn-submit-post hipatec-btn-primary" type="button" [disabled]="enviando || !texto.trim() || (!modoRepost && !postId)" (click)="enviar()">
+        {{ enviando ? 'Enviando…' : (modoRepost ? 'Republicar' : 'Comentar') }}
       </button>
     </div>
   </ion-toolbar>

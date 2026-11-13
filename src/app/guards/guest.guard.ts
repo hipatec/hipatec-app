@@ -7,7 +7,7 @@ export const guestGuard: CanActivateFn = () => {
   const router = inject(Router);
   const auth = inject(AuthService);
   return auth.sessao().pipe(
-    map(() => router.createUrlTree(['/mentorias'])),
+    map(() => router.createUrlTree(['/painel'])),
     catchError(() => of(true))
   );
 };

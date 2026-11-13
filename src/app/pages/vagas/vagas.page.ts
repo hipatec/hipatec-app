@@ -1,7 +1,10 @@
+import { FeedbackNoticeComponent } from '../../components/feedback-notice/feedback-notice.component';
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
+import { RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 import { addIcons } from 'ionicons';
 import { briefcaseOutline, locationOutline, funnelOutline, timeOutline, openOutline } from 'ionicons/icons';
 
@@ -28,9 +31,10 @@ interface Vaga {
   templateUrl: './vagas.page.html',
   styleUrls: ['./vagas.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [FeedbackNoticeComponent, IonicModule, CommonModule, FormsModule, RouterLink]
 })
 export class VagasPage {
+  aviso = '';
   busca = '';
   cargo = 'Todos';
   area = 'Todas';
@@ -42,11 +46,16 @@ export class VagasPage {
   idioma = 'Todos';
   modalidade = 'Todas';
   contrato = 'Todos';
-
   vagas: Vaga[] = [];
+  userRole = '';
 
-  constructor() {
+  constructor(private authService: AuthService) {
     addIcons({ briefcaseOutline, locationOutline, funnelOutline, timeOutline, openOutline });
+    this.authService.sessao().subscribe({ next: sessao => this.userRole = sessao.role, error: () => this.userRole = '' });
+  }
+
+  get podePublicarVaga(): boolean {
+    return ['mentoras', 'administradores', 'administrador'].includes(this.userRole);
   }
 
   get vagasFiltradas(): Vaga[] {
@@ -89,11 +98,11 @@ export class VagasPage {
   }
 
   abrirVaga(vaga: Vaga) {
-    alert(`Detalhes da vaga: ${vaga.titulo}`);
+    this.aviso = 'Os detalhes de vagas ainda não estão disponíveis.';
   }
 
   inscrever(vaga: Vaga) {
-    alert(`A inscrição em “${vaga.titulo}” abrirá o site da oportunidade em uma nova aba quando o link externo estiver configurado.`);
+    this.aviso = 'Esta vaga ainda não tem link de candidatura disponível. Nenhuma inscrição foi realizada.';
   }
 
 }

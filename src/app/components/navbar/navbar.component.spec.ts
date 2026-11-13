@@ -91,7 +91,7 @@ describe('NavbarComponent', () => {
     await fixture.whenStable();
 
     expect(router.navigate).toHaveBeenCalledWith(['/home']);
-    expect(router.navigate).toHaveBeenCalledWith(['/mentorias']);
+    expect(router.navigate).toHaveBeenCalledWith(['/painel']);
     expect(router.navigate).toHaveBeenCalledWith(['/aprendizado']);
     expect(router.navigate).toHaveBeenCalledWith(['/gestao-mentorias']);
     expect(router.navigate).toHaveBeenCalledWith(['/vagas']);

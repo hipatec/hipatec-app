@@ -1,2 +1,57 @@
 // For information on how to create your own theme, please refer to:
 // https://ionicframework.com/docs/theming/
+
+// Tokens semânticos mínimos da Hipatec. Só entram aqui valores realmente
+// compartilhados entre telas; particularidades continuam nas páginas.
+:root {
+  --hipatec-color-brand: #472b7a;
+  --hipatec-color-brand-rgb: 71, 43, 122;
+  --hipatec-color-brand-strong: #37205f;
+  --hipatec-color-brand-soft: #7b59b8;
+  --hipatec-color-accent: #f4d878;
+  --hipatec-color-surface: #ffffff;
+  --hipatec-color-surface-soft: #f7f2fc;
+  --hipatec-color-surface-tint: #eee8f7;
+  --hipatec-color-text: #342844;
+  --hipatec-color-text-muted: #6d637c;
+  --hipatec-color-border: #ded6eb;
+  --hipatec-color-danger: #8b3d5c;
+  --hipatec-color-danger-soft: #f7edf3;
+  --hipatec-color-success: #2d8f68;
+
+  --hipatec-radius-sm: 8px;
+  --hipatec-radius-md: 12px;
+  --hipatec-radius-pill: 20px;
+
+  --hipatec-space-1: 4px;
+  --hipatec-space-2: 8px;
+  --hipatec-space-3: 12px;
+  --hipatec-space-4: 16px;
+  --hipatec-space-5: 24px;
+  --hipatec-space-6: 32px;
+
+  --hipatec-shadow-card: 0 5px 14px rgba(var(--hipatec-color-brand-rgb), .06);
+  --hipatec-shadow-overlay: 0 8px 22px rgba(var(--hipatec-color-brand-rgb), .16);
+
+  --hipatec-content-max: 1200px;
+  --hipatec-content-padding: 24px;
+
+  --hipatec-focus-ring: #7b59b8;
+  --hipatec-focus-width: 2px;
+  --hipatec-focus-offset: 2px;
+
+  // Alvo mínimo de toque: 44px em ponteiro grosso, 36px com mouse.
+  --hipatec-target-min: 36px;
+
+  // Integração com o tema Ionic: a cor primária do Ionic passa a ser o roxo da marca.
+  --ion-color-primary: #472b7a;
+  --ion-color-primary-rgb: 71, 43, 122;
+  --ion-color-primary-contrast: #ffffff;
+  --ion-color-primary-contrast-rgb: 255, 255, 255;
+  --ion-color-primary-shade: #3e266b;
+  --ion-color-primary-tint: #594087;
+}
+
+@media (pointer: coarse) {
+  :root { --hipatec-target-min: 44px; }
+}

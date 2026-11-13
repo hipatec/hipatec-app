@@ -1,0 +1,33 @@
+<app-modal-shell appContentModalFocus titulo="Adicionar curso" (fechar)="cancelar()">
+  <app-feedback-notice [mensagem]="erro" [erro]="true" />
+  <form class="content-form" (ngSubmit)="salvar()">
+    <div class="field">
+      <label for="curso-titulo">Nome do curso <span class="required" aria-hidden="true">*</span></label>
+      <input [disabled]="estado.enviando" (blur)="tituloTocado = true" [attr.aria-invalid]="tituloTocado && !form.titulo.trim()" aria-describedby="curso-titulo-erro" id="curso-titulo" maxlength="160" name="titulo" type="text" autocomplete="off" required placeholder="Ex.: Introdução à pesquisa social…"
+        [(ngModel)]="form.titulo" (ngModelChange)="atualizarAlterado()" />
+      @if (tituloTocado && !form.titulo.trim()) { <p id="curso-titulo-erro" class="hipatec-state-error">Informe um título.</p> }
+    </div>
+    <div class="field">
+      <label for="curso-instituicao">Instituição</label>
+      <input [disabled]="estado.enviando" id="curso-instituicao" maxlength="160" name="instituicao" type="text" autocomplete="off" placeholder="Nome da instituição…"
+        [(ngModel)]="form.instituicao" (ngModelChange)="atualizarAlterado()" />
+    </div>
+    <div class="field">
+      <label for="curso-formato">Formato <span class="required" aria-hidden="true">*</span></label>
+      <select [disabled]="estado.enviando" id="curso-formato" name="formato" required [(ngModel)]="form.formato" (ngModelChange)="atualizarAlterado()">
+        <option value="" disabled>Selecione</option>
+        <option>Online</option><option>Presencial</option><option>Híbrido</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="curso-descricao">Descrição</label>
+      <textarea [disabled]="estado.enviando" id="curso-descricao" maxlength="4000" name="descricao" rows="4" placeholder="Descreva o conteúdo e o objetivo do curso." autocomplete="off"
+        [(ngModel)]="form.descricao" (ngModelChange)="atualizarAlterado()"></textarea>
+    </div>
+    <p class="form-hint"><span aria-hidden="true">*</span> Campos obrigatórios.</p>
+  </form>
+  <div modalFooter class="content-actions">
+    <button type="button" class="hipatec-btn-secondary" [disabled]="estado.enviando" (click)="cancelar()">Cancelar</button>
+    <button type="button" class="hipatec-btn-primary" [disabled]="!valido || estado.enviando" (click)="salvar()">Salvar curso</button>
+  </div>
+</app-modal-shell>

@@ -7,7 +7,7 @@
 }
 
 .profile-tabs { display: flex; gap: 4px; margin-top: 6px; border-top: 1px solid #eee8f7; }
-.profile-tabs button { padding: 12px 18px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #827990; font: inherit; cursor: pointer; }
+.profile-tabs button { min-height: var(--hipatec-target-min); padding: 12px 18px; border: 0; border-bottom: 2px solid transparent; background: transparent; color: #827990; font: inherit; cursor: pointer; }
 .profile-tabs button.active { border-bottom-color: #472b7a; color: #472b7a; font-weight: 700; }
 .repost-label { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; color: #7b59b8; font-size: 12px; font-weight: 700; }
 .repost-status { display: flex; justify-content: flex-end; margin-bottom: 4px; color: #2d8f68; }
@@ -15,16 +15,12 @@
 .reposted-original { margin-top: 14px; padding: 12px; border: 1px solid #e5dcef; border-radius: 8px; background: #faf8fd; }
 .reposted-original strong { color: #472b7a; font-size: 13px; }
 .reposted-original p { margin: 6px 0 0; color: #6d637c; font-size: 13px; }
+.post-open-area { cursor: pointer; }
+.post-card[role='article']:hover,
+.post-card[role='article']:focus-visible { box-shadow: 0 5px 18px rgba(71, 43, 122, 0.14); }
 
-.profile-avatar-initials {
-  align-items: center;
-  background: #eee8f7;
-  color: #472b7a;
-  display: flex;
-  font-size: 24px;
-  font-weight: 700;
-  justify-content: center;
-}
+.profile-page .feed-container .post-card[role='article'],
+.profile-page .reposts-feed .post-card[role='article'] { cursor: pointer; }
 
 .profile-page .feed-container,
 .feed-container {
